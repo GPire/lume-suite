@@ -198,6 +198,9 @@ final class It {
         q("Ocean", "Oceano", "Océano", "Ozean", "Océan", "Oceano");
         q("Graphite", "Grafite", "Grafito", "Graphit", "Graphite", "Grafite");
         q("Looking for the receiver…", "Cerco il ricevitore…", "Buscando el receptor…", "Suche den Empfänger…", "Recherche du récepteur…", "A procurar o recetor…");
+        q("Voice assistant", "Assistente vocale", "Asistente de voz", "Sprachassistent", "Assistant vocal", "Assistente de voz");
+        q("None on this TV", "Nessuno su questa TV", "Ninguno en esta TV", "Keiner auf diesem Fernseher", "Aucun sur ce téléviseur", "Nenhum nesta TV");
+        q("This TV has no voice assistant app.", "Questa TV non ha un\u2019app di assistente vocale.", "Esta TV no tiene una aplicación de asistente de voz.", "Dieser Fernseher hat keine Sprachassistenten-App.", "Ce téléviseur n\u2019a pas d\u2019application d\u2019assistant vocal.", "Esta TV não tem uma aplicação de assistente de voz.");
         q("Make Lume your home screen?", "Vuoi che Lume sia la tua schermata Home?", "¿Quieres que Lume sea tu pantalla de inicio?", "Lume als Startseite verwenden?", "Faire de Lume votre écran d’accueil ?", "Quer que o Lume seja o seu ecrã inicial?");
         q("The Home button on the remote will open Lume.", "Il tasto Home del telecomando aprirà Lume.", "El botón Inicio del mando abrirá Lume.", "Die Home-Taste der Fernbedienung öffnet Lume.", "La touche Accueil de la télécommande ouvrira Lume.", "O botão Início do comando abrirá o Lume.");
         q("Back to return   ·   Hold OK for options", "Indietro per tornare   ·   Tieni premuto OK per le opzioni", "Atrás para volver   ·   Mantén OK para opciones", "Zurück zum Verlassen   ·   OK halten für Optionen", "Retour pour revenir   ·   Maintenez OK pour les options", "Voltar para regressar   ·   Mantenha OK para opções");

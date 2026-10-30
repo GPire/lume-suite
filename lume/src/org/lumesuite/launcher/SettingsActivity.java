@@ -548,6 +548,9 @@ public class SettingsActivity extends Activity {
     }
 
     void pageHome() {
+        row("Voice assistant", () -> { String n = Assistant.name(this); return n != null ? n : It.t("None on this TV"); },
+                () -> { if (!Assistant.open(this)) Clicks.dialog(this).setTitle(It.t("Voice assistant"))
+                        .setMessage(It.t("This TV has no voice assistant app.")).setPositiveButton(It.t("OK"), null).show(); });
         row("Home screen", () -> Perms.isDefaultHome(this) ? "Lume" : "Make Lume the home screen\u2026",
                 () -> Perms.requestDefaultHome(this));
         row("Appearance", () -> Appearance.nameOf(this, Appearance.mode()), () -> {

@@ -54,6 +54,13 @@ a{color:#7ab8ff}small{color:var(--dim)}
     <p class="dim" style="margin-top:12px"><small data-t="tvN">Per spegnere ciò che rallenta una Fire TV serve il computer una volta: la TV non può farlo a sé stessa.</small></p>
   </div>
 
+  <div class="card">
+    <h2 data-t="cmdT">Oppure un solo comando</h2>
+    <p class="dim" data-t="cmdS">Incollalo nel Terminale (Mac, Linux) o in PowerShell (Windows): scarica TV Doctor, controlla la sua firma e lo avvia da solo.</p>
+    <div class="row"><div class="url" id="c1">curl -fsSL https://gpire.github.io/lume-suite/install.sh | sh</div><button class="btn ghost" data-copy="c1" data-t="copy">Copia</button></div>
+    <div class="row" style="margin-top:10px"><div class="url" id="c2">irm https://gpire.github.io/lume-suite/install.ps1 | iex</div><button class="btn ghost" data-copy="c2" data-t="copy">Copia</button></div>
+  </div>
+
   <div class="grid">
     <div class="card"><h2 data-t="c1T">Cosa fa</h2><p class="dim" data-t="c1">Riconosce marca, modello, anno e sistema. Installa le app dopo aver controllato la loro firma. Spegne a gruppi di quattro, controlla che la TV stia bene e annulla da sola se qualcosa non va. Mai disinstalla.</p></div>
     <div class="card"><h2 data-t="c2T">Cosa è Lume</h2><p class="dim" data-t="c2">Una Home calma con un grande orologio di vetro, schede nitide, Centro di controllo, controllo da telefono, tre aspetti (vetro, grafite, alto contrasto) e testi sincronizzati con AirPlay.</p></div>
@@ -66,13 +73,14 @@ a{color:#7ab8ff}small{color:var(--dim)}
 <script>
 "use strict";
 const IT={};
-const EN={h1:"A calmer TV.",lead:"TV Doctor finds your TV, installs Lume and Ambient Cast, and turns off, safely and always reversibly, what slows it down. No commands, no developer tools.",pcT:"From a computer",pcS:"Works with any TV on your Wi-Fi.",dl:"Download TV Doctor",all:"All files",s1:"Unzip the file you downloaded.",s2:"Open <b>TV Doctor Auto.command</b> (Mac) or <b>TV Doctor Auto.bat</b> (Windows): it finds the TV by itself and, unless you press Stop, does everything after 12 seconds.",s3:"Press <b>Find my TV</b>: it does the rest and waits for your OK before touching anything.",tvT:"From the TV alone (Fire TV, Android TV, Google TV)",tvS:"With the free <b>Downloader</b> app, type this address:",copy:"Copy",tvN:"To turn off what slows a Fire TV you need a computer once: the TV cannot do it to itself.",c1T:"What it does",c1:"Recognises brand, model, year and system. Installs the apps after checking their signature. Turns things off four at a time, checks the TV is fine and undoes it by itself if anything is wrong. Never uninstalls.",c2T:"What Lume is",c2:"A calm Home with a big glass clock, sharp cards, Control Center, phone control, three looks (glass, graphite, high contrast) and AirPlay with synced lyrics.",c3T:"Samsung, LG, Roku",c3:"Closed systems: TV Doctor says what is really possible for your model and year, and the cleanest answer is a small HDMI stick.",beta:"Beta: really tested on one Fire TV Stick 4K Max",support:"What works on which TV",copied:"Copied"};
+const EN={cmdT:"Or one command",cmdS:"Paste it into Terminal (Mac, Linux) or PowerShell (Windows): it downloads TV Doctor, checks its signature and starts it by itself.",h1:"A calmer TV.",lead:"TV Doctor finds your TV, installs Lume and Ambient Cast, and turns off, safely and always reversibly, what slows it down. No commands, no developer tools.",pcT:"From a computer",pcS:"Works with any TV on your Wi-Fi.",dl:"Download TV Doctor",all:"All files",s1:"Unzip the file you downloaded.",s2:"Open <b>TV Doctor Auto.command</b> (Mac) or <b>TV Doctor Auto.bat</b> (Windows): it finds the TV by itself and, unless you press Stop, does everything after 12 seconds.",s3:"Press <b>Find my TV</b>: it does the rest and waits for your OK before touching anything.",tvT:"From the TV alone (Fire TV, Android TV, Google TV)",tvS:"With the free <b>Downloader</b> app, type this address:",copy:"Copy",tvN:"To turn off what slows a Fire TV you need a computer once: the TV cannot do it to itself.",c1T:"What it does",c1:"Recognises brand, model, year and system. Installs the apps after checking their signature. Turns things off four at a time, checks the TV is fine and undoes it by itself if anything is wrong. Never uninstalls.",c2T:"What Lume is",c2:"A calm Home with a big glass clock, sharp cards, Control Center, phone control, three looks (glass, graphite, high contrast) and AirPlay with synced lyrics.",c3T:"Samsung, LG, Roku",c3:"Closed systems: TV Doctor says what is really possible for your model and year, and the cleanest answer is a small HDMI stick.",beta:"Beta: really tested on one Fire TV Stick 4K Max",support:"What works on which TV",copied:"Copied"};
 const lang=(navigator.language||"it").toLowerCase().startsWith("it")?IT:EN;
 document.documentElement.lang=lang===IT?"it":"en";
 document.querySelectorAll("[data-t]").forEach(e=>{const v=lang[e.dataset.t];if(v)e.innerHTML=v});
 const ua=navigator.userAgent,os=/Windows/.test(ua)?"Windows":/Mac/.test(ua)&&!/iPhone|iPad/.test(ua)?"Mac":/Linux|X11/.test(ua)&&!/Android/.test(ua)?"Linux":"";
 if(os)document.getElementById("osn").textContent="· "+os;
 if(/Android/.test(ua))document.getElementById("u").scrollIntoView();
+document.querySelectorAll("[data-copy]").forEach(b=>b.onclick=async e=>{try{await navigator.clipboard.writeText(document.getElementById(b.dataset.copy).textContent.trim());b.textContent=lang.copied||"Copiato";setTimeout(()=>b.textContent=lang.copy||"Copia",1800)}catch(_){}});
 document.getElementById("copy").onclick=async e=>{try{await navigator.clipboard.writeText(document.getElementById("u").textContent.trim());e.target.textContent=lang.copied||"Copiato";setTimeout(()=>e.target.textContent=lang.copy||"Copia",1800)}catch(_){}};
 </script>
 </body>

@@ -219,7 +219,9 @@ def inspect(serial):
         "count": len(todo), "mb": mb,
         "replaceHome": d["family"] in ("google-tv", "android-tv") and bool({"com.google.android.tvlauncher", "com.google.android.apps.tv.launcherx"} & set(T.home_activities(serial))),
         "suite": d["family"] in ("fireos", "google-tv", "android-tv", "android-other") and int(d.get("sdk") or 0) >= 24,
-        "items": [{"pkg": p, "why": re.sub(r"\s*\[\d+ MB\]", "", why), "tier": t} for p, t, why, src, off in todo],
+        "items": [{"pkg": p, "why": re.sub(r"\s*\[\d+ MB\]", "", why), "tier": t, "group": T.group_of(p)} for p, t, why, src, off in todo],
+        "groups": [{"id": g, "count": sum(1 for x in todo if T.group_of(x[0]) == g), "keep": keep}
+                   for g, _, keep in T.KEEP_GROUPS if any(T.group_of(x[0]) == g for x in todo)],
     }
 
 
@@ -302,7 +304,7 @@ def healthy(serial, home_pkg):
     return bool(h.strip()) and (not home_pkg or home_pkg in h)
 
 
-def run_apply(serial, batch=4, install=False, replace_home=False, dns=False):
+def run_apply(serial, batch=4, install=False, replace_home=False, dns=False, keep=(), anim=True):
     """Small batches, a health check after each; on the first doubt the batch is undone and we stop."""
     if DEMO and T.FIXTURE is None:
         T.FIXTURE = demo_fixture()
@@ -314,7 +316,7 @@ def run_apply(serial, batch=4, install=False, replace_home=False, dns=False):
         except Exception as e:
             suite = [{"app": n, "ok": False, "why": str(e)[:160]} for _, n, _ in SUITE]
     plan = T.build_plan(serial, d, "safe")
-    todo = [x[0] for x in plan if not x[4]]
+    todo = [x[0] for x in plan if not x[4] and T.group_of(x[0]) not in set(keep)]   # what the owner chose to keep stays on
     home = T.sh(serial, "cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME | tail -1").split("/")[0]
     before, done, rolled = mem_avail(serial), 0, False
     for k in range(0, len(todo), batch):
@@ -333,7 +335,7 @@ def run_apply(serial, batch=4, install=False, replace_home=False, dns=False):
             break
         done += ok_now
     with contextlib.redirect_stdout(io.StringIO()):
-        T.tune(serial, d.get("tier", "essenziale"), dns)
+        T.tune(serial, d.get("tier", "essenziale") if anim else "pieno", dns)
     T.sh(serial, "sync")   # Android writes package states a little later: a reboot right now would lose them (seen on Fire OS 8.1)
     homed = None
     if replace_home and not rolled:   # Lume must be there; replace_google_home checks Home opens Lume and puts Google back if not
@@ -391,7 +393,7 @@ class H(BaseHTTPRequestHandler):
                 r = classify(ip) or {"error": "nessuna TV riconosciuta a questo indirizzo"}
                 if r.get("kind") == "adb": T.adb(None, "connect", r["serial"])
             elif self.path == "/api/inspect": r = inspect(q["serial"])
-            elif self.path == "/api/apply": r = run_apply(q["serial"], install=bool(q.get("install")), replace_home=bool(q.get("replaceHome")), dns=bool(q.get("dns")))
+            elif self.path == "/api/apply": r = run_apply(q["serial"], install=bool(q.get("install")), replace_home=bool(q.get("replaceHome")), dns=bool(q.get("dns")), keep=q.get("keep") or [], anim=q.get("anim", True))
             elif self.path == "/api/undo": r = run_undo(q["serial"])
             elif self.path == "/api/enable": r = enable_guide(q["brand"], int(q.get("year", 2022)), q.get("lang", "en"))
             elif self.path == "/api/adbstatus": r = {"ready": DEMO or adb_ready()}

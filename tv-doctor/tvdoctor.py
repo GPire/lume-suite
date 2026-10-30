@@ -278,6 +278,31 @@ NEVER_EXACT |= {"com.google.android.rkpdapp", "com.google.android.apps.mediashel
 NEVER_WORDS = ("tvinput", "hdmi", "livetv", "inputmethod", "tvcenter", "inputservice")
 
 
+# What the owner may want to keep. Each rule is (group, words in the package name); kept groups are left out of the plan.
+# keep_default: True where switching it off removes something people use daily (the voice button, casting).
+KEEP_GROUPS = [
+    ("assistant", ("katniss", "alexa", "vizzini", "voice", "assistant"), True),
+    ("cast", ("mediashell", "chromecast", "cast.receiver", "airplay"), True),
+    ("games", ("games", "gamehub", "luna"), False),
+    ("music", ("music",), False),
+    ("shopping", ("shoptv", "shopping"), False),
+    ("video", ("youtube.tvunplugged", "videos", "minitv", "tubitv", "netflix", "disney", "amazonvideo"), False),
+    ("screensaver", ("dreamx", "dreams", "backdrop", "screensaver"), False),
+    ("kids", ("tahoe", "kids"), False),
+    ("smarthome", ("smarthome", "homekit"), False),
+    ("recommendations", ("recommendations", "tvrecommendations", "sonyselect", "promos", "mitvplus", "michannel"), False),
+    ("privacy", ("acr", "feedback", "logging", "adservices", "ondevicepersonalization", "stats", "diag", "analyser", "bootad", "adshow"), False),
+]
+
+
+def group_of(pkg):
+    low = pkg.lower()
+    for g, words, _ in KEEP_GROUPS:
+        if any(w in low for w in words):
+            return g
+    return None
+
+
 def is_never(p):
     return p in NEVER_EXACT or p.startswith(NEVER_PREFIX) or any(w in p for w in NEVER_WORDS)
 
