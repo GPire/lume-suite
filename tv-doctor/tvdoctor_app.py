@@ -413,7 +413,7 @@ PAGE = open(os.path.join(HERE, "app_page.html"), encoding="utf-8").read()
 
 def main():
     srv = ThreadingHTTPServer(("127.0.0.1", 0), H)
-    url = f"http://127.0.0.1:{srv.server_port}/"
+    url = f"http://127.0.0.1:{srv.server_port}/" + ("?auto=1" if "--auto" in sys.argv else "")
     print("TV Doctor è aperto su", url, "(solo su questo computer). Ctrl+C per chiudere.")
     threading.Timer(0.6, lambda: webbrowser.open(url)).start()
     try: srv.serve_forever()
