@@ -230,7 +230,18 @@ GOOGLE_TV_SAFE = {
     "com.google.android.tv.remotecontrol.logging": "Remote-control usage logging",
     "com.android.printspooler": "Printing (a TV does not print)",
 }
+GOOGLE_TV_SAFE.update({
+    "com.google.android.partnersetup": "Partner setup (one-shot, already done)",
+    "com.google.android.onetimeinitializer": "One-time initialiser (already done)",
+    "com.google.android.syncadapters.calendar": "Calendar sync (a TV has no calendar)",
+    "com.google.android.backdrop": "Old Daydream backdrop screensaver",
+    "com.android.adservices.api": "Android ad-services API (ad profiling)",
+    "com.android.ondevicepersonalization.services": "On-device ad personalisation",
+})
 GOOGLE_TV_CAUTION = {
+    "com.google.android.tvrecommendations": "Recommendation rows on Google's own Home go empty",
+    "com.google.android.leanbacklauncher.recommendations": "Recommendation rows on the old Android TV Home",
+    "com.android.dreams.basic": "The basic screensaver",
     "com.google.android.apps.tv.dreamx": "Ambient-mode screensaver with recommendations (falls back to the basic one)",
     "com.google.android.videos": "Google TV store and rentals: the Shop tab and past purchases stop working",
     "com.google.android.katniss": "Google Assistant: the remote's microphone button stops working",
@@ -238,13 +249,37 @@ GOOGLE_TV_CAUTION = {
     "com.google.android.youtube.tvunplugged": "YouTube TV app",
     "com.google.android.marvin.talkback": "TalkBack screen reader (turn back on if anyone needs it)",
 }
+# Brand extras (promotions, boot ads, telemetry) found on real sets: techpp "debloat Android TV with ADB", TCL/Sony/Xiaomi/Nvidia.
+# safe = ads, promotions, telemetry; caution = apps the owner may still use. Inputs, updates and HDMI packages are never listed.
+BRAND_SAFE = {
+    "tcl": {"com.tcl.bootadservice": "Ads at start-up", "com.tcl.overseasappshow": "App ads", "com.tcl.notereminder": "Reminder pop-ups",
+            "com.tcl.messagebox": "Promotional message box", "com.tcl.esticker": "Electronic sticker ads"},
+    "sony": {"com.sony.dtv.promos": "Sony promotions", "com.sony.dtv.sonyselect": "Sony Select promo row", "com.sony.dtv.multiscreendemo": "Demo screen",
+             "com.sony.dtv.ecodashboard": "Eco dashboard", "com.sony.dtv.smarthelp": "Smart help pop-ups"},
+    "xiaomi": {"com.mitv.tvhome.mitvplus": "Mi TV+ rows (PatchWall)", "com.mitv.tvhome.michannel": "Mi channel rows (PatchWall)"},
+    "nvidia": {"com.nvidia.stats": "Usage statistics", "com.nvidia.enhancedlogging": "Extra logging", "com.nvidia.feedback": "Feedback reports",
+               "com.nvidia.diagtools": "Diagnostic tools", "com.nvidia.shield.remotediagnostic": "Remote diagnostics",
+               "com.nvidia.SHIELD.Platform.Analyser": "Platform analyser", "com.nvidia.factorybundling": "Factory bundling"},
+}
+BRAND_CAUTION = {
+    "tcl": {"com.tcl.dashboard": "TCL dashboard", "com.tcl.appmarket2": "TCL app market", "com.tcl.browser": "TCL browser",
+            "com.tcl.guard": "TCL guard", "com.tcl.usercenter": "TCL user centre", "com.tcl.tvweishi": "TCL tvweishi service"},
+    "sony": {"com.sony.dtv.helpguidecontents": "Help guide contents", "com.sony.dtv.sonytab": "Sony tab"},
+    "xiaomi": {"com.mitv.tvhome.atv": "Mi TV home (PatchWall)"},
+}
+# Needed by the brand even if a list says otherwise (Inputs button, updates, system service).
+NEVER_EXACT |= {"com.tcl.suspension", "com.tcl.tvinput", "com.tcl.ttvs", "com.sony.dtv.sonysystemservice", "com.sony.dtv.airplay"}
 # Needed by Google TV even if a list says otherwise: DRM keys (HD/4K), the Cast receiver, firmware updates, sign-in pages.
 NEVER_EXACT |= {"com.google.android.rkpdapp", "com.google.android.apps.mediashell", "com.google.android.tv.dfuservice",
                 "com.google.android.webview", "com.google.android.configupdater"}
 
 
+# Whatever a list says: anything whose name says it handles inputs, HDMI or live TV breaks the remote or the picture sources.
+NEVER_WORDS = ("tvinput", "hdmi", "livetv", "inputmethod", "tvcenter", "inputservice")
+
+
 def is_never(p):
-    return p in NEVER_EXACT or p.startswith(NEVER_PREFIX)
+    return p in NEVER_EXACT or p.startswith(NEVER_PREFIX) or any(w in p for w in NEVER_WORDS)
 
 
 def build_plan(serial, d, tier):
@@ -275,6 +310,14 @@ def build_plan(serial, d, tier):
         if tier == "caution":
             for p, why in GOOGLE_TV_CAUTION.items():
                 if p in d["_pkgs"] and not is_never(p) and p != home_pkg: add(p, "caution", why, "debloat-tv"); seen.add(p)
+    maker = (d["maker"] + " " + d["brand"]).lower()
+    for key, safe_set in BRAND_SAFE.items():
+        if key not in maker: continue
+        for p, why in safe_set.items():
+            if p in d["_pkgs"] and not is_never(p) and p != home_pkg: add(p, "safe", why, key.upper()); seen.add(p)
+        if tier == "caution":
+            for p, why in BRAND_CAUTION.get(key, {}).items():
+                if p in d["_pkgs"] and not is_never(p) and p != home_pkg: add(p, "caution", why, key.upper()); seen.add(p)
     for p in sorted(system):
         if p in seen or is_never(p) or p == home_pkg or p not in uad or p.startswith(NO_BENEFIT_PREFIX):
             continue
@@ -345,7 +388,7 @@ BRAND_PITFALLS = {
     "xiaomi": ["Con la Home di Google spenta il tasto YouTube del telecomando può non fare niente."],
     "vu": ["Con la Home di Google spenta il tasto YouTube del telecomando può non fare niente."],
     "oneplus": ["Con la Home spenta i tasti Guida e Tutte le app non rispondono."],
-    "google": ["Chromecast con Google TV: spegnere la Home di Google può bloccare il riavvio (serve il ripristino di fabbrica). Per questo la lasciamo SEMPRE accesa."],
+    "google": ["Google TV: la Home di Google si sostituisce solo con l'opzione dedicata (spegne anche l'app di configurazione, alcune pagine Impostazioni risultano non disponibili finché non annulli). Altrimenti resta sempre accesa."],
     "amazon": ["Fire OS 8.1: dopo disattivazioni aggressive è segnalato qualche bootloop. Riavvio di controllo dopo ogni gruppo."],
 }
 GOOGLE_TV_KEEP = ["com.google.android.tvlauncher", "com.google.android.apps.tv.launcherx", "com.google.android.tungsten.setupwraith"]
@@ -387,13 +430,24 @@ def check(serial):
     return back
 
 
-def tune(serial, tier="essenziale"):
-    """Apply the animation tuning, saving old values so undo can restore them."""
+PRIVATE_DNS = "dns.adguard-dns.com"   # blocks ads and trackers for every app (not YouTube's own ads); off again with undo
+
+
+def tune(serial, tier="essenziale", dns=False):
+    """Apply the animation tuning (and, if asked, the private DNS), saving old values so undo can restore them."""
     old = {}
+    sh(serial, "pm trim-caches 999G")   # app caches only: logins and downloads stay
+    if dns:
+        for key in ("private_dns_mode", "private_dns_specifier"):
+            old[f"global:{key}"] = sh(serial, f"settings get global {key}").strip()
+        sh(serial, "settings put global private_dns_mode hostname")
+        sh(serial, f"settings put global private_dns_specifier {PRIVATE_DNS}")
     scale = {"essenziale": "0.5", "equilibrato": "0.7", "pieno": "1.0"}.get(tier, "0.5")
-    if scale == "1.0":
+    if scale == "1.0" and not dns:
         print("TV potente: animazioni lasciate com'è"); return
-    for ns, key, _ in TUNING:
+    if scale == "1.0":
+        scale = None
+    for ns, key, _ in (TUNING if scale else []):
         val = scale
         old[f"{ns}:{key}"] = sh(serial, f"settings get {ns} {key}").strip()
         sh(serial, f"settings put {ns} {key} {val}")
@@ -486,11 +540,17 @@ def replace_google_home(serial, apply=False, allow_google_tv=False):
               "l'app di configurazione: alcune pagine delle Impostazioni (Account > App e servizi) risultano 'non disponibili' finché\n"
               "non annulli con undo. Se vuoi: --google-tv."); return []
     targets = stock + (["com.google.android.apps.tv.launcherx", "com.google.android.tungsten.setupwraith"] if gtv else [])
+    if "sony" in sh(serial, "getprop ro.product.manufacturer").lower() and "com.sony.dtv.applicationdisabler" in sh(serial, "pm list packages"):
+        targets.append("com.sony.dtv.applicationdisabler")   # it turns disabled apps back on after a restart
     targets = [t for t in targets if t in sh(serial, "pm list packages")]
     if not targets:
         print("Nessuna Home di Google da sostituire."); return []
     if not apply:
         print("Lume può sostituire: " + ", ".join(targets) + "\nAnnullabile con undo. Aggiungi --yes per farlo."); return targets
+    # Order matters (a black screen otherwise): Lume becomes the Home role holder first, and only then the old Home goes off.
+    sh(serial, "cmd role add-role-holder --user 0 android.app.role.HOME org.lumesuite.launcher")
+    if "org.lumesuite.launcher" not in sh(serial, "cmd role get-role-holders --user 0 android.app.role.HOME"):
+        print("Lume non risulta la Home scelta dal sistema: non spengo niente."); return []
     for p in targets:
         print(sh(serial, f"pm disable-user --user 0 {p}").strip())
     sh(serial, "cmd package set-home-activity --user 0 org.lumesuite.launcher/.MainActivity")
@@ -537,7 +597,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("cmd", choices=["detect", "plan", "apply", "undo", "check", "tune", "guide", "issues", "launchers", "replace-home", "install"])
     ap.add_argument("-s", "--serial"); ap.add_argument("--tier", choices=["safe", "caution"], default="safe")
-    ap.add_argument("--yes", action="store_true"); ap.add_argument("--os"); ap.add_argument("--year", type=int, default=2022); ap.add_argument("--only"); ap.add_argument("--file"); ap.add_argument("--apk"); ap.add_argument("--google-tv", action="store_true")
+    ap.add_argument("--yes", action="store_true"); ap.add_argument("--os"); ap.add_argument("--year", type=int, default=2022); ap.add_argument("--only"); ap.add_argument("--file"); ap.add_argument("--apk"); ap.add_argument("--google-tv", action="store_true"); ap.add_argument("--dns", action="store_true")
     a = ap.parse_args()
     if a.cmd == "guide":
         guide(a.os, a.year); return
@@ -547,7 +607,7 @@ def main():
     if a.cmd == "check":
         check(serial); return
     if a.cmd == "tune":
-        tune(serial); return
+        tune(serial, dns=a.dns); return
     if a.cmd == "launchers":
         launchers(serial, a.yes); return
     if a.cmd == "replace-home":

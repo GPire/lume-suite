@@ -13,3 +13,14 @@ for never in ("com.google.android.rkpdapp", "com.google.android.apps.mediashell"
               "com.google.android.tungsten.setupwraith", "com.google.android.gms"):
     assert never not in full, never
 print("TUTTO OK google tv")
+
+# brands: ads/promotions proposed, inputs/updates never, and any name with hdmi/tvinput/livetv is refused
+T.FIXTURE = fixture(SCEN["TCL (Google TV, 2 GB)"])
+extra = ["com.tcl.bootadservice", "com.tcl.overseasappshow", "com.tcl.tvinput", "com.tcl.ttvs", "com.tcl.suspension", "com.acme.hdmi.service", "com.acme.livetv"]
+T.FIXTURE["packages"] += extra; T.FIXTURE["system"] = T.FIXTURE["packages"]; T.FIXTURE["ram_kb"] = {p: 30_000 for p in T.FIXTURE["packages"]}
+d = T.detect("fixture")
+plan = [x[0] for x in T.build_plan("fixture", d, "caution") if not x[4]]
+assert "com.tcl.bootadservice" in plan and "com.tcl.overseasappshow" in plan
+for never in ("com.tcl.tvinput", "com.tcl.ttvs", "com.tcl.suspension", "com.acme.hdmi.service", "com.acme.livetv"):
+    assert never not in plan, never
+print("TUTTO OK marche")

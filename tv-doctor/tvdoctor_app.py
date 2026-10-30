@@ -302,7 +302,7 @@ def healthy(serial, home_pkg):
     return bool(h.strip()) and (not home_pkg or home_pkg in h)
 
 
-def run_apply(serial, batch=4, install=False, replace_home=False):
+def run_apply(serial, batch=4, install=False, replace_home=False, dns=False):
     """Small batches, a health check after each; on the first doubt the batch is undone and we stop."""
     if DEMO and T.FIXTURE is None:
         T.FIXTURE = demo_fixture()
@@ -333,7 +333,7 @@ def run_apply(serial, batch=4, install=False, replace_home=False):
             break
         done += ok_now
     with contextlib.redirect_stdout(io.StringIO()):
-        T.tune(serial, d.get("tier", "essenziale"))
+        T.tune(serial, d.get("tier", "essenziale"), dns)
     T.sh(serial, "sync")   # Android writes package states a little later: a reboot right now would lose them (seen on Fire OS 8.1)
     homed = None
     if replace_home and not rolled:   # Lume must be there; replace_google_home checks Home opens Lume and puts Google back if not
@@ -391,7 +391,7 @@ class H(BaseHTTPRequestHandler):
                 r = classify(ip) or {"error": "nessuna TV riconosciuta a questo indirizzo"}
                 if r.get("kind") == "adb": T.adb(None, "connect", r["serial"])
             elif self.path == "/api/inspect": r = inspect(q["serial"])
-            elif self.path == "/api/apply": r = run_apply(q["serial"], install=bool(q.get("install")), replace_home=bool(q.get("replaceHome")))
+            elif self.path == "/api/apply": r = run_apply(q["serial"], install=bool(q.get("install")), replace_home=bool(q.get("replaceHome")), dns=bool(q.get("dns")))
             elif self.path == "/api/undo": r = run_undo(q["serial"])
             elif self.path == "/api/enable": r = enable_guide(q["brand"], int(q.get("year", 2022)), q.get("lang", "en"))
             elif self.path == "/api/adbstatus": r = {"ready": DEMO or adb_ready()}
