@@ -1,0 +1,502 @@
+#!/usr/bin/env python3
+"""tvdoctor: recognises an Android-family TV, plans a cleanup by risk tier, applies it reversibly.
+
+    tvdoctor.py detect                 what TV is this (brand, model, Android/Fire OS, RAM, storage, launcher)
+    tvdoctor.py plan  [--tier T]       dry run: what would change, with why. Changes NOTHING.
+    tvdoctor.py apply --tier T --yes   backs up first, then disables (never uninstalls) the planned packages
+    tvdoctor.py undo  [--file F]       turns back on everything a backup disabled (default: the latest)
+
+Tiers: safe (recommended, no known side effect), caution (advanced: privacy/telemetry, may touch features).
+Everything marked Expert/Unsafe by the community list is never touched. Packages the TV needs to boot, show
+its Home, take remote input or update itself are never touched, whatever any list says.
+Package data: Universal Android Debloater Next Generation (GPL-3.0), plus a curated Fire OS set.
+Works on the Android family (Android TV, Google TV, Fire OS, Shield...). LG webOS, Samsung Tizen, Roku and
+VIDAA have no ADB: see the note printed by `detect` on those.
+"""
+import argparse, json, os, subprocess, sys, time, urllib.request, re
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+CACHE = os.path.join(HERE, "uad_lists.json")
+BACKUPS = os.path.join(HERE, "backups")
+UAD_URL = ("https://raw.githubusercontent.com/Universal-Debloater-Alliance/"
+           "universal-android-debloater-next-generation/main/resources/assets/uad_lists.json")
+
+# Never touched, whatever any list says: boot, Home, input, settings, updates, our own apps.
+NEVER_EXACT = {
+    "android", "com.android.systemui", "com.android.settings", "com.android.shell", "com.android.bluetooth",
+    "com.android.phone", "com.android.vending", "com.google.android.gms", "com.google.android.gsf",
+    "com.google.android.tvlauncher", "com.google.android.apps.tv.launcherx", "com.google.android.leanbacklauncher",
+    "com.google.android.tungsten.setupwraith", "com.google.android.tv.remote.service", "com.google.android.inputmethod.latin",
+    "com.amazon.tv.launcher", "com.amazon.platform", "com.amazon.firelauncher", "com.amazon.firehomestarter",
+    "amazon.fireos", "com.amazon.fireinputdevices", "com.amazon.device.software.ota", "com.amazon.tv.settings.v2",
+    "com.amazon.vizzini", "com.amazon.whisperlink.core.android", "com.amazon.tcomm",
+    "com.amazon.venezia", "com.amazon.dcp", "com.android.onetimeinitializer", "com.amazon.tv.livetv",
+    "com.tcl.tv", "com.tcl.setupwizard", "org.droidtv.homeintentresolver", "org.droidtv.tvsystem",
+    "com.google.android.katniss.setup", "com.google.android.tv.provision",
+    "com.petrobot.hume", "io.github.toolicious.homeonfire", "com.weenas.castbay", "org.lumesuite.gallery", "org.lumesuite.cast",
+}
+NEVER_PREFIX = ("com.android.providers.", "com.android.inputmethod", "com.android.server.", "com.android.networkstack",
+                "com.android.permissioncontroller", "com.android.packageinstaller", "com.google.android.gms.",
+                "com.mediatek.", "com.qualcomm.", "vendor.", "android.ext.")
+
+# Fire OS: tested conservative set (ads, shopping, preloaded apps) = safe; telemetry/ACR/ad id = caution.
+FIRE_SAFE = {
+    "com.amazon.shoptv.firetv.client": "Amazon Shopping on the TV (ads and shopping rows)",
+    "com.amazon.shoptv.client": "Amazon Shopping client",
+    "com.amazon.ods.kindleconnect": "Kindle connect service",
+    "com.amazon.bueller.music": "Amazon Music app",
+    "com.amazon.dummy.music": "Amazon Music placeholder",
+    "com.amazon.bueller.photos": "Amazon Photos app",
+    "com.amazon.minitv.android.app": "Amazon miniTV app",
+    "com.amazon.tahoe": "Amazon Kids (FreeTime)",
+    "com.amazon.gamehub": "Luna / Game Hub",
+    "com.amazon.tv.website_launcher": "Website launcher tiles",
+    "com.amazon.smarthomemapviewapp": "Smart Home map app",
+    "com.amazon.storm.lightning.tutorial": "Remote tutorial",
+    "com.amazon.tmm.tutorial": "Tutorial",
+    "com.amazon.tv.releasenotes": "Release notes screen",
+    "com.amazon.sneakpeek": "Promotional previews",
+    "com.android.printservice.recommendation": "Print service recommendations",
+}
+FIRE_CAUTION = {
+    "com.amazon.tv.acr": "Automatic content recognition: what you watch is reported",
+    "com.amazon.hybridadidservice": "Advertising ID service",
+    "com.amazon.wifilocker": "Saves Wi-Fi passwords to the Amazon cloud",
+    "com.amazon.device.metrics": "Device metrics",
+    "com.amazon.client.metrics.api": "Metrics API",
+    "com.amazon.wirelessmetrics.service": "Wireless metrics",
+    "com.amazon.device.logmanager": "Log manager (uploads logs)",
+    "com.amazon.dp.logger": "Data platform logger",
+    "com.amazon.perfcollection": "Performance data collection",
+    "com.fireos.usagestats.proxy": "Usage statistics proxy",
+    "com.amazon.privacypassservice": "Privacy pass service",
+}
+
+
+FIXTURE = None   # a dict describing a fake TV, for tests: props, packages, system, disabled, ram_kb, home
+
+
+def fake_sh(command):
+    f = FIXTURE
+    m = re.match(r"getprop (\S+)", command)
+    if m: return f["props"].get(m.group(1), "")
+    if "grep MemTotal" in command: return "MemTotal: %d kB" % (f["ram_mb"] * 1024)
+    if command.startswith("df /data"): return "x x x %d" % (f.get("free_mb", 4000) * 1024)
+    if command.startswith("wm size"): return "Physical size: 1920x1080"
+    if command.startswith("pm list packages -s"): return "\n".join("package:" + p for p in f["system"])
+    if command.startswith("pm list packages -d"): return "\n".join("package:" + p for p in f.get("disabled", []))
+    if command.startswith("pm list packages"): return "\n".join("package:" + p for p in f["packages"])
+    if command.startswith("pm disable-user"): return "Package %s new state: disabled-user" % command.split()[3]
+    if "resolve-activity" in command: return f["home"] + "/.Main"
+    if command.startswith("dumpsys meminfo"):
+        return "Total PSS by process:\n" + "\n".join("    %s: %s (pid 1 / activities)" % (format(kb, ",") + "K", p) for p, kb in f["ram_kb"].items()) + "\nTotal PSS by OOM adj:"
+    return ""
+
+
+def _builtin_adb(serial, args):
+    """No adb program installed: use the built-in pure-Python client (pyadb) for what we need."""
+    import pyadb
+    host, _, port = (serial or "").partition(":")
+    port = int(port or 5555)
+    try:
+        if args and args[0] == "shell":
+            return pyadb.shell(host, args[1], port)
+        if args and args[0] == "connect":
+            pyadb.connect(args[1].split(":")[0], int(args[1].split(":")[1]) if ":" in args[1] else 5555).close()
+            return "connected to " + args[1]
+    except (OSError, ConnectionError) as e:
+        raise SystemExit(f"la TV non risponde: {e}")
+    return ""
+
+
+def adb(serial, *args, check=False):
+    import shutil
+    if not shutil.which("adb"):
+        return _builtin_adb(serial, args)
+    cmd = ["adb"] + (["-s", serial] if serial else []) + list(args)
+    r = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+    if check and r.returncode:
+        raise SystemExit(f"adb non risponde: {r.stderr.strip() or r.stdout.strip()}")
+    return r.stdout.strip()
+
+
+def install_apk(serial, apk, progress=None):
+    """Put an app on the TV (or update it). Uses adb when it is installed, else the built-in client. Returns True on success."""
+    import shutil
+    if FIXTURE is not None:
+        FIXTURE.setdefault("installed", []).append(apk)
+        return True
+    if shutil.which("adb"):
+        r = subprocess.run(["adb"] + (["-s", serial] if serial else []) + ["install", "-r", apk], capture_output=True, text=True, timeout=300)
+        return "Success" in r.stdout
+    import pyadb
+    host = (serial or "").split(":")[0]
+    return "Success" in pyadb.install(host, apk, int(serial.split(":")[1]) if serial and ":" in serial else 5555, progress)
+
+
+def sh(serial, command):
+    if FIXTURE is not None:
+        return fake_sh(command)
+    return adb(serial, "shell", command)
+
+
+def pick_serial(arg):
+    if arg:
+        return arg
+    lines = [l.split()[0] for l in adb(None, "devices").splitlines()[1:] if l.strip().endswith("device")]
+    if len(lines) == 1:
+        return lines[0]
+    raise SystemExit("serve un solo dispositivo collegato, oppure indicalo con -s IP:5555 (trovati: %s)" % (lines or "nessuno"))
+
+
+def prop(serial, key):
+    return sh(serial, f"getprop {key}")
+
+
+def detect(serial):
+    d = {
+        "maker": prop(serial, "ro.product.manufacturer"), "brand": prop(serial, "ro.product.brand"),
+        "model": prop(serial, "ro.product.model"), "device": prop(serial, "ro.product.device"),
+        "soc": prop(serial, "ro.hardware"), "android": prop(serial, "ro.build.version.release"),
+        "sdk": prop(serial, "ro.build.version.sdk"), "fingerprint": prop(serial, "ro.build.fingerprint"),
+        "characteristics": prop(serial, "ro.build.characteristics"),
+        "fire_os": prop(serial, "ro.build.version.name"),
+    }
+    mem = sh(serial, "grep MemTotal /proc/meminfo")
+    d["ram_mb"] = int(re.sub(r"\D", "", mem) or 0) // 1024
+    d["free_mb"] = int((sh(serial, "df /data | tail -1").split() + ["0"] * 4)[3] or 0) // 1024
+    d["size"] = sh(serial, "wm size").replace("Physical size: ", "")
+    pk = set(l.replace("package:", "") for l in sh(serial, "pm list packages").splitlines())
+    d["_pkgs"] = pk
+    if d["maker"].lower() == "amazon" or d["fingerprint"].startswith("Amazon/"):
+        d["family"] = "fireos"
+    elif "com.google.android.apps.tv.launcherx" in pk:
+        d["family"] = "google-tv"
+    elif "com.google.android.tvlauncher" in pk or "com.google.android.leanbacklauncher" in pk:
+        d["family"] = "android-tv"
+    else:
+        d["family"] = "android-other"
+    d["tier"] = "essenziale" if d["ram_mb"] <= 2200 else "equilibrato" if d["ram_mb"] <= 3300 else "pieno"
+    return d
+
+
+def show_detect(d):
+    print(f"Marca/modello : {d['maker']} {d['model']}  ({d['device']}, SoC {d['soc']})")
+    print(f"Sistema       : Android {d['android']} (API {d['sdk']})" + (f", Fire OS {d['fire_os']}" if d["family"] == "fireos" else ""))
+    print(f"Famiglia      : {d['family']}")
+    print(f"Memoria       : {d['ram_mb']} MB di RAM -> profilo {d['tier']}; spazio libero {d['free_mb']} MB; schermo {d['size']}")
+    notes = {
+        "fireos": "Fire OS non cede la Home a un altro launcher: si pulisce e si redirige il tasto Home (Hume / Home on Fire).",
+        "google-tv": "Google TV: si possono disattivare i pacchetti e sostituire il launcher.",
+        "android-tv": "Android TV: si possono disattivare i pacchetti e impostare un altro launcher.",
+        "android-other": "Android generico: la lista della comunita' si applica, ma verifica che sia davvero una TV.",
+    }
+    print("Nota          : " + notes[d["family"]])
+    for n in pitfalls(d): print("Attenzione    : " + n)
+    if wireless_note(d): print("Connessione   : " + wireless_note(d))
+
+
+def load_uad():
+    if not os.path.exists(CACHE):
+        print("scarico la lista UAD-NG (una volta)...", file=sys.stderr)
+        urllib.request.urlretrieve(UAD_URL, CACHE)
+    return json.load(open(CACHE))
+
+
+NO_BENEFIT_PREFIX = ("com.android.theme.", "com.android.traceur", "com.android.protips", "com.android.carrierconfig",
+                     "com.android.calllogbackup", "com.android.bluetoothmidiservice")
+MIN_RAM_KB = 10_000   # generic list entries are proposed only when they use at least ~10 MB right now
+
+
+def ram_by_package(serial):
+    """Resident memory (PSS, KB) per package from dumpsys meminfo: what each app really costs this TV."""
+    out, ram, on = sh(serial, "dumpsys meminfo"), {}, False
+    for line in out.splitlines():
+        if "Total PSS by process" in line: on = True; continue
+        if on and "Total PSS by OOM" in line: break
+        m = re.match(r"\s*([\d,]+)K: ([\w.\-]+)", line)
+        if on and m:
+            pkg = m.group(2).split(":")[0]
+            ram[pkg] = max(ram.get(pkg, 0), int(m.group(1).replace(",", "")))
+    return ram
+
+
+def is_never(p):
+    return p in NEVER_EXACT or p.startswith(NEVER_PREFIX)
+
+
+def build_plan(serial, d, tier):
+    uad = load_uad()
+    system = set(l.replace("package:", "") for l in sh(serial, "pm list packages -s").splitlines())
+    disabled = set(l.replace("package:", "") for l in sh(serial, "pm list packages -d").splitlines())
+    home = sh(serial, "cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME | tail -1")
+    home_pkg = home.split("/")[0]
+    plan = []
+    ram = ram_by_package(serial)
+    def add(p, t, why, src):
+        mb = ram.get(p, 0) // 1024
+        tag = f" [{mb} MB]" if mb else ""
+        if p in disabled:
+            plan.append((p, t, "già disattivato", src, True))
+        else:
+            plan.append((p, t, why + tag, src, False))
+    seen = set()
+    if d["family"] == "fireos":
+        for p, why in FIRE_SAFE.items():
+            if p in d["_pkgs"] and not is_never(p): add(p, "safe", why, "Fire OS"); seen.add(p)
+        if tier == "caution":
+            for p, why in FIRE_CAUTION.items():
+                if p in d["_pkgs"] and not is_never(p): add(p, "caution", why, "Fire OS"); seen.add(p)
+    for p in sorted(system):
+        if p in seen or is_never(p) or p == home_pkg or p not in uad or p.startswith(NO_BENEFIT_PREFIX):
+            continue
+        if ram.get(p, 0) < MIN_RAM_KB:
+            continue   # nothing to gain: it is not using memory now
+        e = uad[p]; lvl = e.get("removal")
+        if lvl not in ("Recommended", "Advanced"):
+            continue
+        t = "safe" if lvl == "Recommended" else "caution"
+        needed = [n for n in e.get("neededBy", []) if n in d["_pkgs"] and n not in disabled]
+        if t == "safe" and needed:
+            t = "caution"
+        if t == "caution" and tier == "safe":
+            continue
+        why = (e.get("description") or "").split("\n")[0][:90]
+        if needed: why += f"  [serve a: {', '.join(needed[:2])}]"
+        add(p, t, why, "UAD-NG " + e.get("list", ""))
+    return plan
+
+
+def show_plan(plan, tier):
+    todo = [x for x in plan if not x[4]]
+    print(f"Livello: {tier}.  Da disattivare: {len(todo)}   già disattivati: {len(plan) - len(todo)}")
+    for t in ("safe", "caution"):
+        rows = [x for x in plan if x[1] == t]
+        if not rows: continue
+        print(f"\n== {t.upper()} ({len(rows)})")
+        for p, _, why, src, off in rows:
+            print(f"  {'[gia off]' if off else '[da fare]'} {p:<52} {why}  <{src}>")
+    print("\nNiente è stato modificato. Per applicare: apply --tier %s --yes" % tier)
+
+
+def apply(serial, d, plan, tier, only):
+    todo = [x for x in plan if not x[4] and (not only or x[0] in only)]
+    if not todo:
+        print("niente da fare"); return
+    os.makedirs(BACKUPS, exist_ok=True)
+    path = os.path.join(BACKUPS, f"{serial.replace(':','_')}-{time.strftime('%Y%m%d-%H%M%S')}.json")
+    json.dump({"serial": serial, "model": d["model"], "tier": tier, "disabled": [x[0] for x in todo]}, open(path, "w"), indent=1)
+    print(f"backup scritto: {path}")
+    done, failed = [], []
+    for p, *_ in todo:
+        out = sh(serial, f"pm disable-user --user 0 {p} 2>&1 | tail -1")
+        (done if "disabled-user" in out else failed).append((p, out))
+        print(("  ok    " if "disabled-user" in out else "  salta ") + p + ("" if "disabled-user" in out else "  (" + out[:70] + ")"))
+    print(f"\nfatto: {len(done)}  saltati (protetti dal sistema): {len(failed)}.  Per annullare: undo --file {path}")
+
+
+def undo(serial, path):
+    if not path:
+        files = sorted(f for f in os.listdir(BACKUPS) if f.startswith(serial.replace(":", "_"))) if os.path.isdir(BACKUPS) else []
+        if not files: raise SystemExit("nessun backup trovato")
+        path = os.path.join(BACKUPS, files[-1])
+    b = json.load(open(path))
+    for p in b["disabled"]:
+        print(sh(serial, f"pm enable {p} 2>&1 | tail -1"))
+    for k, v in b.get("settings", {}).items():
+        ns, key = k.split(":")
+        sh(serial, f"settings put {ns} {key} {v}" if v not in ("", "null") else f"settings delete {ns} {key}")
+
+
+# ---- Lessons from the community (TV Detox, dumbtv, free-my-tv): known pitfalls per brand -------------------
+BRAND_PITFALLS = {
+    "tcl": ["Non disattivare com.tcl.tv: rompe tutti gli ingressi HDMI.",
+            "L'app di setup possiede il Wi-Fi: disattivarla fa dimenticare la rete.",
+            "Dopo l'installazione di un launcher serve il permesso di esecuzione in background (appops RUN_IN_BACKGROUND allow)."],
+    "philips": ["La Home passa da org.droidtv.homeintentresolver: non toccarlo o il nuovo launcher non si apre."],
+    "xiaomi": ["Con la Home di Google spenta il tasto YouTube del telecomando può non fare niente."],
+    "vu": ["Con la Home di Google spenta il tasto YouTube del telecomando può non fare niente."],
+    "oneplus": ["Con la Home spenta i tasti Guida e Tutte le app non rispondono."],
+    "google": ["Chromecast con Google TV: spegnere la Home di Google può bloccare il riavvio (serve il ripristino di fabbrica). Per questo la lasciamo SEMPRE accesa."],
+    "amazon": ["Fire OS 8.1: dopo disattivazioni aggressive è segnalato qualche bootloop. Riavvio di controllo dopo ogni gruppo."],
+}
+GOOGLE_TV_KEEP = ["com.google.android.tvlauncher", "com.google.android.apps.tv.launcherx", "com.google.android.tungsten.setupwraith"]
+
+# Cheap settings that help every Android-family TV (reversible: the old value is saved in the backup).
+TUNING = [("global", "window_animation_scale", "0.5"), ("global", "transition_animation_scale", "0.5"),
+          ("global", "animator_duration_scale", "0.5")]
+
+
+def pitfalls(d):
+    keys = [d["maker"].lower(), d["brand"].lower()]
+    out = []
+    for k, notes in BRAND_PITFALLS.items():
+        if any(k in x for x in keys):
+            out += notes
+    if d["family"] == "google-tv":
+        out += BRAND_PITFALLS["google"]
+    return out
+
+
+def wireless_note(d):
+    """Android 11+ TVs and Chromecast with Google TV have no fixed port 5555: they need adb pair."""
+    if int(d.get("sdk") or 0) >= 30:
+        return "Android 11+: se la porta 5555 non risponde usa Debug wireless: adb pair IP:porta, poi adb connect IP:porta."
+    return ""
+
+
+def check(serial):
+    """Drift check after a firmware update: finds packages a backup disabled that are enabled again."""
+    files = sorted(os.listdir(BACKUPS)) if os.path.isdir(BACKUPS) else []
+    files = [f for f in files if f.startswith(serial.replace(":", "_"))]
+    if not files: raise SystemExit("nessun backup: non c'è nulla da controllare")
+    want = set()
+    for f in files: want |= set(json.load(open(os.path.join(BACKUPS, f)))["disabled"])
+    off = set(l.replace("package:", "") for l in sh(serial, "pm list packages -d").splitlines())
+    back = sorted(want - off)
+    print(f"Controllati {len(want)} pacchetti. Tornati attivi dopo un aggiornamento: {len(back)}")
+    for p in back: print("  riattivato  " + p)
+    return back
+
+
+def tune(serial, tier="essenziale"):
+    """Apply the animation tuning, saving old values so undo can restore them."""
+    old = {}
+    scale = {"essenziale": "0.5", "equilibrato": "0.7", "pieno": "1.0"}.get(tier, "0.5")
+    if scale == "1.0":
+        print("TV potente: animazioni lasciate com'è"); return
+    for ns, key, _ in TUNING:
+        val = scale
+        old[f"{ns}:{key}"] = sh(serial, f"settings get {ns} {key}").strip()
+        sh(serial, f"settings put {ns} {key} {val}")
+    os.makedirs(BACKUPS, exist_ok=True)
+    path = os.path.join(BACKUPS, f"{serial.replace(':','_')}-tuning-{time.strftime('%Y%m%d-%H%M%S')}.json")
+    json.dump({"serial": serial, "disabled": [], "settings": old}, open(path, "w"), indent=1)
+    print("animazioni ridotte (valori precedenti salvati in %s)" % path)
+
+
+KNOWN = os.path.join(HERE, "known_issues.json")
+
+
+def match_issues(family=None, brand="", maker="", sdk=0, year=0):
+    """Known community problems that apply to this device (read-only: nothing is run)."""
+    out = []
+    for i in json.load(open(KNOWN))["issues"]:
+        m = i["match"]
+        if m.get("family") and family not in m["family"]: continue
+        if m.get("brand") and not any(b in (brand + " " + maker).lower() for b in m["brand"]): continue
+        if m.get("sdk_min") and int(sdk or 0) < m["sdk_min"]: continue
+        if m.get("sdk_max") and int(sdk or 0) > m["sdk_max"]: continue
+        if m.get("year_from") and year < m["year_from"]: continue
+        if m.get("year_to") and year > m["year_to"]: continue
+        out.append(i)
+    return out
+
+
+def show_issues(issues, lang="it"):
+    for i in issues:
+        t = lambda k: i[k].get(lang) or i[k]["en"]
+        print(f"[{i['confidence']}] {t('symptom')}\n    causa: {t('cause')}\n    cosa fare: {t('fix')}\n    fonte: {i['source']}")
+        if i.get("adb"): print("    comandi: " + " ; ".join(i["adb"]))
+
+
+OURS = ("org.lumesuite.launcher",)
+# Home screens that belong to the system or the maker: they are never touched (Fire OS and Google TV need their own).
+SYSTEM_HOME_PREFIXES = ("com.amazon.", "com.google.android.", "com.android.", "android", "com.sony.", "com.samsung.", "com.lge.",
+                        "com.tcl.", "com.mediatek.", "com.nvidia.", "org.droidtv.", "com.xiaomi.", "com.mitv.", "com.hisense.", "com.philips.")
+
+
+def home_activities(serial):
+    """Package names of every app that offers itself as a Home screen."""
+    out = sh(serial, "cmd package query-activities -a android.intent.action.MAIN -c android.intent.category.HOME --brief")
+    return sorted({l.strip().split("/")[0] for l in out.splitlines() if "/" in l and not l.strip().startswith(("priority", "Activity"))})
+
+
+def launchers(serial, apply=False):
+    """Extra launchers installed by hand (Hume, FLauncher, ATV Launcher, an old tvOS clone...): turned off, never uninstalled,
+    and only when Lume is there to take their place. The list of what was switched off is saved so undo can bring them back."""
+    homes = home_activities(serial)
+    ours = [h for h in homes if h in OURS]
+    system = [h for h in homes if h not in OURS and h.startswith(SYSTEM_HOME_PREFIXES)]
+    extra = [h for h in homes if h not in OURS and h not in system]
+    print("Home screens on this TV:")
+    for h in homes:
+        print("  " + ("nostro   " if h in ours else "di sistema" if h in system else "extra    ") + "  " + h)
+    if not ours:
+        print("\nLume non è installato: non spengo nessun altro launcher (resterebbe la Home senza ricambio).")
+        return []
+    if not extra:
+        print("\nNessun launcher in più da spegnere."); return []
+    if not apply:
+        print("\nSi possono spegnere (sempre ripristinabili): " + ", ".join(extra) + "\nAggiungi --yes per farlo."); return extra
+    for p in extra:
+        sh(serial, f"am force-stop {p}")
+        print(sh(serial, f"pm disable-user --user 0 {p}").strip())
+    sh(serial, "sync")
+    os.makedirs(BACKUPS, exist_ok=True)
+    path = os.path.join(BACKUPS, f"{serial.replace(':','_')}-launchers-{time.strftime('%Y%m%d-%H%M%S')}.json")
+    json.dump({"serial": serial, "disabled": extra, "settings": {}}, open(path, "w"), indent=1)
+    print("salvato in " + path)
+    return extra
+
+
+GUIDES = os.path.join(HERE, "closed_tvs.json")
+
+
+def guide(os_name, year):
+    """Closed platforms (no ADB): honest, per-year checklist from guides.json."""
+    g = json.load(open(GUIDES))
+    p = g.get(os_name)
+    if not p: raise SystemExit("piattaforme: " + ", ".join(g))
+    yr = p.get("years", {}).get(str(year))
+    if yr:
+        print(f"{p['name']} {year} - {yr['os']}  [{yr['confidence']}]\n"); print("Cosa si puo' fare davvero:  " + yr["reach"]["it"])
+        print("\nImpostazioni da spegnere (sul telecomando):")
+        for s_ in yr["privacy"]: print("  - " + s_)
+        if yr["note"]["it"]: print("\nNota: " + yr["note"]["it"])
+        print("\nDomini DNS: " + ", ".join(p["dns"])); return
+    band = next((b for b in p["bands"] if b["from"] <= year <= b["to"]), None)
+    print(f"{p['name']} - modello {year}\n")
+    if not band: print("anno fuori dalle fasce note: uso solo la lista impostazioni generale\n"); band = p["bands"][-1]
+    print("Cosa si può fare davvero:  " + band["reach"])
+    print("\nImpostazioni da spegnere (sul telecomando):")
+    for s in p["settings"]: print("  - " + s)
+    print("\nDomini da bloccare nel DNS (uno alla volta, controlla che app e aggiornamenti funzionino):")
+    for dom in p["dns"]: print("  - " + dom)
+    print("\nAttenzione: " + "; ".join(p["risks"]))
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("cmd", choices=["detect", "plan", "apply", "undo", "check", "tune", "guide", "issues", "launchers", "install"])
+    ap.add_argument("-s", "--serial"); ap.add_argument("--tier", choices=["safe", "caution"], default="safe")
+    ap.add_argument("--yes", action="store_true"); ap.add_argument("--os"); ap.add_argument("--year", type=int, default=2022); ap.add_argument("--only"); ap.add_argument("--file"); ap.add_argument("--apk")
+    a = ap.parse_args()
+    if a.cmd == "guide":
+        guide(a.os, a.year); return
+    if a.cmd == "issues" and a.os:
+        show_issues(match_issues(family=a.os, year=a.year)); return
+    serial = pick_serial(a.serial)
+    if a.cmd == "check":
+        check(serial); return
+    if a.cmd == "tune":
+        tune(serial); return
+    if a.cmd == "launchers":
+        launchers(serial, a.yes); return
+    if a.cmd == "install":
+        print("installato" if install_apk(serial, a.apk, lambda d, t: print(f"\r{d * 100 // t}%", end="", flush=True)) else "NON installato"); return
+    if a.cmd == "undo":
+        undo(serial, a.file); return
+    d = detect(serial)
+    if a.cmd == "issues":
+        show_issues(match_issues(d["family"], d["brand"], d["maker"], d["sdk"])); return
+    if a.cmd == "detect":
+        show_detect(d); return
+    plan = build_plan(serial, d, a.tier)
+    if a.cmd == "plan" or not a.yes:
+        show_detect(d); print(); show_plan(plan, a.tier); return
+    apply(serial, d, plan, a.tier, set(a.only.split(",")) if a.only else None)
+
+
+if __name__ == "__main__":
+    main()

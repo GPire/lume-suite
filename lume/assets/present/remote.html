@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0b0b10">
+<title>Lume</title>
+<style>
+:root{--bg:#0b0b10;--card:#1c1c22;--card2:#26262e;--text:#f5f5f7;--dim:#9a9aa5;--accent:#0a84ff;--ok:#30d158;--bad:#ff453a;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.35 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;overscroll-behavior:none}
+body{min-height:100vh;padding:env(safe-area-inset-top) 16px calc(86px + env(safe-area-inset-bottom))}
+h1{font-size:28px;margin:22px 0 4px;letter-spacing:-.02em}
+p.sub{color:var(--dim);margin:0 0 18px}
+button{font:inherit;color:inherit;border:0;background:var(--card);border-radius:16px;padding:14px 16px;min-height:48px;cursor:pointer;touch-action:manipulation}
+button:active{transform:scale(.97);background:var(--card2)}
+input{font:inherit;color:inherit;background:var(--card);border:1px solid #33333c;border-radius:14px;padding:14px 16px;width:100%;min-height:48px}
+input:focus{outline:2px solid var(--accent)}
+.pair{max-width:380px;margin:12vh auto 0;text-align:center}
+.pair input{font-size:34px;letter-spacing:.35em;text-align:center}
+.pair button{margin-top:14px;width:100%;background:var(--accent);font-weight:600}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;gap:4px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(11,11,16,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid #23232a}
+nav button{flex:1;background:none;font-size:12px;color:var(--dim);padding:8px 2px;min-height:52px;border-radius:12px}
+nav button.on{color:var(--text);background:var(--card)}
+nav b{display:block;font-size:20px;line-height:1.1;margin-bottom:2px}
+.pad{width:min(78vw,300px);height:min(78vw,300px);margin:6px auto 18px;border-radius:50%;background:var(--card);position:relative}
+.pad button{position:absolute;background:none;font-size:26px;width:33%;height:33%;padding:0;border-radius:50%}
+.pad .u{top:2%;left:33.5%}.pad .d{bottom:2%;left:33.5%}.pad .l{left:2%;top:33.5%}.pad .r{right:2%;top:33.5%}
+.pad .o{left:33.5%;top:33.5%;background:var(--accent);font-weight:700;font-size:18px;box-shadow:0 4px 22px rgba(10,132,255,.45)}
+.row{display:flex;gap:10px;margin:0 0 10px}.row>button{flex:1}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.app{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;font-size:12px;text-align:center;word-break:break-word}
+.app img{width:56px;height:56px;border-radius:14px;background:var(--card2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.chips button{padding:10px 16px;min-height:44px;border-radius:22px}.chips button.on{background:var(--accent)}
+.list button{display:block;width:100%;text-align:left;margin-bottom:8px}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin:22px 0 10px;font-weight:600}
+#toast{position:fixed;left:16px;right:16px;bottom:calc(88px + env(safe-area-inset-bottom));padding:12px 16px;border-radius:14px;background:#2c2c34;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;text-align:center}
+#toast.show{opacity:1;transform:none}#toast.bad{background:#5a1f1b}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div id="pair" class="pair hide">
+  <h1 data-t="pairTitle">Collega la TV</h1>
+  <p class="sub" data-t="pairSub">Scrivi il codice di 6 cifre che vedi sulla TV.</p>
+  <input id="pin" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="000000">
+  <button id="pairBtn" data-t="pairBtn">Collega</button>
+</div>
+
+<main id="app" class="hide">
+  <section id="t-remote">
+    <h1 id="devname">Lume</h1><p class="sub" id="where"></p>
+    <div class="pad">
+      <button class="u" data-key="up" aria-label="su">▲</button><button class="d" data-key="down" aria-label="giù">▼</button>
+      <button class="l" data-key="left" aria-label="sinistra">◀</button><button class="r" data-key="right" aria-label="destra">▶</button>
+      <button class="o" data-key="ok">OK</button>
+    </div>
+    <div class="row"><button data-key="back" data-t="back">Indietro</button><button id="homeBtn" data-t="home">Home</button><button data-key="menu" data-t="menu">Menu</button></div>
+  </section>
+  <section id="t-apps" class="hide"><h1 data-t="apps">App</h1><p class="sub" data-t="appsSub">Tocca per aprirla sulla TV.</p>
+    <input id="appq" placeholder="Cerca un'app" data-p="findApp"><div class="grid" id="grid" style="margin-top:12px"></div></section>
+  <section id="t-search" class="hide"><h1 data-t="search">Cerca</h1><p class="sub" data-t="searchSub">Scrivi qui e il testo arriva sulla TV: niente tastiera col telecomando.</p>
+    <form id="sf"><input id="q" placeholder="App, film, serie…" data-p="searchPh" enterkeyhint="search"></form>
+    <div class="row" style="margin-top:12px"><button id="sendQ" style="background:var(--accent);font-weight:600" data-t="searchBtn">Cerca sulla TV</button></div></section>
+  <section id="t-look" class="hide"><h1 data-t="look">Aspetto</h1>
+    <h2 data-t="bg">Sfondo</h2><div class="chips" id="walls"></div>
+    <h2 data-t="homeLook">Home</h2><div class="chips" id="looks"></div></section>
+  <section id="t-more" class="hide"><h1 data-t="more">Altro</h1><h2 data-t="open">Apri sulla TV</h2>
+    <div class="list" id="shortcuts"></div>
+    <h2 data-t="power">Alimentazione</h2><div class="list"><button id="sleepBtn" data-t="sleep">Spegni lo schermo</button></div>
+    <h2 data-t="phone">Questo telefono</h2><div class="list"><button id="forget" data-t="forget">Scollega questo telefono</button></div></section>
+</main>
+
+<nav id="nav" class="hide">
+  <button data-tab="remote" class="on"><b>◉</b><span data-t="tRemote">Telecomando</span></button>
+  <button data-tab="apps"><b>▦</b><span data-t="tApps">App</span></button>
+  <button data-tab="search"><b>⌕</b><span data-t="tSearch">Cerca</span></button>
+  <button data-tab="look"><b>◐</b><span data-t="tLook">Aspetto</span></button>
+  <button data-tab="more"><b>⋯</b><span data-t="tMore">Altro</span></button>
+</nav>
+<div id="toast"></div>
+
+<script>
+"use strict";
+const IT={pairTitle:"Collega la TV",pairSub:"Scrivi il codice di 6 cifre che vedi sulla TV.",pairBtn:"Collega",back:"Indietro",home:"Home",menu:"Menu",apps:"App",appsSub:"Tocca per aprirla sulla TV.",findApp:"Cerca un'app",search:"Cerca",searchSub:"Scrivi qui e il testo arriva sulla TV: niente tastiera col telecomando.",searchPh:"App, film, serie…",searchBtn:"Cerca sulla TV",look:"Aspetto",bg:"Sfondo",homeLook:"Home",scene:"Scena",classic:"Classico",more:"Altro",open:"Apri sulla TV",power:"Alimentazione",sleep:"Spegni lo schermo",phone:"Questo telefono",forget:"Scollega questo telefono",tRemote:"Telecomando",tApps:"App",tSearch:"Cerca",tLook:"Aspetto",tMore:"Altro",sent:"Inviato",badPin:"Il codice non corrisponde a quello sulla TV",off:"Il controllo da telefono è spento sulla TV",lost:"La TV non risponde",notHome:"Lume non è in primo piano: Indietro funziona solo con l'interruttore del tasto Home",onHome:"Lume è in primo piano",elsewhere:"Un'altra app è aperta",cc:"Centro di controllo",recents:"App recenti",weather:"Previsioni meteo",markets:"Mercati",news:"Notizie",health:"Salute della TV",settings:"Impostazioni",airplay:"AirPlay: come collegarsi",ask:"Spegnere lo schermo della TV?"};
+const EN={pairTitle:"Pair with the TV",pairSub:"Type the 6-digit code shown on the TV.",pairBtn:"Pair",back:"Back",home:"Home",menu:"Menu",apps:"Apps",appsSub:"Tap to open it on the TV.",findApp:"Find an app",search:"Search",searchSub:"Type here and the text goes to the TV: no remote keyboard.",searchPh:"Apps, movies, shows…",searchBtn:"Search on the TV",look:"Look",bg:"Background",homeLook:"Home",scene:"Scene",classic:"Classic",more:"More",open:"Open on the TV",power:"Power",sleep:"Turn the screen off",phone:"This phone",forget:"Unpair this phone",tRemote:"Remote",tApps:"Apps",tSearch:"Search",tLook:"Look",tMore:"More",sent:"Sent",badPin:"The code does not match the one on the TV",off:"Phone control is off on the TV",lost:"The TV is not answering",notHome:"Lume is not in front: Back only works with the Home-key switch on",onHome:"Lume is in front",elsewhere:"Another app is open",cc:"Control Center",recents:"Recent Apps",weather:"Forecast",markets:"Markets",news:"News",health:"TV health",settings:"Settings",airplay:"AirPlay: how to connect",ask:"Turn the TV screen off?"};
+const L=(navigator.language||"it").toLowerCase().startsWith("it")?IT:EN;
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+$$("[data-t]").forEach(e=>e.textContent=L[e.dataset.t]||e.textContent);
+$$("[data-p]").forEach(e=>e.placeholder=L[e.dataset.p]||e.placeholder);
+let token=localStorage.getItem("lume_token")||"",state=null,toastT;
+function toast(m,bad){const t=$("#toast");t.textContent=m;t.className="show"+(bad?" bad":"");clearTimeout(toastT);toastT=setTimeout(()=>t.className="",2200)}
+async function api(path,opt={}){
+  const r=await fetch(path,Object.assign({headers:{"Authorization":"Bearer "+token,"Content-Type":"application/json"}},opt)).catch(()=>null);
+  if(!r){toast(L.lost,1);return null}
+  if(r.status===401){unpaired();return null}
+  if(r.status===403){toast(L.off,1);return null}
+  return r;
+}
+const act=async o=>{const r=await api("/api/remote/act",{method:"POST",body:JSON.stringify(o)});if(!r)return;const j=await r.json();if(j.ok){navigator.vibrate&&navigator.vibrate(8);return true}toast(j.error||L.lost,1);return false};
+function unpaired(){token="";localStorage.removeItem("lume_token");$("#pair").classList.remove("hide");$("#app").classList.add("hide");$("#nav").classList.add("hide")}
+$("#pairBtn").onclick=async()=>{
+  const r=await fetch("/api/pair",{method:"POST",body:JSON.stringify({pin:$("#pin").value.trim()})}).catch(()=>null);
+  if(!r)return toast(L.lost,1);
+  const j=await r.json();if(!j.token)return toast(L.badPin,1);
+  token=j.token;localStorage.setItem("lume_token",token);start();
+};
+async function start(){
+  const r=await api("/api/remote/state");if(!r)return;
+  state=await r.json();
+  $("#pair").classList.add("hide");$("#app").classList.remove("hide");$("#nav").classList.remove("hide");
+  $("#devname").textContent=state.name||"Lume";$("#where").textContent=state.onHome?L.onHome:L.elsewhere;
+  drawApps();drawLook();drawMore();
+}
+function drawApps(){
+  const f=$("#appq").value.trim().toLowerCase(),g=$("#grid");g.textContent="";
+  state.apps.filter(a=>!f||a.label.toLowerCase().includes(f)).forEach(a=>{
+    const b=document.createElement("button");b.className="app";
+    const i=new Image();i.loading="lazy";i.src="/api/remote/icon?pkg="+encodeURIComponent(a.pkg)+"&token="+encodeURIComponent(token);
+    const s=document.createElement("span");s.textContent=a.label;b.append(i,s);
+    b.onclick=async()=>{if(await act({action:"launch",pkg:a.pkg}))toast(a.label)};g.append(b)});
+}
+function chip(box,label,on,fn){const b=document.createElement("button");b.textContent=label;if(on)b.className="on";b.onclick=fn;box.append(b)}
+function drawLook(){
+  const w=$("#walls");w.textContent="";state.wallpapers.forEach(x=>chip(w,x.name,x.current,async()=>{if(await act({action:"wallpaper",key:x.key})){state.wallpapers.forEach(y=>y.current=y.key===x.key);drawLook()}}));
+  const l=$("#looks");l.textContent="";[["scene",L.scene],["classic",L.classic]].forEach(([k,n])=>chip(l,n,state.look===k,async()=>{if(await act({action:"look",value:k})){state.look=k;drawLook()}}));
+}
+function drawMore(){
+  const s=$("#shortcuts");s.textContent="";
+  [["cc","cc"],["recents","recents"],["weather","weather"],["markets","markets"],["news","news"],["health","health"],["settings","settings"],["airplay","airplay"]].forEach(([k,t])=>{
+    const b=document.createElement("button");b.textContent=L[t];b.onclick=async()=>{if(await act({action:"open",screen:k}))toast(L.sent)};s.append(b)});
+}
+$$("[data-key]").forEach(b=>{
+  const k=b.dataset.key;let rep;
+  const fire=async()=>{if(await act({action:"key",key:k})===false)stop()};
+  const stop=()=>{clearInterval(rep);rep=null};
+  b.addEventListener("pointerdown",e=>{e.preventDefault();fire();if(["up","down","left","right"].includes(k))rep=setTimeout(()=>{rep=setInterval(fire,170)},380)});
+  ["pointerup","pointerleave","pointercancel"].forEach(ev=>b.addEventListener(ev,()=>{clearTimeout(rep);stop()}));
+});
+$("#homeBtn").onclick=()=>act({action:"home"});
+$("#appq").oninput=drawApps;
+const send=async()=>{const t=$("#q").value.trim();if(t&&await act({action:"search",text:t}))toast(L.sent)};
+$("#sendQ").onclick=send;$("#sf").onsubmit=e=>{e.preventDefault();send()};
+$("#sleepBtn").onclick=()=>{if(confirm(L.ask))act({action:"sleep"})};
+$("#forget").onclick=unpaired;
+$$("[data-tab]").forEach(b=>b.onclick=()=>{$$("[data-tab]").forEach(x=>x.classList.toggle("on",x===b));["remote","apps","search","look","more"].forEach(t=>$("#t-"+t).classList.toggle("hide",t!==b.dataset.tab));if(b.dataset.tab==="search")$("#q").focus()});
+if(token)start();else unpaired();
+</script>
+</body>
+</html>

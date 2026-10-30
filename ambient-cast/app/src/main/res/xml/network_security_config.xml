@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  AirPlay video plays whatever URL the sender hands over: usually the protocol core's local
+  HLS server (http://localhost:<port>), but some apps (e.g. Bilibili) pass plain http media
+  URLs from their CDNs. The app itself only downloads media, so cleartext is permitted.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

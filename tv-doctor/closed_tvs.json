@@ -1,0 +1,541 @@
+{
+ "tizen": {
+  "name": "Samsung Tizen",
+  "bands": [
+   {
+    "from": 2015,
+    "to": 2017,
+    "reach": "Solo impostazioni e DNS. Le app di terze parti sono instabili (Tizen 2.3-3.0) e il menu Impostazioni delle app può bloccarsi: usa il tasto Impostazioni del telecomando."
+   },
+   {
+    "from": 2018,
+    "to": 2019,
+    "reach": "Impostazioni e DNS; Modalità sviluppatore (1-2-3-4-5 dentro Apps) con sdb sulla porta 26101: si leggono e si disinstallano solo le app non di sistema. Una Home sostitutiva come app web è possibile ma non è il default e l'avvio automatico non è garantito."
+   },
+   {
+    "from": 2020,
+    "to": 2022,
+    "reach": "Come sopra, più installazione di app web firmate (TizenBrew, free-my-tv). Autorun Last App spesso non riapre l'app."
+   },
+   {
+    "from": 2023,
+    "to": 2030,
+    "reach": "Impostazioni e DNS; l'installazione di app firmate richiede l'accesso con l'account Samsung. Nessuna rimozione di pacchetti di sistema."
+   }
+  ],
+  "settings": [
+   "Impostazioni > Assistenza > Termini e privacy > Servizi di informazioni sulla visione: OFF (riconoscimento contenuti ACR)",
+   "Impostazioni > Assistenza > Termini e privacy > Pubblicità basata sugli interessi: OFF",
+   "Impostazioni > Generale > Funzioni smart > Avvio automatico Smart Hub: OFF",
+   "Impostazioni > Generale > Funzioni smart > Avvio automatico ultima app: a scelta (OFF per aprire sull'ultimo ingresso)",
+   "Smart Hub > Impostazioni: anteprime video automatiche OFF, se la tua versione le ha",
+   "Se hai attivato la Modalità sviluppatore: spegnila a fine lavoro (lascia un ponte di debug sulla rete)"
+  ],
+  "dns": [
+   "samsungads.com",
+   "samsungacr.com"
+  ],
+  "risks": [
+   "non rimuovere mai pacchetti org.tizen.* o com.samsung.*",
+   "il reset di Smart Hub o di fabbrica riporta le app preinstallate",
+   "bloccare tutti i domini Samsung rompe app store e aggiornamenti: aggiungili uno alla volta",
+   "i menu cambiano per modello e paese: confronta con la tua TV"
+  ],
+  "years": {
+   "2015": {
+    "os": "Tizen 2.3",
+    "reach": {
+     "it": "Modalità sviluppatore possibile (Apps, poi 1-2-3-4-5). Le app vanno costruite a mano: gli installer comunitari non le supportano. Nessuna pulizia di sistema.",
+     "en": "Developer mode possible (Apps, then 1-2-3-4-5). Apps must be hand-built: community installers do not support them. No system cleanup."
+    },
+    "privacy": [
+     "Impostazioni > Assistenza > Termini e policy > SyncPlus e Marketing: OFF (riconoscimento contenuti e pubblicità basata sulla visione)"
+    ],
+    "confidence": "da verificare sulla tua TV: i menu cambiano per anno, firmware e paese",
+    "note": {
+     "it": "Un UE48JU6100 è stato segnalato funzionante con un pacchetto fatto a mano.",
+     "en": "A UE48JU6100 was reported working with a hand-built package."
+    }
+   },
+   "2016": {
+    "os": "Tizen 2.4",
+    "reach": {
+     "it": "Come il 2015, ma le installazioni falliscono spesso (errore 118); un pacchetto rimasto da un tentativo precedente può bloccare tutto.",
+     "en": "As 2015, but installs often fail (error 118); a package left from an earlier attempt can block everything."
+    },
+    "privacy": [
+     "Impostazioni > Assistenza > Termini e policy > SyncPlus e Marketing: OFF (riconoscimento contenuti e pubblicità basata sulla visione)"
+    ],
+    "confidence": "da verificare sulla tua TV: i menu cambiano per anno, firmware e paese",
+    "note": {
+     "it": "Nel cassetto app manca Impostazioni: usa il tasto Impostazioni del telecomando.",
+     "en": "Settings is missing from the app drawer: use the remote's Settings button."
+    }
+   },
+   "2017": {
+    "os": "Tizen 3.0",
+    "reach": {
+     "it": "Modalità sviluppatore possibile; le app firmate di terzi sono instabili e il menu Impostazioni delle app può bloccarsi.",
+     "en": "Developer mode possible; third-party signed apps are unstable and the apps' Settings menu can freeze."
+    },
+    "privacy": [
+     "Impostazioni > Assistenza > Termini e policy > SyncPlus e Marketing: OFF (riconoscimento contenuti e pubblicità basata sulla visione)"
+    ],
+    "confidence": "da verificare sulla tua TV: i menu cambiano per anno, firmware e paese",
+    "note": {
+     "it": "Usa il tasto Impostazioni del telecomando, non quello nel cassetto app.",
+     "en": "Use the remote's Settings button, not the one in the app drawer."
+    }
+   },
+   "2018": {
+    "os": "Tizen 4.0",
+    "reach": {
+     "it": "Modalità sviluppatore e sdb (porta 26101): si leggono e si disinstallano solo le app non di sistema. Provato su un UE55NU7400.",
+     "en": "Developer mode and sdb (port 26101): only non-system apps can be listed and removed. Tested on a UE55NU7400."
+    },
+    "privacy": [
+     "Impostazioni > Assistenza > Termini e policy > Servizi di informazioni sulla visione: OFF (riconoscimento contenuti)",
+     "Impostazioni > Assistenza > Termini e policy > Pubblicità basata sugli interessi: OFF",
+     "Impostazioni > Generale > Funzioni smart > Avvio automatico Smart Hub: OFF"
+    ],
+    "confidence": "confermato da fonte (modello 2018) o da guide concordi",
+    "note": {
+     "it": "Non rimuovere pacchetti org.tizen.* o com.samsung.*.",
+     "en": "Never remove org.tizen.* or com.samsung.* packages."
+    }
+   },
+   "2019": {
+    "os": "Tizen 5.0",
+    "reach": {
+     "it": "Come il 2018: modalità sviluppatore e sdb, app non di sistema.",
+     "en": "As 2018: developer mode and sdb, non-system apps."
+    },
+    "privacy": [
+     "Impostazioni > Assistenza > Termini e policy > Servizi di informazioni sulla visione: OFF (riconoscimento contenuti)",
+     "Impostazioni > Assistenza > Termini e policy > Pubblicità basata sugli interessi: OFF",
+     "Impostazioni > Generale > Funzioni smart > Avvio automatico Smart Hub: OFF"
+    ],
+    "confidence": "confermato da fonte (modello 2018) o da guide concordi",
+    "note": {
+     "it": "Autorun Last App spesso non riapre l'app sostitutiva.",
+     "en": "Autorun Last App often does not reopen a replacement app."
+    }
+   },
+   "2020": {
+    "os": "Tizen 5.5",
+    "reach": {
+     "it": "Modalità sviluppatore e sdb; da questo anno funzionano gli installer comunitari (TizenBrew) per le app web.",
+     "en": "Developer mode and sdb; from this year community installers (TizenBrew) work for web apps."
+    },
+    "privacy": [
+     "Impostazioni > Assistenza > Termini e policy > Servizi di informazioni sulla visione: OFF (riconoscimento contenuti)",
+     "Impostazioni > Assistenza > Termini e policy > Pubblicità basata sugli interessi: OFF",
+     "Impostazioni > Generale > Funzioni smart > Avvio automatico Smart Hub: OFF"
+    ],
+    "confidence": "confermato da fonte (modello 2018) o da guide concordi",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2021": {
+    "os": "Tizen 6.0",
+    "reach": {
+     "it": "Come il 2020. Il menu privacy può chiamarsi Termini e privacy > Scelte sulla privacy.",
+     "en": "As 2020. The privacy menu may be called Terms & Privacy > Privacy Choices."
+    },
+    "privacy": [
+     "Impostazioni > Assistenza > Termini e privacy > Scelte sulla privacy > Servizi di informazioni sulla visione: OFF (riconoscimento contenuti)",
+     "Impostazioni > Assistenza > Termini e privacy > Scelte sulla privacy > Pubblicità basata sugli interessi: OFF"
+    ],
+    "confidence": "da verificare sulla tua TV: i menu cambiano per anno, firmware e paese",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2022": {
+    "os": "Tizen 6.5",
+    "reach": {
+     "it": "Come il 2021: modalità sviluppatore, app web firmate, nessuna pulizia di sistema.",
+     "en": "As 2021: developer mode, signed web apps, no system cleanup."
+    },
+    "privacy": [
+     "Impostazioni > Assistenza > Termini e privacy > Scelte sulla privacy > Servizi di informazioni sulla visione: OFF (riconoscimento contenuti)",
+     "Impostazioni > Assistenza > Termini e privacy > Scelte sulla privacy > Pubblicità basata sugli interessi: OFF"
+    ],
+    "confidence": "da verificare sulla tua TV: i menu cambiano per anno, firmware e paese",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2023": {
+    "os": "Tizen 7.0",
+    "reach": {
+     "it": "Per firmare le app serve l'accesso con l'account Samsung. Nessuna pulizia di sistema.",
+     "en": "Signing apps needs your Samsung account. No system cleanup."
+    },
+    "privacy": [
+     "Impostazioni > Assistenza > Termini e privacy > Scelte sulla privacy > Servizi di informazioni sulla visione: OFF (riconoscimento contenuti)",
+     "Impostazioni > Assistenza > Termini e privacy > Scelte sulla privacy > Pubblicità basata sugli interessi: OFF"
+    ],
+    "confidence": "da verificare sulla tua TV: i menu cambiano per anno, firmware e paese",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2024": {
+    "os": "Tizen 8.0",
+    "reach": {
+     "it": "Come il 2023; il certificato gratuito da riga di comando viene rifiutato (errori 3-15, 3-16): serve quello legato all'account Samsung. Si dice che Samsung prometta 7 anni di aggiornamenti dal 2024 (forum, non annuncio ufficiale).",
+     "en": "As 2023; the free command-line certificate is rejected (errors 3-15, 3-16): you need the Samsung-account one. Samsung reportedly promises 7 years of updates from 2024 (forum, not official)."
+    },
+    "privacy": [
+     "Impostazioni > Assistenza > Termini e privacy > Scelte sulla privacy > Servizi di informazioni sulla visione: OFF (riconoscimento contenuti)",
+     "Impostazioni > Assistenza > Termini e privacy > Scelte sulla privacy > Pubblicità basata sugli interessi: OFF"
+    ],
+    "confidence": "da verificare sulla tua TV: i menu cambiano per anno, firmware e paese",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2025": {
+    "os": "versione non confermata",
+    "reach": {
+     "it": "Nessuna fonte trovata sulle app di terzi per questo anno: solo impostazioni e DNS finché non è provato.",
+     "en": "No source found on third-party apps for this year: settings and DNS only until proven."
+    },
+    "privacy": [
+     "Impostazioni > Assistenza > Termini e privacy > Scelte sulla privacy > Servizi di informazioni sulla visione: OFF (riconoscimento contenuti)",
+     "Impostazioni > Assistenza > Termini e privacy > Scelte sulla privacy > Pubblicità basata sugli interessi: OFF"
+    ],
+    "confidence": "da verificare sulla tua TV: i menu cambiano per anno, firmware e paese",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2026": {
+    "os": "versione non confermata",
+    "reach": {
+     "it": "Nessun dato: modelli troppo recenti. Solo impostazioni e DNS.",
+     "en": "No data: models too recent. Settings and DNS only."
+    },
+    "privacy": [
+     "Impostazioni > Assistenza > Termini e privacy > Scelte sulla privacy > Servizi di informazioni sulla visione: OFF (riconoscimento contenuti)",
+     "Impostazioni > Assistenza > Termini e privacy > Scelte sulla privacy > Pubblicità basata sugli interessi: OFF"
+    ],
+    "confidence": "nessun dato verificato",
+    "note": {
+     "it": "Dal 10 giugno 2026 Samsung apre la home alla pubblicità programmatica (fonte stampa). Metti OFF 'Pubblicità basata sugli interessi' e 'Servizi di informazioni sulla visione', e usa il DNS: non toglie gli spazi in home, riduce il tracciamento.",
+     "en": "Since 10 June 2026 Samsung opens the home screen to programmatic ads (press report). Turn OFF 'Interest-based advertising' and 'Viewing information services' and use DNS: it does not remove home slots, it reduces tracking."
+    }
+   }
+  }
+ },
+ "webos": {
+  "name": "LG webOS",
+  "bands": [
+   {
+    "from": 2015,
+    "to": 2017,
+    "reach": "webOS 3.x: impostazioni e DNS; la Modalità sviluppatore funziona (sessione rinnovabile); l'elenco app per una Home sostitutiva va letto dal computer. Il root dipende dal modello e dal firmware: controlla webosbrew.org (tabella hardware)."
+   },
+   {
+    "from": 2018,
+    "to": 2021,
+    "reach": "webOS 4-6: impostazioni, DNS e Modalità sviluppatore; Homebrew Channel dove il firmware è ancora rootabile. Le app installate in Modalità sviluppatore non vedono le altre app."
+   },
+   {
+    "from": 2022,
+    "to": 2030,
+    "reach": "webOS 22+: impostazioni e DNS; Modalità sviluppatore (si rinnova ogni circa 40 giorni dall'app, tasto EXTEND). Root non garantito: le versioni recenti correggono i metodi noti."
+   }
+  ],
+  "settings": [
+   "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Live Plus: OFF (riconoscimento contenuti)",
+   "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Pubblicità: attiva Limita il tracciamento degli annunci e Reimposta ID pubblicitario",
+   "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Impostazioni Home > Promozione Home: OFF",
+   "Accordi dell'utente (in Sistema o in Assistenza e privacy, a seconda della versione): togli le voci facoltative, come Informazioni vocali e Pubblicità basata sugli interessi"
+  ],
+  "dns": [
+   "Servono le liste del tuo modello: attiva il registro DNS (AdGuard Home / Pi-hole) e guarda cosa chiede la TV; webos-unclutter documenta le categorie Smart Ads, Home Dashboard, Sports, IoT"
+  ],
+  "risks": [
+   "il firmware può ripristinare tutto dopo un aggiornamento",
+   "le regole DNS note sono tarate su una C1 europea (webOS 6): altri modelli e paesi chiamano altri server",
+   "se il DNS è un computer e si spegne, la TV non risolve più nulla",
+   "è impossibile togliere tutta la pubblicità da webOS con le impostazioni"
+  ],
+  "years": {
+   "2014": {
+    "os": "webOS 1.0",
+    "reach": {
+     "it": "Nessuna modalità sviluppatore utile per le app di oggi. Solo impostazioni e DNS.",
+     "en": "No developer mode useful for today's apps. Settings and DNS only."
+    },
+    "privacy": [
+     "Impostazioni > Tutte > Generali > Informazioni su questa TV > Accordi dell'utente: togli Live Plus e la pubblicità basata sugli interessi, se presenti"
+    ],
+    "confidence": "da verificare",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2015": {
+    "os": "webOS 2.0",
+    "reach": {
+     "it": "Modalità sviluppatore non confermata per questo anno; gli installer comunitari richiedono webOS 3 o più recente. Solo impostazioni e DNS.",
+     "en": "Developer mode not confirmed for this year; community installers need webOS 3 or newer. Settings and DNS only."
+    },
+    "privacy": [
+     "Impostazioni > Tutte > Generali > Informazioni su questa TV > Accordi dell'utente: togli Live Plus e la pubblicità basata sugli interessi, se presenti"
+    ],
+    "confidence": "da verificare",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2016": {
+    "os": "webOS 3.0",
+    "reach": {
+     "it": "Modalità sviluppatore sì (Content Store, app Developer Mode). L'elenco app per una Home sostitutiva va letto dal computer. Il root dipende dal firmware (webosbrew.org).",
+     "en": "Developer mode yes (Content Store, Developer Mode app). The app list for a replacement home must be read from the computer. Root depends on firmware (webosbrew.org)."
+    },
+    "privacy": [
+     "Impostazioni > Tutte > Generali > Informazioni su questa TV > Accordi dell'utente: togli Live Plus e la pubblicità basata sugli interessi, se presenti"
+    ],
+    "confidence": "da verificare",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2017": {
+    "os": "webOS 3.5",
+    "reach": {
+     "it": "Come il 2016.",
+     "en": "As 2016."
+    },
+    "privacy": [
+     "Impostazioni > Tutte > Generali > Informazioni su questa TV > Accordi dell'utente: togli Live Plus e la pubblicità basata sugli interessi, se presenti"
+    ],
+    "confidence": "da verificare",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2018": {
+    "os": "webOS 4.0",
+    "reach": {
+     "it": "Modalità sviluppatore sì; Homebrew Channel dove il firmware è ancora rootabile.",
+     "en": "Developer mode yes; Homebrew Channel where the firmware is still rootable."
+    },
+    "privacy": [
+     "Impostazioni > Tutte > Generali > Informazioni su questa TV > Accordi dell'utente: togli Live Plus e la pubblicità basata sugli interessi, se presenti",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Live Plus: OFF (riconoscimento contenuti)"
+    ],
+    "confidence": "da verificare",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2019": {
+    "os": "webOS 4.5",
+    "reach": {
+     "it": "Come il 2018.",
+     "en": "As 2018."
+    },
+    "privacy": [
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Live Plus: OFF (riconoscimento contenuti)",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Pubblicità: attiva Limita il tracciamento degli annunci e Reimposta ID pubblicitario",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Impostazioni Home > Promozione Home: OFF",
+     "Accordi dell'utente (in Sistema o in Assistenza e privacy, a seconda della versione): togli le voci facoltative, come Informazioni vocali e Pubblicità basata sugli interessi"
+    ],
+    "confidence": "menu confermati da guide concordi (non da LG): controlla le voci sulla tua TV",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2020": {
+    "os": "webOS 5.0",
+    "reach": {
+     "it": "Modalità sviluppatore sì; root solo su firmware vecchi.",
+     "en": "Developer mode yes; root only on old firmware."
+    },
+    "privacy": [
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Live Plus: OFF (riconoscimento contenuti)",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Pubblicità: attiva Limita il tracciamento degli annunci e Reimposta ID pubblicitario",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Impostazioni Home > Promozione Home: OFF",
+     "Accordi dell'utente (in Sistema o in Assistenza e privacy, a seconda della versione): togli le voci facoltative, come Informazioni vocali e Pubblicità basata sugli interessi"
+    ],
+    "confidence": "menu confermati da guide concordi (non da LG): controlla le voci sulla tua TV",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2021": {
+    "os": "webOS 6.0",
+    "reach": {
+     "it": "Modalità sviluppatore sì: le app installate così non vedono le altre app e chiedono accesso una volta. Home ridisegnata: i menu possono cambiare posto.",
+     "en": "Developer mode yes: apps installed this way cannot see other apps and ask for access once. Home was redesigned: menus may move."
+    },
+    "privacy": [
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Live Plus: OFF (riconoscimento contenuti)",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Pubblicità: attiva Limita il tracciamento degli annunci e Reimposta ID pubblicitario",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Impostazioni Home > Promozione Home: OFF",
+     "Accordi dell'utente (in Sistema o in Assistenza e privacy, a seconda della versione): togli le voci facoltative, come Informazioni vocali e Pubblicità basata sugli interessi"
+    ],
+    "confidence": "menu confermati da guide concordi (non da LG): controlla le voci sulla tua TV",
+    "note": {
+     "it": "Provato su una C1 europea da chi ha scritto webos-unclutter.",
+     "en": "Tested on a European C1 by webos-unclutter's author."
+    }
+   },
+   "2022": {
+    "os": "webOS 22",
+    "reach": {
+     "it": "Modalità sviluppatore sì (si rinnova ogni circa 40 giorni, tasto EXTEND). Root non garantito.",
+     "en": "Developer mode yes (renew about every 40 days, EXTEND button). Root not guaranteed."
+    },
+    "privacy": [
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Live Plus: OFF (riconoscimento contenuti)",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Pubblicità: attiva Limita il tracciamento degli annunci e Reimposta ID pubblicitario",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Impostazioni Home > Promozione Home: OFF",
+     "Accordi dell'utente (in Sistema o in Assistenza e privacy, a seconda della versione): togli le voci facoltative, come Informazioni vocali e Pubblicità basata sugli interessi"
+    ],
+    "confidence": "menu confermati da guide concordi (non da LG): controlla le voci sulla tua TV",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2023": {
+    "os": "webOS 23",
+    "reach": {
+     "it": "Come il 2022.",
+     "en": "As 2022."
+    },
+    "privacy": [
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Live Plus: OFF (riconoscimento contenuti)",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Pubblicità: attiva Limita il tracciamento degli annunci e Reimposta ID pubblicitario",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Impostazioni Home > Promozione Home: OFF",
+     "Accordi dell'utente (in Sistema o in Assistenza e privacy, a seconda della versione): togli le voci facoltative, come Informazioni vocali e Pubblicità basata sugli interessi"
+    ],
+    "confidence": "menu confermati da guide concordi (non da LG): controlla le voci sulla tua TV",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2024": {
+    "os": "webOS 24",
+    "reach": {
+     "it": "Come il 2022.",
+     "en": "As 2022."
+    },
+    "privacy": [
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Live Plus: OFF (riconoscimento contenuti)",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Pubblicità: attiva Limita il tracciamento degli annunci e Reimposta ID pubblicitario",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Impostazioni Home > Promozione Home: OFF",
+     "Accordi dell'utente (in Sistema o in Assistenza e privacy, a seconda della versione): togli le voci facoltative, come Informazioni vocali e Pubblicità basata sugli interessi"
+    ],
+    "confidence": "menu confermati da guide concordi (non da LG): controlla le voci sulla tua TV",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2025": {
+    "os": "webOS 25",
+    "reach": {
+     "it": "Come il 2022; l'aggiornamento webOS 25 è gratuito su molti modelli precedenti (da testata).",
+     "en": "As 2022; webOS 25 is a free update on many earlier models (press report)."
+    },
+    "privacy": [
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Live Plus: OFF (riconoscimento contenuti)",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Pubblicità: attiva Limita il tracciamento degli annunci e Reimposta ID pubblicitario",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Impostazioni Home > Promozione Home: OFF",
+     "Accordi dell'utente (in Sistema o in Assistenza e privacy, a seconda della versione): togli le voci facoltative, come Informazioni vocali e Pubblicità basata sugli interessi"
+    ],
+    "confidence": "menu confermati da guide concordi (non da LG): controlla le voci sulla tua TV",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   },
+   "2026": {
+    "os": "versione non confermata",
+    "reach": {
+     "it": "Nessun dato: modelli troppo recenti. Solo impostazioni e DNS.",
+     "en": "No data: models too recent. Settings and DNS only."
+    },
+    "privacy": [
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Live Plus: OFF (riconoscimento contenuti)",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Pubblicità: attiva Limita il tracciamento degli annunci e Reimposta ID pubblicitario",
+     "Impostazioni > Generali > Sistema > Impostazioni aggiuntive > Impostazioni Home > Promozione Home: OFF",
+     "Accordi dell'utente (in Sistema o in Assistenza e privacy, a seconda della versione): togli le voci facoltative, come Informazioni vocali e Pubblicità basata sugli interessi"
+    ],
+    "confidence": "nessun dato verificato",
+    "note": {
+     "it": "",
+     "en": ""
+    }
+   }
+  }
+ },
+ "roku": {
+  "name": "Roku TV",
+  "bands": [
+   {
+    "from": 2015,
+    "to": 2030,
+    "reach": "Solo impostazioni e DNS: Roku non ha ADB né modalità per app di terzi sulle TV."
+   }
+  ],
+  "settings": [
+   "Impostazioni > Privacy > Pubblicità: attiva Limita il tracciamento degli annunci",
+   "Impostazioni > Privacy > Esperienza Smart TV: spegni Usa le informazioni dagli ingressi TV (riconoscimento contenuti)",
+   "Impostazioni > Sistema > Alimentazione > Accensione: Ultimo ingresso (così non apre la Home piena di pubblicità)",
+   "Voci di menu da confrontare con la tua TV: possono cambiare per versione di Roku OS e paese"
+  ],
+  "dns": [
+   "Usa le liste di AdGuard Home o Pi-hole e guarda cosa chiede la TV prima di bloccare"
+  ],
+  "risks": [
+   "i percorsi dei menu sono da verificare sulla tua versione di Roku OS",
+   "bloccare troppo può rompere i canali",
+   "Roku ha provato pubblicità in riproduzione automatica prima della home (2025). Nessuna impostazione ufficiale la spegne: il DNS può ridurre le richieste, non cambia la home."
+  ]
+ },
+ "vidaa": {
+  "name": "Hisense VIDAA",
+  "bands": [
+   {
+    "from": 2015,
+    "to": 2030,
+    "reach": "Impostazioni e DNS. Una lista DNS comunitaria dedicata esiste (ipanalytics/Hisense-VIDAA-DNS-Clean-TV-Blocklist)."
+   }
+  ],
+  "settings": [
+   "Impostazioni > Sistema > Privacy: spegni pubblicità personalizzata e riconoscimento contenuti, se presenti",
+   "I percorsi cambiano per modello: confrontali con la tua TV"
+  ],
+  "dns": [
+   "Lista comunitaria Hisense-VIDAA-DNS-Clean-TV-Blocklist"
+  ],
+  "risks": [
+   "i menu sono da verificare sul modello",
+   "Stampa 2026: Hisense VIDAA mostra pubblicità non saltabili cambiando ingresso, canale o aprendo la home. Il solo rimedio riportato è scollegare la TV da internet o scrivere al supporto con il numero di serie; il DNS può ridurre qualche richiesta ma non è garantito (fonti: Tom's Hardware, marzo 2026)."
+  ]
+ }
+}

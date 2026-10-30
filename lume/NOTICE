@@ -1,0 +1,29 @@
+Lume
+
+Lume is derived from Hume Launcher, Copyright 2026 Petrobot, licensed under the Apache License 2.0.
+The source has been modified: renamed and rebranded, new design, European content instead of Indian,
+health and Wi-Fi panels, shared device profiles. Original licence and notices are kept below.
+
+Part of the Recent Apps screen (src/org/lumesuite/launcher/RecentAppsOverlay.java) is adapted from
+tvOS Launcher, Copyright 2026 techgenius, licensed under the Apache License 2.0
+(https://github.com/techgenius1/tvOS-Launcher). Changes: renamed package, translations through It,
+no bundled third-party app logos, background processes ended with KILL_BACKGROUND_PROCESSES instead of
+on-device ADB (so it works on Fire OS), fewer disk writes on window changes.
+
+Original notice:
+Hume Launcher
+Copyright 2026 Petrobot
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This product includes third-party components under their own licences:
+
+- Inter typeface — Copyright the Inter Project Authors — SIL Open Font License 1.1
+  (assets/fonts/Inter-LICENSE.txt)
+- QR Code generator library (Java) — Copyright (c) Project Nayuki — MIT License
+  (src/io/nayuki/qrcodegen)
+
+Third-party logos (assets/app-logos): clean brand squares of Netflix, YouTube, Prime Video, Disney+, Apple TV, Spotify, Twitch and
+Max, taken from tvOS Launcher (Apache-2.0, techgenius) to keep the cards sharp. They are trademarks and artwork of their owners,
+not covered by this project's licence, and are used only to identify the apps installed on the person's own TV. Delete
+assets/app-logos to ship without them: the cards then use each app's own icon.

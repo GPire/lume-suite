@@ -1,0 +1,651 @@
+{
+ "_about": "Problemi reali segnalati dalla comunita' (issue e README di progetti aperti, 2026-10-30), organizzati per sintomo. confidence: reported = una fonte pubblica, non riprodotto da noi; verified = provato da noi su hardware reale. match: family (fire-tv, google-tv, android-tv, tizen, webos, roku, vidaa), brand (sottostringa), sdk_max/sdk_min, year_from/year_to.",
+ "issues": [
+  {
+   "id": "home-black-screen",
+   "match": {
+    "family": [
+     "android-tv",
+     "google-tv"
+    ]
+   },
+   "symptom": {
+    "it": "Schermo nero o tasto Home che non fa nulla dopo aver spento la Home originale",
+    "en": "Black screen or dead Home key after turning off the stock Home"
+   },
+   "cause": {
+    "it": "Il launcher originale e' stato disattivato prima di avere un'alternativa installata.",
+    "en": "The stock launcher was disabled before an alternative was installed."
+   },
+   "fix": {
+    "it": "Installare il nuovo launcher PRIMA di toccare la Home originale. TV Doctor non disattiva mai la Home.",
+    "en": "Install the new launcher BEFORE touching the stock Home. TV Doctor never disables the Home."
+   },
+   "auto": "prevented",
+   "source": "awesome-tv-debloat, tv-home",
+   "confidence": "reported"
+  },
+  {
+   "id": "google-tv-setupwraith-home",
+   "match": {
+    "family": [
+     "google-tv"
+    ]
+   },
+   "symptom": {
+    "it": "Il tasto Home apre la procedura guidata di Google invece del launcher scelto",
+    "en": "Home key opens Google's setup wizard instead of the chosen launcher"
+   },
+   "cause": {
+    "it": "com.google.android.tungsten.setupwraith si prende il tasto Home.",
+    "en": "com.google.android.tungsten.setupwraith grabs the Home key."
+   },
+   "fix": {
+    "it": "Disattivarlo solo dopo aver controllato che il Wi-Fi resti salvato: su alcune TV lo possiede. TV Doctor lo tiene nella lista da non toccare finche' non c'e' una prova per quel modello.",
+    "en": "Disable it only after checking the Wi-Fi stays saved: on some TVs it owns it. TV Doctor keeps it on the do-not-touch list until a model is proven."
+   },
+   "auto": "manual",
+   "source": "tv-home, free-my-tv",
+   "confidence": "reported"
+  },
+  {
+   "id": "launcher-behind-app",
+   "match": {
+    "family": [
+     "android-tv",
+     "google-tv"
+    ]
+   },
+   "symptom": {
+    "it": "Dopo il cambio di launcher la Home si apre dietro l'app in corso",
+    "en": "After switching launcher, Home opens behind the running app"
+   },
+   "cause": {
+    "it": "Restano in memoria il launcher e com.android.tv.settings nello stato precedente.",
+    "en": "The launcher and com.android.tv.settings stay in memory in the old state."
+   },
+   "fix": {
+    "it": "Fermare con force-stop il launcher e com.android.tv.settings, poi premere Home.",
+    "en": "Force-stop the launcher and com.android.tv.settings, then press Home."
+   },
+   "auto": "adb",
+   "adb": [
+    "am force-stop com.android.tv.settings"
+   ],
+   "source": "tv-home",
+   "confidence": "reported"
+  },
+  {
+   "id": "tcl-background-killed",
+   "match": {
+    "brand": [
+     "tcl"
+    ]
+   },
+   "symptom": {
+    "it": "TCL: il launcher viene chiuso in background o l'app non parte da sola",
+    "en": "TCL: the launcher is killed in the background or does not auto-start"
+   },
+   "cause": {
+    "it": "Il firmware TCL blocca l'esecuzione in background per le app non sue; su Android 11 (Realtek) agisce anche TGuard.",
+    "en": "TCL firmware blocks background running for third-party apps; on Android 11 (Realtek) TGuard also acts."
+   },
+   "fix": {
+    "it": "Dopo ogni installazione concedere RUN_IN_BACKGROUND e AUTO_START; se la Home non cambia, attendere uno o due minuti e premere Home di nuovo.",
+    "en": "After each install allow RUN_IN_BACKGROUND and AUTO_START; if Home does not switch, wait a minute or two and press Home again."
+   },
+   "auto": "adb",
+   "adb": [
+    "appops set {pkg} RUN_IN_BACKGROUND allow",
+    "appops set {pkg} AUTO_START allow || appops set {pkg} APP_AUTO_START allow"
+   ],
+   "source": "free-my-tv, awesome-tv-debloat",
+   "confidence": "reported"
+  },
+  {
+   "id": "tcl-hdmi-break",
+   "match": {
+    "brand": [
+     "tcl"
+    ]
+   },
+   "symptom": {
+    "it": "TCL: gli ingressi HDMI non funzionano piu'",
+    "en": "TCL: HDMI inputs stopped working"
+   },
+   "cause": {
+    "it": "E' stato disattivato com.tcl.tv.",
+    "en": "com.tcl.tv was disabled."
+   },
+   "fix": {
+    "it": "Riattivare com.tcl.tv (pm enable). Sta nella lista da non toccare.",
+    "en": "Re-enable com.tcl.tv (pm enable). It is on the never-touch list."
+   },
+   "auto": "adb",
+   "adb": [
+    "pm enable com.tcl.tv"
+   ],
+   "source": "TV Detox, dumbtv",
+   "confidence": "reported"
+  },
+  {
+   "id": "wifi-forgotten",
+   "match": {
+    "family": [
+     "android-tv",
+     "google-tv"
+    ]
+   },
+   "symptom": {
+    "it": "La TV dimentica il Wi-Fi dopo il cambio di Home o la disattivazione dell'app di setup",
+    "en": "TV forgets Wi-Fi after the Home switch or disabling the setup app"
+   },
+   "cause": {
+    "it": "L'app di setup possiede le reti salvate.",
+    "en": "The setup app owns the saved networks."
+   },
+   "fix": {
+    "it": "Prima del cambio dimenticare la rete e riconnettersi, cosi' Android non la cancella. TV Doctor non tocca le app di setup.",
+    "en": "Before the switch, forget the network and reconnect so Android does not erase it. TV Doctor does not touch setup apps."
+   },
+   "auto": "prevented",
+   "source": "free-my-tv, TV Detox",
+   "confidence": "reported"
+  },
+  {
+   "id": "adb-port-closed-android11",
+   "match": {
+    "family": [
+     "android-tv",
+     "google-tv"
+    ],
+    "sdk_min": 30
+   },
+   "symptom": {
+    "it": "La porta 5555 resta chiusa (Chromecast con Google TV, Android 11 o piu')",
+    "en": "Port 5555 stays closed (Chromecast with Google TV, Android 11+)"
+   },
+   "cause": {
+    "it": "Esiste solo il Debug wireless con codice di abbinamento; la porta si richiude a ogni riavvio.",
+    "en": "Only Wireless debugging with a pairing code exists; the port closes after every restart."
+   },
+   "fix": {
+    "it": "Attivare Debug wireless, abbinare con adb pair IP:porta, poi adb connect. Dopo ogni riavvio ripetere.",
+    "en": "Turn on Wireless debugging, pair with adb pair IP:port, then adb connect. Repeat after every restart."
+   },
+   "auto": "guide",
+   "source": "free-my-tv, cleanyourtv-app",
+   "confidence": "reported"
+  },
+  {
+   "id": "firmware-reenables",
+   "match": {
+    "family": [
+     "android-tv",
+     "google-tv",
+     "fireos"
+    ]
+   },
+   "symptom": {
+    "it": "Dopo un aggiornamento di sistema le app disattivate tornano attive",
+    "en": "After a system update the disabled apps are active again"
+   },
+   "cause": {
+    "it": "Il firmware ripristina i pacchetti.",
+    "en": "The firmware restores the packages."
+   },
+   "fix": {
+    "it": "Eseguire il controllo deriva (comando check) e riapplicare. Su Fire OS aspettare 25-30 secondi e fare sync prima di riavviare.",
+    "en": "Run the drift check (check command) and re-apply. On Fire OS wait 25-30 seconds and sync before restarting."
+   },
+   "auto": "tvdoctor",
+   "tvdoctor": "check",
+   "source": "TV Slim, tvdoctor (verificato su Fire TV Stick 4K Max)",
+   "confidence": "verified"
+  },
+  {
+   "id": "fire-os-home-locked",
+   "match": {
+    "family": [
+     "fireos"
+    ]
+   },
+   "symptom": {
+    "it": "Fire TV: la Home Amazon resta a scatti e non si puo' sostituire",
+    "en": "Fire TV: the Amazon Home stays janky and cannot be replaced"
+   },
+   "cause": {
+    "it": "Fire OS ignora il launcher predefinito scelto e protegge force-stop e disattivazione della Home.",
+    "en": "Fire OS ignores the chosen default launcher and protects the Home from force-stop and disabling."
+   },
+   "fix": {
+    "it": "Unica via: servizio di accessibilita' che reindirizza il tasto Home, attivato dall'utente sulla TV. Misurato: Amazon 69-81% di frame a scatti, Lume 28%. Disattivare l'anteprima automatica video e audio in Impostazioni aiuta.",
+    "en": "Only route: an accessibility service that redirects the Home key, enabled by the user on the TV. Measured: Amazon 69-81% janky frames, Lume 28%. Turning off video and audio autoplay in Settings helps."
+   },
+   "auto": "user-consent",
+   "source": "misura propria su AFTKM, fire-tv-cleanup, awesome-tv-debloat",
+   "confidence": "verified"
+  },
+  {
+   "id": "fire-os-bootloop-risk",
+   "match": {
+    "family": [
+     "fireos"
+    ]
+   },
+   "symptom": {
+    "it": "Fire TV: rischio di bootloop dopo disattivazioni aggressive",
+    "en": "Fire TV: bootloop risk after aggressive disabling"
+   },
+   "cause": {
+    "it": "Alcuni pacchetti Amazon sono dipendenze di sistema.",
+    "en": "Some Amazon packages are system dependencies."
+   },
+   "fix": {
+    "it": "Gruppi di 4, controllo salute dopo ogni gruppo, riavvio di prova, annullo automatico. Mai disinstallare.",
+    "en": "Groups of 4, health check after each group, test restart, automatic undo. Never uninstall."
+   },
+   "auto": "prevented",
+   "source": "orchard-tv, tvdoctor",
+   "confidence": "verified"
+  },
+  {
+   "id": "pm-chain-stops",
+   "match": {
+    "family": [
+     "android-tv",
+     "google-tv",
+     "fireos"
+    ]
+   },
+   "symptom": {
+    "it": "Una catena di comandi pm si ferma in silenzio dopo il primo",
+    "en": "A chain of pm commands silently stops after the first"
+   },
+   "cause": {
+    "it": "La shell della TV interrompe le catene lunghe.",
+    "en": "The TV shell cuts long chains."
+   },
+   "fix": {
+    "it": "Un comando per chiamata di shell. TV Doctor lo fa gia'.",
+    "en": "One command per shell call. TV Doctor already does this."
+   },
+   "auto": "prevented",
+   "source": "tv-home",
+   "confidence": "reported"
+  },
+  {
+   "id": "macos-adb-blocked",
+   "match": {},
+   "symptom": {
+    "it": "Su macOS adb risponde 'No route to host' o e' bloccato",
+    "en": "On macOS adb answers 'No route to host' or is blocked"
+   },
+   "cause": {
+    "it": "macOS blocca il binario adb sulla rete locale.",
+    "en": "macOS blocks the adb binary on the local network."
+   },
+   "fix": {
+    "it": "TV Doctor usa un client ADB in Python puro (pyadb): niente adb da installare. Se serve il permesso, abilitare la rete locale per il Terminale.",
+    "en": "TV Doctor uses a pure-Python ADB client (pyadb): no adb to install. If asked, allow local network access for Terminal."
+   },
+   "auto": "prevented",
+   "source": "tv-home, fire-tv-cleanup",
+   "confidence": "reported"
+  },
+  {
+   "id": "playprotect-blocks",
+   "match": {
+    "family": [
+     "android-tv",
+     "google-tv"
+    ],
+    "sdk_min": 34
+   },
+   "symptom": {
+    "it": "Android 14: Play Protect blocca l'installazione di un APK esterno",
+    "en": "Android 14: Play Protect blocks an outside APK"
+   },
+   "cause": {
+    "it": "L'APK non viene dal Play Store.",
+    "en": "The APK is not from the Play Store."
+   },
+   "fix": {
+    "it": "Scegliere Maggiori dettagli e poi Installa comunque, oppure installare con adb install.",
+    "en": "Choose More details then Install anyway, or install with adb install."
+   },
+   "auto": "guide",
+   "source": "free-my-tv",
+   "confidence": "reported"
+  },
+  {
+   "id": "tizen-dev-install-118",
+   "match": {
+    "family": [
+     "tizen"
+    ],
+    "year_from": 2015,
+    "year_to": 2016
+   },
+   "symptom": {
+    "it": "Samsung 2015-2016: l'installazione da sviluppatore fallisce con failed[118]",
+    "en": "Samsung 2015-2016: developer install fails with failed[118]"
+   },
+   "cause": {
+    "it": "Su alcuni modelli resta una copia precedente o il modello rifiuta installazioni da sviluppatore.",
+    "en": "On some models a previous copy remains or the model refuses developer installs."
+   },
+   "fix": {
+    "it": "Rimuovere la copia precedente con --uninstall e riprovare; i modelli 2015-2016 non reggono gli installer recenti, serve la compilazione propria.",
+    "en": "Remove the previous copy with --uninstall and retry; 2015-2016 models cannot run recent installers, you must build your own."
+   },
+   "auto": "guide",
+   "source": "free-my-tv (issue 349)",
+   "confidence": "reported"
+  },
+  {
+   "id": "tizen-settings-freeze",
+   "match": {
+    "family": [
+     "tizen"
+    ],
+    "year_from": 2017,
+    "year_to": 2018
+   },
+   "symptom": {
+    "it": "Samsung 2017-2018: la voce Impostazioni della TV si blocca",
+    "en": "Samsung 2017-2018: the TV Settings item freezes"
+   },
+   "cause": {
+    "it": "Conflitto con una home sostitutiva installata in modalita' sviluppatore.",
+    "en": "Conflict with a replacement home installed in developer mode."
+   },
+   "fix": {
+    "it": "Usare il tasto Impostazioni del telecomando, che continua a funzionare.",
+    "en": "Use the remote's own Settings button, which keeps working."
+   },
+   "auto": "guide",
+   "source": "free-my-tv (issue 257)",
+   "confidence": "reported"
+  },
+  {
+   "id": "tizen-autorun",
+   "match": {
+    "family": [
+     "tizen"
+    ],
+    "year_from": 2019
+   },
+   "symptom": {
+    "it": "Samsung 2019-2020: l'app non si riapre all'accensione",
+    "en": "Samsung 2019-2020: the app does not reopen at power on"
+   },
+   "cause": {
+    "it": "L'avvio automatico dell'ultima app e' confermato solo su un modello 2017.",
+    "en": "Autorun of the last app is confirmed only on a 2017 model."
+   },
+   "fix": {
+    "it": "Non promettere l'avvio automatico su questi anni; indicarlo come non garantito.",
+    "en": "Do not promise autorun on these years; state it as not guaranteed."
+   },
+   "auto": "guide",
+   "source": "free-my-tv (issue 356)",
+   "confidence": "reported"
+  },
+  {
+   "id": "webos-dev-expires",
+   "match": {
+    "family": [
+     "webos"
+    ]
+   },
+   "symptom": {
+    "it": "LG: dopo circa 40 giorni l'app sviluppatore smette di funzionare",
+    "en": "LG: after about 40 days the developer app stops working"
+   },
+   "cause": {
+    "it": "La sessione Developer Mode scade.",
+    "en": "The Developer Mode session expires."
+   },
+   "fix": {
+    "it": "Aprire Developer Mode e premere EXTEND; con Homebrew Channel il rinnovo e' automatico.",
+    "en": "Open Developer Mode and press EXTEND; with Homebrew Channel renewal is automatic."
+   },
+   "auto": "guide",
+   "source": "free-my-tv, closed_tvs.json",
+   "confidence": "reported"
+  },
+  {
+   "id": "webos-apps-missing",
+   "match": {
+    "family": [
+     "webos"
+    ]
+   },
+   "symptom": {
+    "it": "LG: dopo l'installazione di nuove app non compaiono nella home sostitutiva",
+    "en": "LG: newly installed apps do not appear in the replacement home"
+   },
+   "cause": {
+    "it": "webOS 3 richiede di rieseguire l'elenco app; webOS 6+ mostra solo app note finche' non si concede l'accesso una volta.",
+    "en": "webOS 3 needs the app list re-run; webOS 6+ shows only well-known apps until access is allowed once."
+   },
+   "fix": {
+    "it": "webOS 6+: concedere l'accesso una volta sulla TV. webOS 3: rieseguire apps.py.",
+    "en": "webOS 6+: allow access once on the TV. webOS 3: re-run apps.py."
+   },
+   "auto": "guide",
+   "source": "free-my-tv",
+   "confidence": "reported"
+  },
+  {
+   "id": "vidaa-ads",
+   "match": {
+    "family": [
+     "vidaa"
+    ]
+   },
+   "symptom": {
+    "it": "Hisense VIDAA: pubblicita' non saltabili e nessun modo di sostituire la Home",
+    "en": "Hisense VIDAA: unskippable ads and no way to replace Home"
+   },
+   "cause": {
+    "it": "Sistema chiuso, senza ADB.",
+    "en": "Closed system, no ADB."
+   },
+   "fix": {
+    "it": "Solo impostazioni di privacy e blocco DNS; per una Home pulita collegare una chiavetta o box Android/Google TV.",
+    "en": "Only privacy settings and DNS blocking; for a clean Home attach an Android/Google TV stick or box."
+   },
+   "auto": "guide",
+   "source": "awesome-tv-debloat, ricerca di mercato 2026",
+   "confidence": "reported"
+  },
+  {
+   "id": "dns-hardcoded-bypass",
+   "match": {},
+   "symptom": {
+    "it": "Il blocco DNS non ferma alcune pubblicita'",
+    "en": "DNS blocking does not stop some ads"
+   },
+   "cause": {
+    "it": "Alcune app usano indirizzi IP fissi o DNS propri.",
+    "en": "Some apps use hard-coded IPs or their own DNS."
+   },
+   "fix": {
+    "it": "Dire la verita': il DNS aiuta ma non rimuove app o righe della Home. Su LG scegliere la lista che non rompe il Content Store.",
+    "en": "Say it honestly: DNS helps but does not remove apps or Home rows. On LG pick the list that does not break the Content Store."
+   },
+   "auto": "guide",
+   "source": "awesome-tv-debloat",
+   "confidence": "reported"
+  },
+  {
+   "id": "adb-left-on",
+   "match": {
+    "family": [
+     "android-tv",
+     "google-tv",
+     "fireos"
+    ]
+   },
+   "symptom": {
+    "it": "Debug di rete lasciato acceso: chiunque sulla rete Wi-Fi puo' collegarsi",
+    "en": "Network debugging left on: anyone on the Wi-Fi can connect"
+   },
+   "cause": {
+    "it": "Dimenticato dopo la pulizia.",
+    "en": "Forgotten after cleanup."
+   },
+   "fix": {
+    "it": "Spegnere il debug di rete alla fine, a meno che l'utente scelga di tenerlo.",
+    "en": "Turn network debugging off at the end unless the user chooses to keep it."
+   },
+   "auto": "adb",
+   "adb": [
+    "settings put global adb_enabled 0"
+   ],
+   "source": "awesome-tv-debloat, cleanyourtv-app",
+   "confidence": "reported"
+  },
+  {
+   "id": "lag-low-storage",
+   "match": {
+    "family": [
+     "android-tv",
+     "google-tv",
+     "fireos"
+    ]
+   },
+   "symptom": {
+    "it": "TV lenta con memoria quasi piena",
+    "en": "Slow TV with almost full storage"
+   },
+   "cause": {
+    "it": "Cache e app inutilizzate riempiono la memoria interna (8 GB su molte chiavette).",
+    "en": "Caches and unused apps fill internal storage (8 GB on many sticks)."
+   },
+   "fix": {
+    "it": "Svuotare le cache con pm trim-caches, togliere le app che non servono, riavviare.",
+    "en": "Clear caches with pm trim-caches, remove unused apps, restart."
+   },
+   "auto": "adb",
+   "adb": [
+    "pm trim-caches 999999999999"
+   ],
+   "source": "Google TV Help, Android Police, XDA",
+   "confidence": "reported"
+  },
+  {
+   "id": "end-of-support",
+   "match": {},
+   "symptom": {
+    "it": "Netflix o YouTube spariscono da una TV vecchia",
+    "en": "Netflix or YouTube vanish from an old TV"
+   },
+   "cause": {
+    "it": "I produttori ritirano il supporto dei modelli con poca memoria e CPU lenta (es. Samsung 2011-2012, Netflix agosto 2023).",
+    "en": "Makers drop models with little storage and a slow CPU (e.g. Samsung 2011-2012, Netflix August 2023)."
+   },
+   "fix": {
+    "it": "Nessuna correzione sul televisore: collegare una chiavetta Fire TV/Google TV da HDMI e usare Lume su quella.",
+    "en": "No fix on the TV itself: attach a Fire TV/Google TV stick over HDMI and run Lume on it."
+   },
+   "auto": "guide",
+   "source": "Samsung, Kiplinger, Mumsnet",
+   "confidence": "reported"
+  },
+  {
+   "id": "standby-input-switch",
+   "match": {
+    "family": [
+     "android-tv",
+     "google-tv"
+    ]
+   },
+   "symptom": {
+    "it": "La selezione dell'ingresso all'avvio funziona ma non dopo la sospensione",
+    "en": "Input auto-switch works on boot but not after standby wake"
+   },
+   "cause": {
+    "it": "Il firmware non invia l'evento di avvio al risveglio.",
+    "en": "The firmware sends no boot event on wake."
+   },
+   "fix": {
+    "it": "Ascoltare anche il risveglio schermo (ACTION_SCREEN_ON) e non solo BOOT_COMPLETED: da implementare in Lume.",
+    "en": "Also listen for screen wake (ACTION_SCREEN_ON), not just BOOT_COMPLETED: to implement in Lume."
+   },
+   "auto": "todo-lume",
+   "source": "aerial-tv (issue 964)",
+   "confidence": "reported"
+  },
+  {
+   "id": "elderly-focus-visibility",
+   "match": {},
+   "symptom": {
+    "it": "Per le persone anziane non si capisce quale app e' selezionata",
+    "en": "For elderly people it is unclear which app is selected"
+   },
+   "cause": {
+    "it": "Il segno di focus e' troppo discreto.",
+    "en": "The focus mark is too subtle."
+   },
+   "fix": {
+    "it": "Modalita' Chiara in Lume: focus forte (anello pieno + ingrandimento + nome sempre visibile), contrasto alto.",
+    "en": "A Clear mode in Lume: strong focus (solid ring + scale + always-visible name), high contrast."
+   },
+   "auto": "todo-lume",
+   "source": "aerial-tv (issue 969)",
+   "confidence": "reported"
+  },
+  {
+   "id": "gtv-adb-port-changes",
+   "match": {
+    "family": [
+     "google-tv",
+     "android-tv"
+    ],
+    "sdk_min": 34
+   },
+   "symptom": {
+    "it": "Google TV (Android 14): la porta di debug cambia o si chiude dopo un riavvio o la sospensione",
+    "en": "Google TV (Android 14): the debug port changes or closes after a restart or sleep"
+   },
+   "cause": {
+    "it": "Android 14 sceglie una porta casuale per il Debug wireless e la chiude al riavvio: e' una misura di sicurezza, non un guasto.",
+    "en": "Android 14 picks a random port for Wireless debugging and closes it on restart: a security measure, not a fault."
+   },
+   "fix": {
+    "it": "Dopo ogni riavvio riaccendere Debug wireless; l'abbinamento resta. Poi riaprire la porta fissa con adb tcpip 5555 da un computer abbinato. Esiste un'app di terzi che lo rifa' da sola (adb-auto-enable), dichiarata provata solo su Chromecast con Google TV: non verificata da noi.",
+    "en": "After each restart switch Wireless debugging back on; the pairing stays. Then reopen the fixed port with adb tcpip 5555 from a paired computer. A third-party app does this by itself (adb-auto-enable), said to be tested only on Chromecast with Google TV: not verified by us."
+   },
+   "auto": "guide",
+   "source": "Home Assistant forum, adb-auto-enable README, Google Cast docs",
+   "confidence": "reported"
+  },
+  {
+   "id": "tizen-third-party-tools",
+   "match": {
+    "family": [
+     "tizen"
+    ],
+    "year_from": 2017
+   },
+   "symptom": {
+    "it": "Samsung: la Home e la pubblicita' non si possono cambiare dalle impostazioni",
+    "en": "Samsung: the Home screen and its ads cannot be changed from Settings"
+   },
+   "cause": {
+    "it": "Tizen e' chiuso: niente ADB, e nessuna guida affidabile su quali app di sistema si possono rimuovere.",
+    "en": "Tizen is closed: no ADB, and no reliable guide on which system apps can be removed."
+   },
+   "fix": {
+    "it": "Cio' che funziona davvero e' in modalita' sviluppatore: TizenBrew (GPL-3.0) installa app e moduli, TizenTube (GPL-3.0) toglie la pubblicita' da YouTube e salta le parti sponsorizzate, Free My TV (MIT) offre una Home alternativa. Sono progetti di terzi, non nostri. Non rimuovere app di sistema Samsung.",
+    "en": "What really works is in developer mode: TizenBrew (GPL-3.0) installs apps and modules, TizenTube (GPL-3.0) removes YouTube ads and skips sponsored parts, Free My TV (MIT) offers an alternative Home. They are third-party projects, not ours. Do not remove Samsung system apps."
+   },
+   "auto": "guide",
+   "source": "reisxd/TizenBrew, reisxd/TizenTube, simbasjungles/free-my-tv",
+   "confidence": "reported"
+  }
+ ]
+}

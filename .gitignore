@@ -1,0 +1,26 @@
+build/
+.gradle/
+local.properties
+*.keystore
+*.jks
+*.apk
+__pycache__/
+*.pyc
+tv-doctor/backups/
+tv-doctor/uad_lists.json
+.DS_Store
+.cxx/
+.kotlin/
+.claude/
+screens/
+tools/privacy_denylist.txt
+# Fetched, not stored: OpenSSL is 140 MB of sources and tests; ambient-cast/tools/fetch-openssl.sh gets the pinned release.
+ambient-cast/third_party/openssl/
+ambient-cast/third_party/openssl-android/
+# The upstream project's own CI (it targets another repository); this repository's workflows are in .github/
+ambient-cast/.github/
+ambient-cast/.claude/
+ambient-cast/.gitmodules
+dist/
+*.jks
+*.p12

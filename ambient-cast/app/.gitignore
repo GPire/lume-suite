@@ -1,0 +1,8 @@
+# CastBay
+# Building
+.gradle/
+.gradle/
+build/
+*.apk
+*.apks
+local.properties

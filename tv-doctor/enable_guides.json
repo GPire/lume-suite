@@ -1,0 +1,238 @@
+{
+ "fire": {
+  "can": "clean",
+  "title": {
+   "it": "Fire TV e Fire Stick",
+   "en": "Fire TV and Fire Stick"
+  },
+  "intro": {
+   "it": "Si può pulire dal computer. Servono due interruttori.",
+   "en": "Can be cleaned from the computer. Two switches needed."
+  },
+  "steps": [
+   {
+    "it": "Sulla TV apri Impostazioni, poi La mia Fire TV (sulle TV con Fire TV integrato può chiamarsi Dispositivo e software).",
+    "en": "On the TV open Settings, then My Fire TV (on TVs with Fire TV built in it can be called Device & Software)."
+   },
+   {
+    "it": "Apri Informazioni e seleziona sette volte il primo elemento, il nome del dispositivo. Compare il conto alla rovescia, poi Sei uno sviluppatore.",
+    "en": "Open About and select the first item, the device name, seven times. A countdown appears, then You are now a developer."
+   },
+   {
+    "it": "Torna indietro: ora c'è Opzioni sviluppatore. Entra e accendi Debug ADB.",
+    "en": "Go back: Developer options now shows up. Open it and turn on ADB debugging."
+   },
+   {
+    "it": "Accendi anche Installa app sconosciute, se vuoi installare il nostro launcher.",
+    "en": "Also turn on Apps from unknown sources if you want to install our launcher."
+   }
+  ],
+  "notes": [
+   {
+    "it": "Alcuni modelli (per esempio Insignia F30) mostrano le opzioni solo dopo l'accesso con un account Amazon.",
+    "en": "Some models (for example Insignia F30) only show the options after signing in with an Amazon account."
+   },
+   {
+    "it": "Gli aggiornamenti Amazon possono nascondere di nuovo il menu: si riattiva con gli stessi sette tocchi.",
+    "en": "Amazon updates can hide the menu again: the same seven taps bring it back."
+   }
+  ]
+ },
+ "androidtv": {
+  "can": "clean",
+  "title": {
+   "it": "Android TV (fino al 2020)",
+   "en": "Android TV (up to 2020)"
+  },
+  "intro": {
+   "it": "Si può pulire dal computer. Serve il debug USB.",
+   "en": "Can be cleaned from the computer. USB debugging is needed."
+  },
+  "steps": [
+   {
+    "it": "Apri Impostazioni, poi Preferenze del dispositivo, poi Informazioni.",
+    "en": "Open Settings, then Device Preferences, then About."
+   },
+   {
+    "it": "Seleziona la voce Build e premi OK sette volte. Compare Ora sei uno sviluppatore.",
+    "en": "Select Build and press OK seven times. You will see You are now a developer."
+   },
+   {
+    "it": "Torna indietro ed entra in Opzioni sviluppatore. Accendi Debug USB.",
+    "en": "Go back and open Developer options. Turn on USB debugging."
+   },
+   {
+    "it": "Quando la TV chiede di autorizzare il computer, scegli Consenti sempre.",
+    "en": "When the TV asks to authorise the computer, choose Always allow."
+   }
+  ],
+  "notes": [
+   {
+    "it": "Su alcune versioni la voce Build sta direttamente sotto Sistema. Su Philips il menu può partire da Impostazioni Android.",
+    "en": "On some versions Build sits directly under System. On Philips the menu may start from Android settings."
+   },
+   {
+    "it": "Percorsi per marca: confermati solo per Android TV standard e Sony; per TCL, Philips e Hisense possono cambiare.",
+    "en": "Paths by brand: confirmed only for standard Android TV and Sony; for TCL, Philips and Hisense they may differ."
+   }
+  ]
+ },
+ "googletv": {
+  "can": "clean",
+  "title": {
+   "it": "Google TV (dal 2021)",
+   "en": "Google TV (from 2021)"
+  },
+  "intro": {
+   "it": "Si può pulire dal computer. Serve il debug, spesso senza cavo.",
+   "en": "Can be cleaned from the computer. Debugging is needed, often wireless."
+  },
+  "steps": [
+   {
+    "it": "Apri Impostazioni, poi Sistema, poi Informazioni.",
+    "en": "Open Settings, then System, then About."
+   },
+   {
+    "it": "Seleziona sette volte la voce Build del sistema Android TV con OK.",
+    "en": "Select the Android TV OS build item seven times with OK."
+   },
+   {
+    "it": "Torna a Sistema: ora c'è Opzioni sviluppatore. Accendi Debug USB e, se c'e', Debug wireless.",
+    "en": "Back in System, Developer options now shows up. Turn on USB debugging and, if present, Wireless debugging."
+   },
+   {
+    "it": "Con il debug wireless la TV mostra un indirizzo con una porta e un codice di abbinamento: l'app ti guida a inserirli.",
+    "en": "With wireless debugging the TV shows an address with a port and a pairing code: the app guides you to enter them."
+   }
+  ],
+  "notes": [
+   {
+    "it": "Non spegnere la Home di Google: su alcuni dispositivi la TV non riparte più.",
+    "en": "Never turn off the Google home: on some devices the TV no longer boots."
+   }
+  ]
+ },
+ "tizen": {
+  "can": "guide",
+  "title": {
+   "it": "Samsung (Tizen)",
+   "en": "Samsung (Tizen)"
+  },
+  "intro": {
+   "it": "Non si può disattivare nulla di sistema. La Modalità sviluppatore serve solo per installare app web.",
+   "en": "Nothing system-level can be switched off. Developer mode is only for installing web apps."
+  },
+  "steps": [
+   {
+    "it": "Dalla Home apri Apps.",
+    "en": "From Home open Apps."
+   },
+   {
+    "it": "Con il telecomando premi 1 2 3 4 5 (se non ha i numeri, usa il tasto 123 o l'app SmartThings).",
+    "en": "On the remote press 1 2 3 4 5 (if it has no digits use the 123 button or the SmartThings app)."
+   },
+   {
+    "it": "Metti Modalità sviluppatore su Acceso e scrivi l'indirizzo IP del computer. Premi OK.",
+    "en": "Set Developer mode to On and type the computer's IP address. Press OK."
+   },
+   {
+    "it": "Spegni la TV dalla presa per 15 secondi e riaccendila: senza questo passaggio l'indirizzo non vale.",
+    "en": "Unplug the TV for 15 seconds and plug it back in: without this the address does not apply."
+   }
+  ],
+  "notes": [
+   {
+    "it": "Le TV del 2014 e precedenti (Orsay) non supportano le app web: restano solo le impostazioni.",
+    "en": "TVs from 2014 and earlier (Orsay) do not support web apps: only settings remain."
+   },
+   {
+    "it": "Dal 2023 per firmare le app serve accedere con l'account Samsung.",
+    "en": "From 2023 you must sign in with your Samsung account to sign apps."
+   },
+   {
+    "it": "A fine lavoro spegni la Modalità sviluppatore: lascia un ponte di debug aperto sulla rete.",
+    "en": "When finished turn Developer mode off: it leaves a debug bridge open on the network."
+   }
+  ]
+ },
+ "webos": {
+  "can": "guide",
+  "title": {
+   "it": "LG (webOS)",
+   "en": "LG (webOS)"
+  },
+  "intro": {
+   "it": "Non si può disattivare nulla di sistema. La Modalità sviluppatore serve per installare app.",
+   "en": "Nothing system-level can be switched off. Developer mode is for installing apps."
+  },
+  "steps": [
+   {
+    "it": "Crea un account sviluppatore LG gratuito sul sito LG.",
+    "en": "Create a free LG developer account on LG's site."
+   },
+   {
+    "it": "Dal Content Store della TV installa l'app Developer Mode e accedi con quell'account.",
+    "en": "From the TV's Content Store install the Developer Mode app and sign in with that account."
+   },
+   {
+    "it": "Accendi Dev Mode Status (la TV si riavvia), poi Key Server. Annota l'indirizzo e la passphrase.",
+    "en": "Turn on Dev Mode Status (the TV restarts), then Key Server. Note the address and passphrase."
+   },
+   {
+    "it": "Ogni circa 40 giorni apri l'app e premi EXTEND per rinnovare.",
+    "en": "About every 40 days open the app and press EXTEND to renew."
+   }
+  ],
+  "notes": [
+   {
+    "it": "Serve webOS 3 o più recente (circa 2016 in poi).",
+    "en": "webOS 3 or newer is needed (about 2016 onward)."
+   },
+   {
+    "it": "Per le funzioni avanzate (Homebrew Channel) il root dipende dal modello e dal firmware: vedi webosbrew.org.",
+    "en": "For advanced features (Homebrew Channel) root depends on model and firmware: see webosbrew.org."
+   }
+  ]
+ },
+ "roku": {
+  "can": "none",
+  "title": {
+   "it": "Roku TV",
+   "en": "Roku TV"
+  },
+  "intro": {
+   "it": "Roku non permette di pulire o installare un launcher. Restano impostazioni e DNS.",
+   "en": "Roku does not allow cleaning or a launcher. Only settings and DNS remain."
+  },
+  "steps": [
+   {
+    "it": "Apri Impostazioni, Privacy, Pubblicità e Smart TV experience, e spegni quanto indicato nella guida.",
+    "en": "Open Settings, Privacy, Advertising and Smart TV experience, and switch off what the guide lists."
+   }
+  ],
+  "notes": [
+   {
+    "it": "Il codice per la Modalità sviluppatore di Roku è solo per canali di prova, non per pulire la TV.",
+    "en": "Roku's developer mode code is only for test channels, not for cleaning the TV."
+   }
+  ]
+ },
+ "vidaa": {
+  "can": "none",
+  "title": {
+   "it": "Hisense VIDAA",
+   "en": "Hisense VIDAA"
+  },
+  "intro": {
+   "it": "Nessuna Modalità sviluppatore pubblica. Restano impostazioni e DNS.",
+   "en": "No public developer mode. Only settings and DNS remain."
+  },
+  "steps": [
+   {
+    "it": "Apri Impostazioni, Sistema, Privacy e spegni quanto indicato nella guida.",
+    "en": "Open Settings, System, Privacy and switch off what the guide lists."
+   }
+  ],
+  "notes": []
+ }
+}

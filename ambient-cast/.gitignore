@@ -1,0 +1,57 @@
+# Android
+*.apk
+*.apks
+*.aab
+*.jar
+*.class
+
+# Build
+build/
+bin/
+gen/
+generated/
+.cxx/
+
+# Gradle
+.gradle/
+gradle-app/
+!gradle/wrapper/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Local
+local.properties
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Kotlin
+.kotlin/
+*.kotlin_module
+
+# Debug
+debug.keystore
+
+# Test
+/test-outputs/
+/profils/
+
+# Signing keys never go in the repository (release builds read them from the environment).
+*.jks
+*.keystore
+
+# Designers' asset archives: what they contain is committed unpacked (branding/).
+*.zip
+
+# The website's build tooling (web/): installed by npm, rebuilt by astro.
+web/node_modules/
+web/dist/
+web/.astro/
+
+# Built by tools/build-openssl.sh
+third_party/openssl-android/
