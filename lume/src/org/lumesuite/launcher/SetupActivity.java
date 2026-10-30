@@ -749,8 +749,7 @@ public class SetupActivity extends Activity {
                 + (r.tier == Optimizer.ESSENTIAL ? It.t(". Light animations and compact images") : ""), ACTION, false, () -> { });
         row(l, "Storage", It.f("%s free. Images use at most %d MB", Optimizer.gb(r.storageFreeMb),
                 (int) (Optimizer.cacheLimit(this) / (1024 * 1024))), ACTION, false, () -> { });
-        row(l, "Connection", Optimizer.link(r), ACTION, false, () -> { });
-        boolean on = Optimizer.auto(this);
+        boolean on = Optimizer.auto(this);   // the connection is shown in TV health: five rows push the buttons past the safe area
         row(l, "Automatic optimization", on ? "On: adapts to this device" : "Off: animations and images at their best",
                 SWITCH, on, () -> {
             if (Optimizer.auto(this)) Optimizer.release(this); else Optimizer.apply(this, Optimizer.measure(this));

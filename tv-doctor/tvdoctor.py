@@ -221,6 +221,28 @@ def ram_by_package(serial):
     return ram
 
 
+# Google TV / Android TV: from rcland12/debloat-tv (MIT), tried on a real Chromecast with Google TV 4K (Android 14).
+# Safe = nothing visible depends on them. Caution = a feature goes away (named in the text), always reversible.
+GOOGLE_TV_SAFE = {
+    "com.google.android.play.games": "Play Games (unused on a TV)",
+    "com.google.android.feedback": "Sends feedback and crash reports to Google",
+    "com.android.tv.feedbackconsent": "Consent screen for the feedback reports",
+    "com.google.android.tv.remotecontrol.logging": "Remote-control usage logging",
+    "com.android.printspooler": "Printing (a TV does not print)",
+}
+GOOGLE_TV_CAUTION = {
+    "com.google.android.apps.tv.dreamx": "Ambient-mode screensaver with recommendations (falls back to the basic one)",
+    "com.google.android.videos": "Google TV store and rentals: the Shop tab and past purchases stop working",
+    "com.google.android.katniss": "Google Assistant: the remote's microphone button stops working",
+    "com.google.android.youtube.tvmusic": "YouTube Music app",
+    "com.google.android.youtube.tvunplugged": "YouTube TV app",
+    "com.google.android.marvin.talkback": "TalkBack screen reader (turn back on if anyone needs it)",
+}
+# Needed by Google TV even if a list says otherwise: DRM keys (HD/4K), the Cast receiver, firmware updates, sign-in pages.
+NEVER_EXACT |= {"com.google.android.rkpdapp", "com.google.android.apps.mediashell", "com.google.android.tv.dfuservice",
+                "com.google.android.webview", "com.google.android.configupdater"}
+
+
 def is_never(p):
     return p in NEVER_EXACT or p.startswith(NEVER_PREFIX)
 
@@ -247,6 +269,12 @@ def build_plan(serial, d, tier):
         if tier == "caution":
             for p, why in FIRE_CAUTION.items():
                 if p in d["_pkgs"] and not is_never(p): add(p, "caution", why, "Fire OS"); seen.add(p)
+    if d["family"] in ("google-tv", "android-tv"):
+        for p, why in GOOGLE_TV_SAFE.items():
+            if p in d["_pkgs"] and not is_never(p) and p != home_pkg: add(p, "safe", why, "debloat-tv"); seen.add(p)
+        if tier == "caution":
+            for p, why in GOOGLE_TV_CAUTION.items():
+                if p in d["_pkgs"] and not is_never(p) and p != home_pkg: add(p, "caution", why, "debloat-tv"); seen.add(p)
     for p in sorted(system):
         if p in seen or is_never(p) or p == home_pkg or p not in uad or p.startswith(NO_BENEFIT_PREFIX):
             continue
@@ -443,24 +471,29 @@ def launchers(serial, apply=False):
 def replace_google_home(serial, apply=False, allow_google_tv=False):
     """Opt-in: Lume takes the place of the stock Android TV / Google TV Home. The stock launcher is turned off (never
     uninstalled) and saved in a backup so `undo` turns it back on. Checked right after: if Lume is not what Home opens, it is
-    turned back on at once. Refused on Google TV (launcherx) unless forced: on Chromecast with Google TV the launcher is
-    tied to setup and a TV without it can need a factory reset."""
+    turned back on at once.
+    Android TV: turn off com.google.android.tvlauncher. Google TV (launcherx): the recipe tried on a real Chromecast with
+    Google TV 4K (rcland12/debloat-tv, MIT): turn off launcherx AND the setup app (its RecoveryActivity takes the Home key
+    when launcherx is off), then make the other launcher the default. Cost: a few Settings pages (account > Apps & services)
+    show "Unavailable" until undo."""
     homes = home_activities(serial)
     if not any(h in OURS for h in homes):
         print("Lume non è installato: la Home di Google resta com'è (non resterebbe nessuna Home)."); return []
     stock = [h for h in homes if h in ("com.google.android.tvlauncher", "com.google.android.leanbacklauncher")]
-    gtv = [h for h in homes if h == "com.google.android.apps.tv.launcherx"]
+    gtv = "com.google.android.apps.tv.launcherx" in homes
     if gtv and not allow_google_tv:
-        print("Questa è una Google TV (com.google.android.apps.tv.launcherx): la sua Home è legata alla configurazione e,\n"
-              "spenta, può richiedere il ripristino di fabbrica. Non la tocco. Lume resta usabile col tasto Home (impostazioni\n"
-              "di Lume > Home) e dal programma. Solo se sai cosa fai: --google-tv."); return []
-    targets = stock + (gtv if allow_google_tv else [])
+        print("Questa è una Google TV (launcherx). Si può sostituire (provato su un Chromecast con Google TV vero), ma spegne anche\n"
+              "l'app di configurazione: alcune pagine delle Impostazioni (Account > App e servizi) risultano 'non disponibili' finché\n"
+              "non annulli con undo. Se vuoi: --google-tv."); return []
+    targets = stock + (["com.google.android.apps.tv.launcherx", "com.google.android.tungsten.setupwraith"] if gtv else [])
+    targets = [t for t in targets if t in sh(serial, "pm list packages")]
     if not targets:
         print("Nessuna Home di Google da sostituire."); return []
     if not apply:
         print("Lume può sostituire: " + ", ".join(targets) + "\nAnnullabile con undo. Aggiungi --yes per farlo."); return targets
     for p in targets:
         print(sh(serial, f"pm disable-user --user 0 {p}").strip())
+    sh(serial, "cmd package set-home-activity --user 0 org.lumesuite.launcher/.MainActivity")
     sh(serial, "sync"); time.sleep(2)
     now = sh(serial, "cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME")
     if "org.lumesuite.launcher" not in now:

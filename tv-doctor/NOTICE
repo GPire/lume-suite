@@ -4,3 +4,5 @@ Copyright 2026 Lume Suite contributors
 Licensed under the Apache License, Version 2.0 (see LICENSE).
 
 TV Doctor downloads, at run time and never stores in this repository, the package list of Universal Android Debloater Next Generation (GPL-3.0).
+
+Google TV / Android TV package lists and the Google TV Home replacement recipe come from rcland12/debloat-tv (MIT), tried there on a real Chromecast with Google TV 4K.

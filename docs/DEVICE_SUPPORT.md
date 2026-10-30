@@ -6,7 +6,7 @@
 |---|---|---|---|
 | Fire TV Stick 4K Max, Fire OS 8.1 | Tested: find, plan, apply in groups of 4 with health check and undo, tune animations | Tested | Tested (AirPlay receiver starts; home and settings) |
 | Other Fire TV | Same method, not tested | Not tested | Not tested |
-| Google TV, Android TV (Sony, TCL, Philips, Xiaomi, Hisense, Shield) | 8 simulated scenarios pass; real Android TV 14 system image (emulator): detect, plan, apply, undo and the three release APKs verified; `replace-home` (Lume replaces the stock Android TV Home, reversible, checked after the change, survives a reboot) verified on the emulator; Google TV with `launcherx` is refused by default; no physical Google TV yet | Not tested | Not tested |
+| Google TV, Android TV (Sony, TCL, Philips, Xiaomi, Hisense, Shield) | 8 simulated scenarios pass; real Android TV 14 system image (emulator): detect, plan, apply, undo and the three release APKs verified; `replace-home` (Lume replaces the stock Android TV Home, reversible, checked after the change, survives a reboot) verified on the emulator; Google TV with `launcherx` uses the recipe tried on a real Chromecast with Google TV by rcland12/debloat-tv (turn off launcherx and the setup app; opt-in, verified, reversible) but is not run here; no physical Google TV yet | Not tested | Not tested |
 | Samsung Tizen 2015-2026 | Per-year guide only (developer mode, what is and is not possible). Closed system: no apps are removed | n/a | n/a |
 | LG webOS 2014-2026 | Per-year guide only | n/a | n/a |
 | Roku, VIDAA | Settings and DNS guide only | n/a | n/a |

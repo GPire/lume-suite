@@ -217,7 +217,7 @@ def inspect(serial):
         "serial": serial, "maker": d["maker"], "model": d["model"], "family": d["family"], "android": d["android"],
         "ram": d["ram_mb"], "profile": d["tier"], "free": d["free_mb"], "notes": T.pitfalls(d), "wireless": T.wireless_note(d),
         "count": len(todo), "mb": mb,
-        "replaceHome": d["family"] in ("google-tv", "android-tv") and "com.google.android.tvlauncher" in T.home_activities(serial),
+        "replaceHome": d["family"] in ("google-tv", "android-tv") and bool({"com.google.android.tvlauncher", "com.google.android.apps.tv.launcherx"} & set(T.home_activities(serial))),
         "suite": d["family"] in ("fireos", "google-tv", "android-tv", "android-other") and int(d.get("sdk") or 0) >= 24,
         "items": [{"pkg": p, "why": re.sub(r"\s*\[\d+ MB\]", "", why), "tier": t} for p, t, why, src, off in todo],
     }
@@ -338,7 +338,7 @@ def run_apply(serial, batch=4, install=False, replace_home=False):
     homed = None
     if replace_home and not rolled:   # Lume must be there; replace_google_home checks Home opens Lume and puts Google back if not
         with contextlib.redirect_stdout(io.StringIO()):
-            homed = bool(T.replace_google_home(serial, True))
+            homed = bool(T.replace_google_home(serial, True, True))
     return {"ok": not rolled, "done": done, "rolledBack": rolled, "before": before, "after": mem_avail(serial), "suite": suite, "home": homed}
 
 
