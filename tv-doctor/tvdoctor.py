@@ -440,6 +440,40 @@ def launchers(serial, apply=False):
     return extra
 
 
+def replace_google_home(serial, apply=False, allow_google_tv=False):
+    """Opt-in: Lume takes the place of the stock Android TV / Google TV Home. The stock launcher is turned off (never
+    uninstalled) and saved in a backup so `undo` turns it back on. Checked right after: if Lume is not what Home opens, it is
+    turned back on at once. Refused on Google TV (launcherx) unless forced: on Chromecast with Google TV the launcher is
+    tied to setup and a TV without it can need a factory reset."""
+    homes = home_activities(serial)
+    if not any(h in OURS for h in homes):
+        print("Lume non è installato: la Home di Google resta com'è (non resterebbe nessuna Home)."); return []
+    stock = [h for h in homes if h in ("com.google.android.tvlauncher", "com.google.android.leanbacklauncher")]
+    gtv = [h for h in homes if h == "com.google.android.apps.tv.launcherx"]
+    if gtv and not allow_google_tv:
+        print("Questa è una Google TV (com.google.android.apps.tv.launcherx): la sua Home è legata alla configurazione e,\n"
+              "spenta, può richiedere il ripristino di fabbrica. Non la tocco. Lume resta usabile col tasto Home (impostazioni\n"
+              "di Lume > Home) e dal programma. Solo se sai cosa fai: --google-tv."); return []
+    targets = stock + (gtv if allow_google_tv else [])
+    if not targets:
+        print("Nessuna Home di Google da sostituire."); return []
+    if not apply:
+        print("Lume può sostituire: " + ", ".join(targets) + "\nAnnullabile con undo. Aggiungi --yes per farlo."); return targets
+    for p in targets:
+        print(sh(serial, f"pm disable-user --user 0 {p}").strip())
+    sh(serial, "sync"); time.sleep(2)
+    now = sh(serial, "cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME")
+    if "org.lumesuite.launcher" not in now:
+        for p in targets:
+            sh(serial, f"pm enable --user 0 {p}")
+        print("Con la Home di Google spenta, Home non apre Lume: ho rimesso tutto come prima."); return []
+    os.makedirs(BACKUPS, exist_ok=True)
+    path = os.path.join(BACKUPS, f"{serial.replace(':','_')}-launchers-{time.strftime('%Y%m%d-%H%M%S')}.json")
+    json.dump({"serial": serial, "disabled": targets, "settings": {}}, open(path, "w"), indent=1)
+    print("Fatto: Home apre Lume. Per tornare a Google: undo --file " + path)
+    return targets
+
+
 GUIDES = os.path.join(HERE, "closed_tvs.json")
 
 
@@ -468,9 +502,9 @@ def guide(os_name, year):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["detect", "plan", "apply", "undo", "check", "tune", "guide", "issues", "launchers", "install"])
+    ap.add_argument("cmd", choices=["detect", "plan", "apply", "undo", "check", "tune", "guide", "issues", "launchers", "replace-home", "install"])
     ap.add_argument("-s", "--serial"); ap.add_argument("--tier", choices=["safe", "caution"], default="safe")
-    ap.add_argument("--yes", action="store_true"); ap.add_argument("--os"); ap.add_argument("--year", type=int, default=2022); ap.add_argument("--only"); ap.add_argument("--file"); ap.add_argument("--apk")
+    ap.add_argument("--yes", action="store_true"); ap.add_argument("--os"); ap.add_argument("--year", type=int, default=2022); ap.add_argument("--only"); ap.add_argument("--file"); ap.add_argument("--apk"); ap.add_argument("--google-tv", action="store_true")
     a = ap.parse_args()
     if a.cmd == "guide":
         guide(a.os, a.year); return
@@ -483,6 +517,8 @@ def main():
         tune(serial); return
     if a.cmd == "launchers":
         launchers(serial, a.yes); return
+    if a.cmd == "replace-home":
+        replace_google_home(serial, a.yes, a.google_tv); return
     if a.cmd == "install":
         print("installato" if install_apk(serial, a.apk, lambda d, t: print(f"\r{d * 100 // t}%", end="", flush=True)) else "NON installato"); return
     if a.cmd == "undo":

@@ -217,6 +217,7 @@ def inspect(serial):
         "serial": serial, "maker": d["maker"], "model": d["model"], "family": d["family"], "android": d["android"],
         "ram": d["ram_mb"], "profile": d["tier"], "free": d["free_mb"], "notes": T.pitfalls(d), "wireless": T.wireless_note(d),
         "count": len(todo), "mb": mb,
+        "replaceHome": d["family"] in ("google-tv", "android-tv") and "com.google.android.tvlauncher" in T.home_activities(serial),
         "suite": d["family"] in ("fireos", "google-tv", "android-tv", "android-other") and int(d.get("sdk") or 0) >= 24,
         "items": [{"pkg": p, "why": re.sub(r"\s*\[\d+ MB\]", "", why), "tier": t} for p, t, why, src, off in todo],
     }
@@ -301,7 +302,7 @@ def healthy(serial, home_pkg):
     return bool(h.strip()) and (not home_pkg or home_pkg in h)
 
 
-def run_apply(serial, batch=4, install=False):
+def run_apply(serial, batch=4, install=False, replace_home=False):
     """Small batches, a health check after each; on the first doubt the batch is undone and we stop."""
     if DEMO and T.FIXTURE is None:
         T.FIXTURE = demo_fixture()
@@ -334,7 +335,11 @@ def run_apply(serial, batch=4, install=False):
     with contextlib.redirect_stdout(io.StringIO()):
         T.tune(serial, d.get("tier", "essenziale"))
     T.sh(serial, "sync")   # Android writes package states a little later: a reboot right now would lose them (seen on Fire OS 8.1)
-    return {"ok": not rolled, "done": done, "rolledBack": rolled, "before": before, "after": mem_avail(serial), "suite": suite}
+    homed = None
+    if replace_home and not rolled:   # Lume must be there; replace_google_home checks Home opens Lume and puts Google back if not
+        with contextlib.redirect_stdout(io.StringIO()):
+            homed = bool(T.replace_google_home(serial, True))
+    return {"ok": not rolled, "done": done, "rolledBack": rolled, "before": before, "after": mem_avail(serial), "suite": suite, "home": homed}
 
 
 def run_undo(serial):
@@ -386,7 +391,7 @@ class H(BaseHTTPRequestHandler):
                 r = classify(ip) or {"error": "nessuna TV riconosciuta a questo indirizzo"}
                 if r.get("kind") == "adb": T.adb(None, "connect", r["serial"])
             elif self.path == "/api/inspect": r = inspect(q["serial"])
-            elif self.path == "/api/apply": r = run_apply(q["serial"], install=bool(q.get("install")))
+            elif self.path == "/api/apply": r = run_apply(q["serial"], install=bool(q.get("install")), replace_home=bool(q.get("replaceHome")))
             elif self.path == "/api/undo": r = run_undo(q["serial"])
             elif self.path == "/api/enable": r = enable_guide(q["brand"], int(q.get("year", 2022)), q.get("lang", "en"))
             elif self.path == "/api/adbstatus": r = {"ready": DEMO or adb_ready()}
