@@ -10,6 +10,8 @@ A calmer TV. Three parts that work as one:
 
 ## Install: no coding agent, no command line
 
+**One link for everyone: https://gpire.github.io/lume-suite/** (it picks your computer, shows the TV address to copy).
+
 **From a computer (any TV on your Wi-Fi)**
 1. Open the [latest release](https://github.com/GPire/lume-suite/releases/latest) and download **TV-Doctor.zip**. Unzip it.
 2. Double-click **TV Doctor.command** (Mac), **TV Doctor.bat** (Windows) or run `./tv-doctor.sh` (Linux). Your browser opens.

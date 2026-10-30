@@ -203,7 +203,17 @@ def inspect(serial):
         m = re.search(r"\[(\d+) MB\]", why)
         mb += int(m.group(1)) if m else 0
     STATE[serial] = {"d": d}
+    # After a system update: apps this TV Doctor turned off earlier that are on again (what TV Slim calls drift).
+    reactivated = 0
+    try:
+        files = sorted(f for f in os.listdir(T.BACKUPS) if f.startswith(serial.replace(":", "_")) and "-tuning-" not in f and "-launchers-" not in f) if os.path.isdir(T.BACKUPS) else []
+        before = set()
+        for f in files: before |= set(json.load(open(os.path.join(T.BACKUPS, f))).get("disabled", []))
+        reactivated = len(before & {x[0] for x in todo})
+    except Exception:
+        pass
     return {
+        "reactivated": reactivated,
         "serial": serial, "maker": d["maker"], "model": d["model"], "family": d["family"], "android": d["android"],
         "ram": d["ram_mb"], "profile": d["tier"], "free": d["free_mb"], "notes": T.pitfalls(d), "wireless": T.wireless_note(d),
         "count": len(todo), "mb": mb,

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b10">
+<title>Lume Suite: una TV più calma</title>
+<meta name="description" content="TV Doctor trova la tua TV, installa Lume e Ambient Cast e spegne, senza rischi, ciò che la rallenta. Fire TV, Google TV, Android TV.">
+<style>
+:root{--bg:#0b0b10;--card:rgba(255,255,255,.07);--line:rgba(255,255,255,.12);--text:#f5f5f7;--dim:#a1a1ab;--accent:#0a84ff;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#241a3e 0,transparent 60%),radial-gradient(900px 500px at 100% 10%,#0e2a3a 0,transparent 55%),var(--bg);color:var(--text);font:17px/1.5 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+main{max-width:880px;margin:0 auto;padding:max(28px,env(safe-area-inset-top)) 20px 80px}
+h1{font-size:clamp(38px,7vw,64px);line-height:1.04;letter-spacing:-.03em;margin:44px 0 14px}
+h2{font-size:22px;margin:0 0 6px}
+p{margin:0 0 14px}.dim{color:var(--dim)}
+.clock{font:300 clamp(70px,16vw,140px)/1 "Antonio","Arial Narrow",system-ui,sans-serif;letter-spacing:.02em;background:linear-gradient(#fff,rgba(255,255,255,.45));-webkit-background-clip:text;background-clip:text;color:transparent}
+.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px;margin:18px 0;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#111;font-weight:650;font-size:19px;padding:16px 26px;border-radius:40px;text-decoration:none;border:0;cursor:pointer;transition:transform .15s}
+.btn:hover{transform:scale(1.03)}.btn.ghost{background:var(--card);color:var(--text);border:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.url{flex:1;min-width:260px;font:15px ui-monospace,Menlo,Consolas,monospace;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:14px;padding:14px 16px;overflow-wrap:anywhere}
+ol{padding-left:22px;margin:8px 0 0}li{margin:6px 0}
+.tag{display:inline-block;font-size:13px;color:var(--dim);border:1px solid var(--line);border-radius:20px;padding:3px 12px;margin:0 6px 6px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+a{color:#7ab8ff}small{color:var(--dim)}
+</style>
+</head>
+<body>
+<main>
+  <div class="clock" aria-hidden="true">18:30</div>
+  <h1 data-t="h1">Una TV più calma.</h1>
+  <p class="dim" data-t="lead">TV Doctor trova la tua TV, installa Lume e Ambient Cast e spegne, senza rischi e sempre annullabile, ciò che la rallenta. Niente comandi, niente programmi per sviluppatori.</p>
+
+  <div class="card">
+    <h2 data-t="pcT">Dal computer</h2>
+    <p class="dim" data-t="pcS">Funziona con qualsiasi TV sulla tua rete Wi-Fi.</p>
+    <div class="row">
+      <a class="btn" id="dl" href="https://github.com/GPire/lume-suite/releases/latest/download/TV-Doctor.zip"><span data-t="dl">Scarica TV Doctor</span> <small id="osn" style="color:#555"></small></a>
+      <a class="btn ghost" href="https://github.com/GPire/lume-suite/releases/latest" data-t="all">Tutti i file</a>
+    </div>
+    <ol>
+      <li data-t="s1">Decomprimi il file scaricato.</li>
+      <li id="open" data-t="s2">Apri <b>TV Doctor.command</b> (Mac) o <b>TV Doctor.bat</b> (Windows).</li>
+      <li data-t="s3">Premi <b>Trova la mia TV</b>: lei fa il resto e aspetta il tuo OK prima di toccare qualcosa.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2 data-t="tvT">Solo dalla TV (Fire TV, Android TV, Google TV)</h2>
+    <p class="dim" data-t="tvS">Con l'app gratuita <b>Downloader</b> scrivi questo indirizzo:</p>
+    <div class="row"><div class="url" id="u">github.com/GPire/lume-suite/releases/latest/download/lume-launcher.apk</div><button class="btn ghost" id="copy" data-t="copy">Copia</button></div>
+    <p class="dim" style="margin-top:12px"><small data-t="tvN">Per spegnere ciò che rallenta una Fire TV serve il computer una volta: la TV non può farlo a sé stessa.</small></p>
+  </div>
+
+  <div class="grid">
+    <div class="card"><h2 data-t="c1T">Cosa fa</h2><p class="dim" data-t="c1">Riconosce marca, modello, anno e sistema. Installa le app dopo aver controllato la loro firma. Spegne a gruppi di quattro, controlla che la TV stia bene e annulla da sola se qualcosa non va. Mai disinstalla.</p></div>
+    <div class="card"><h2 data-t="c2T">Cosa è Lume</h2><p class="dim" data-t="c2">Una Home calma con un grande orologio di vetro, schede nitide, Centro di controllo, controllo da telefono, tre aspetti (vetro, grafite, alto contrasto) e testi sincronizzati con AirPlay.</p></div>
+    <div class="card"><h2 data-t="c3T">Samsung, LG, Roku</h2><p class="dim" data-t="c3">Sono sistemi chiusi: TV Doctor dice cosa si può davvero fare per il tuo modello e anno, e la strada più pulita è una chiavetta da pochi euro sull'HDMI.</p></div>
+  </div>
+
+  <p style="margin-top:28px"><span class="tag" data-t="beta">Beta: provata davvero su una Fire TV Stick 4K Max</span><span class="tag">Apache-2.0 · GPL-3.0</span></p>
+  <p><a href="https://github.com/GPire/lume-suite">GitHub</a> · <a href="https://github.com/GPire/lume-suite/blob/main/docs/DEVICE_SUPPORT.md" data-t="support">Cosa funziona su quale TV</a> · <a href="https://github.com/GPire/lume-suite/blob/main/docs/PRIVACY.md">Privacy</a></p>
+</main>
+<script>
+"use strict";
+const IT={};
+const EN={h1:"A calmer TV.",lead:"TV Doctor finds your TV, installs Lume and Ambient Cast, and turns off, safely and always reversibly, what slows it down. No commands, no developer tools.",pcT:"From a computer",pcS:"Works with any TV on your Wi-Fi.",dl:"Download TV Doctor",all:"All files",s1:"Unzip the file you downloaded.",s2:"Open <b>TV Doctor.command</b> (Mac) or <b>TV Doctor.bat</b> (Windows).",s3:"Press <b>Find my TV</b>: it does the rest and waits for your OK before touching anything.",tvT:"From the TV alone (Fire TV, Android TV, Google TV)",tvS:"With the free <b>Downloader</b> app, type this address:",copy:"Copy",tvN:"To turn off what slows a Fire TV you need a computer once: the TV cannot do it to itself.",c1T:"What it does",c1:"Recognises brand, model, year and system. Installs the apps after checking their signature. Turns things off four at a time, checks the TV is fine and undoes it by itself if anything is wrong. Never uninstalls.",c2T:"What Lume is",c2:"A calm Home with a big glass clock, sharp cards, Control Center, phone control, three looks (glass, graphite, high contrast) and AirPlay with synced lyrics.",c3T:"Samsung, LG, Roku",c3:"Closed systems: TV Doctor says what is really possible for your model and year, and the cleanest answer is a small HDMI stick.",beta:"Beta: really tested on one Fire TV Stick 4K Max",support:"What works on which TV",copied:"Copied"};
+const lang=(navigator.language||"it").toLowerCase().startsWith("it")?IT:EN;
+document.documentElement.lang=lang===IT?"it":"en";
+document.querySelectorAll("[data-t]").forEach(e=>{const v=lang[e.dataset.t];if(v)e.innerHTML=v});
+const ua=navigator.userAgent,os=/Windows/.test(ua)?"Windows":/Mac/.test(ua)&&!/iPhone|iPad/.test(ua)?"Mac":/Linux|X11/.test(ua)&&!/Android/.test(ua)?"Linux":"";
+if(os)document.getElementById("osn").textContent="· "+os;
+if(/Android/.test(ua))document.getElementById("u").scrollIntoView();
+document.getElementById("copy").onclick=async e=>{try{await navigator.clipboard.writeText(document.getElementById("u").textContent.trim());e.target.textContent=lang.copied||"Copiato";setTimeout(()=>e.target.textContent=lang.copy||"Copia",1800)}catch(_){}};
+</script>
+</body>
+</html>
