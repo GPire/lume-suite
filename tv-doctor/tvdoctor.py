@@ -15,9 +15,13 @@ VIDAA have no ADB: see the note printed by `detect` on those.
 """
 import argparse, json, os, subprocess, sys, time, urllib.request, re
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-CACHE = os.path.join(HERE, "uad_lists.json")
-BACKUPS = os.path.join(HERE, "backups")
+FROZEN = getattr(sys, "frozen", False)   # the double-click app (PyInstaller): read-only files inside, the person's data outside
+HERE = getattr(sys, "_MEIPASS", None) or os.path.dirname(os.path.abspath(__file__))
+USER = os.path.join(os.path.expanduser("~"), ".tvdoctor") if FROZEN else HERE
+os.makedirs(USER, exist_ok=True)
+CACHE = os.path.join(USER, "uad_lists.json")
+BUNDLED_UAD = os.path.join(HERE, "uad_lists.json")   # shipped inside the app, so the first run works offline
+BACKUPS = os.path.join(USER, "backups")
 UAD_URL = ("https://raw.githubusercontent.com/Universal-Debloater-Alliance/"
            "universal-android-debloater-next-generation/main/resources/assets/uad_lists.json")
 
@@ -198,6 +202,8 @@ def show_detect(d):
 
 def load_uad():
     if not os.path.exists(CACHE):
+        if os.path.exists(BUNDLED_UAD) and BUNDLED_UAD != CACHE:
+            return json.load(open(BUNDLED_UAD))
         print("scarico la lista UAD-NG (una volta)...", file=sys.stderr)
         urllib.request.urlretrieve(UAD_URL, CACHE)
     return json.load(open(CACHE))

@@ -10,9 +10,10 @@ import contextlib, io, json, os, re, secrets, socket, subprocess, sys, threading
 from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-HERE = os.path.dirname(os.path.abspath(__file__))
+HERE = getattr(sys, "_MEIPASS", None) or os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import tvdoctor as T
+USER = T.USER
 import discovery
 
 TOKEN = secrets.token_urlsafe(16)
@@ -128,7 +129,7 @@ def install_adb():
     import platform, urllib.request, zipfile
     osn = {"Darwin": "darwin", "Windows": "windows", "Linux": "linux"}.get(platform.system())
     if not osn: return {"error": "sistema non riconosciuto"}
-    dest = os.path.join(HERE, "tools"); os.makedirs(dest, exist_ok=True)
+    dest = os.path.join(USER, "tools"); os.makedirs(dest, exist_ok=True)
     z = os.path.join(dest, "platform-tools.zip")
     urllib.request.urlretrieve(f"https://dl.google.com/android/repository/platform-tools-latest-{osn}.zip", z)
     zipfile.ZipFile(z).extractall(dest)
@@ -137,7 +138,7 @@ def install_adb():
     return {"ok": adb_ready()}
 
 
-_local_tools = os.path.join(HERE, "tools", "platform-tools")
+_local_tools = os.path.join(USER, "tools", "platform-tools")
 if os.path.isdir(_local_tools):
     os.environ["PATH"] = _local_tools + os.pathsep + os.environ["PATH"]
 
@@ -223,6 +224,21 @@ def inspect(serial):
         "groups": [{"id": g, "count": sum(1 for x in todo if T.group_of(x[0]) == g), "keep": keep}
                    for g, _, keep in T.KEEP_GROUPS if any(T.group_of(x[0]) == g for x in todo)],
     }
+
+
+def report_url(serial, outcome=""):
+    """A prefilled GitHub issue for a TV that did something odd. Brand, model, system and what happened only: no address, no serial
+    number, no account. GitHub gets nothing until the person reads it there and presses Submit."""
+    import urllib.parse, platform
+    d = STATE.get(serial, {}).get("d") or {}
+    body = "\n".join([
+        "**TV:** %s %s" % (d.get("maker", "?"), d.get("model", "?")),
+        "**System:** %s (%s), %s MB RAM, profile %s" % (d.get("android", "?"), d.get("family", "?"), d.get("ram_mb", "?"), d.get("tier", "?")),
+        "**Computer:** %s" % platform.system(),
+        "**What TV Doctor did / showed:** %s" % (outcome or "(write here)"),
+        "", "**What went wrong or what you expected:**", "", "(write here, in your language)"])
+    q = urllib.parse.urlencode({"template": "tv_report.md", "title": "TV report: %s %s" % (d.get("maker", "?"), d.get("model", "?")), "body": body[:1800]})
+    return f"https://github.com/{REPO}/issues/new?{q}"
 
 
 REPO = "GPire/lume-suite"
@@ -393,6 +409,7 @@ class H(BaseHTTPRequestHandler):
                 r = classify(ip) or {"error": "nessuna TV riconosciuta a questo indirizzo"}
                 if r.get("kind") == "adb": T.adb(None, "connect", r["serial"])
             elif self.path == "/api/inspect": r = inspect(q["serial"])
+            elif self.path == "/api/report": r = {"url": report_url(q.get("serial", ""), str(q.get("outcome", ""))[:400])}
             elif self.path == "/api/apply": r = run_apply(q["serial"], install=bool(q.get("install")), replace_home=bool(q.get("replaceHome")), dns=bool(q.get("dns")), keep=q.get("keep") or [], anim=q.get("anim", True))
             elif self.path == "/api/undo": r = run_undo(q["serial"])
             elif self.path == "/api/enable": r = enable_guide(q["brand"], int(q.get("year", 2022)), q.get("lang", "en"))

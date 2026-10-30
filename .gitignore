@@ -24,3 +24,5 @@ ambient-cast/.gitmodules
 dist/
 *.jks
 *.p12
+tv-doctor/dist-app/
+tv-doctor/build-app/
