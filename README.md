@@ -13,6 +13,8 @@
 
 ---
 
+<p align="center"><a href="https://github.com/GPire/lume-suite/releases/download/v0.1.0/lume-suite-promo.mp4"><img src="docs/img/promo-poster.jpg" alt="Watch the 37-second video: a Fire TV Stick before and after" width="230"></a><br><sub>Watch the 37-second video</sub></p>
+
 <p align="center"><img src="docs/img/lume-home.jpg" alt="Lume home screen with a big clock, a dock of app cards and a painting as background" width="720"></p>
 
 **Your TV got slower, louder and nosier, and nobody told you why. One button puts it right in two minutes, and you can undo every step.** In our test on a Fire TV Stick 4K Max the stock home screen dropped frames 69 to 81 percent of the time; Lume dropped 28 percent, and about 25 MB more memory came free after the cleaning (one TV, one test; yours will differ, and the numbers are in [docs/DEVICE_SUPPORT.md](docs/DEVICE_SUPPORT.md)). No coding agent, no command line, no account.

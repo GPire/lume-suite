@@ -57,3 +57,18 @@ Video is what made CleanYourTV spread, and a TV is a thing you can film. Each vi
 ## After posting
 
 Pin a comment with the address and "tell us your TV model: we are building the list of what works on which TV". Link the video from the README and the website the day it is up. Reply to every comment for two days.
+
+## The first video is made
+
+`lume-suite-promo.mp4` (37 s, vertical, English on screen, with captions in `lume-suite-promo.en.srt`) is a release asset: https://github.com/GPire/lume-suite/releases/download/v0.1.0/lume-suite-promo.mp4. It follows Video 1 and Video 2 above in one cut, with real footage and the measured numbers. How it was built: [video/README.md](../video/README.md).
+
+Post it as is. Titles to test (no hashtags, no emoji):
+
+- This Fire TV Stick was dying. Two minutes later.
+- Fix a slow Fire TV Stick in 2 minutes (no command line)
+- Your phone is an Apple TV remote on any Fire TV
+
+First line of the description: *One app finds your TV, switches off what slows it and watches you, and installs a calm home screen. Nothing is deleted, undo any time. Free and open source: gpire.github.io/lume-suite*
+
+Pin a comment: *Tell us your TV model and what happened: github.com/GPire/lume-suite/discussions*
+

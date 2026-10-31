@@ -34,3 +34,5 @@ video/app/node_modules/
 video/app/out/
 video/app/public/*.mp4
 video/app/public/frames/
+video/app/public/*.wav
+video/app/public/*.jpg

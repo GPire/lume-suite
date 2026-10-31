@@ -1,9 +1,10 @@
-import { MyComposition } from "./Composition";
+import { Composition } from "remotion";
+import { Promo } from "./Promo";
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
-      <MyComposition />
+      <Composition id="Promo" component={Promo} durationInFrames={1110} fps={30} width={1080} height={1920} />
     </>
   );
 };
