@@ -24,3 +24,12 @@ assert "com.google.android.play.games" not in seen and "com.google.android.feedb
 seen.clear(); A.run_apply("fixture", keep=[])
 assert "com.google.android.play.games" in seen
 print("TUTTO OK keep apply")
+
+# app-by-app choice: only what is ticked is switched off; ultra offers the careful ones too
+seen.clear(); A.run_apply("fixture", selected=["com.google.android.feedback"])
+assert seen == ["com.google.android.feedback"], seen
+seen.clear(); A.run_apply("fixture", selected=["com.google.android.katniss"], ultra=True)
+assert seen == ["com.google.android.katniss"] or seen == [], seen   # katniss is a careful one: offered, never forced
+info = A.inspect("fixture")
+assert info["ultraCount"] >= info["count"] and any(i["tier"] == "caution" for i in info["items"]) or info["ultraCount"] == info["count"]
+print("TUTTO OK scelta app per app")

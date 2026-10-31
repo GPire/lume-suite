@@ -212,10 +212,11 @@ def inspect(serial):
     if DEMO and T.FIXTURE is None:
         T.FIXTURE = demo_fixture()
     d = T.detect(serial)
-    plan = T.build_plan(serial, d, "safe")
+    plan = T.build_plan(serial, d, "caution")   # everything that could be offered; the page ticks the safe ones
     todo = [x for x in plan if not x[4]]
+    safe_todo = [x for x in todo if x[1] == "safe"]
     mb = 0
-    for p, t, why, src, off in todo:
+    for p, t, why, src, off in safe_todo:
         m = re.search(r"\[(\d+) MB\]", why)
         mb += int(m.group(1)) if m else 0
     STATE[serial] = {"d": d}
@@ -232,13 +233,46 @@ def inspect(serial):
         "reactivated": reactivated,
         "serial": serial, "maker": d["maker"], "model": d["model"], "family": d["family"], "android": d["android"],
         "ram": d["ram_mb"], "profile": d["tier"], "free": d["free_mb"], "notes": T.pitfalls(d), "wireless": T.wireless_note(d),
-        "count": len(todo), "mb": mb,
+        "count": len(safe_todo), "ultraCount": len(todo), "mb": mb,
         "replaceHome": d["family"] in ("google-tv", "android-tv") and bool({"com.google.android.tvlauncher", "com.google.android.apps.tv.launcherx"} & set(T.home_activities(serial))),
         "suite": d["family"] in ("fireos", "google-tv", "android-tv", "android-other") and int(d.get("sdk") or 0) >= 24,
         "items": [{"pkg": p, "why": re.sub(r"\s*\[\d+ MB\]", "", why), "tier": t, "group": T.group_of(p)} for p, t, why, src, off in todo],
         "groups": [{"id": g, "count": sum(1 for x in todo if T.group_of(x[0]) == g), "keep": keep}
                    for g, _, keep in T.KEEP_GROUPS if any(T.group_of(x[0]) == g for x in todo)],
     }
+
+
+AD_DOMAINS = ["doubleclick.net", "googleadservices.com", "pagead2.googlesyndication.com", "app-measurement.com",
+              "samsungads.com", "ads.roku.com", "ad.lgsmartad.com"]
+
+
+def dns_check(domains=None):
+    """How many ad and tracking names this network refuses to answer (what a router-level blocker such as AdGuard or Pi-hole does).
+    It asks this computer's resolver, which on a home network is the same one the TV uses."""
+    out = []
+    for d in domains or AD_DOMAINS:
+        try:
+            addr = socket.gethostbyname(d)
+            blocked = addr.startswith(("0.", "127.")) or addr == "::"
+        except OSError:
+            addr, blocked = "", True   # no answer at all is also a block
+        out.append({"domain": d, "blocked": blocked})
+    return {"results": out, "blocked": sum(1 for r in out if r["blocked"]), "total": len(out), "router": default_gateway()}
+
+
+def default_gateway():
+    """The router's address, where its DNS setting lives."""
+    try:
+        if sys.platform == "darwin":
+            m = re.search(r"gateway:\s*(\S+)", subprocess.run(["route", "-n", "get", "default"], capture_output=True, text=True, timeout=5).stdout)
+        elif sys.platform == "win32":
+            m = re.search(r"Default Gateway[ .]*:\s*(\d+\.\d+\.\d+\.\d+)", subprocess.run(["ipconfig"], capture_output=True, text=True, timeout=5).stdout)
+        else:
+            m = re.search(r"default via (\S+)", subprocess.run(["ip", "route"], capture_output=True, text=True, timeout=5).stdout)
+        if m: return m.group(1)
+    except Exception:
+        pass
+    return local_prefix() + ".1"
 
 
 def report_url(serial, outcome=""):
@@ -337,7 +371,7 @@ def healthy(serial, home_pkg):
     return bool(h.strip()) and (not home_pkg or home_pkg in h)
 
 
-def run_apply(serial, batch=4, install=False, replace_home=False, dns=False, keep=(), anim=True):
+def run_apply(serial, batch=4, install=False, replace_home=False, dns=False, keep=(), anim=True, selected=None, ultra=False):
     """Small batches, a health check after each; on the first doubt the batch is undone and we stop."""
     if DEMO and T.FIXTURE is None:
         T.FIXTURE = demo_fixture()
@@ -348,15 +382,16 @@ def run_apply(serial, batch=4, install=False, replace_home=False, dns=False, kee
             suite = install_suite(serial, d)
         except Exception as e:
             suite = [{"app": n, "ok": False, "why": str(e)[:160]} for _, n, _ in SUITE]
-    plan = T.build_plan(serial, d, "safe")
-    todo = [x[0] for x in plan if not x[4] and T.group_of(x[0]) not in set(keep)]   # what the owner chose to keep stays on
+    plan = T.build_plan(serial, d, "caution" if (selected is not None or ultra) else "safe")
+    chosen = set(selected) if selected is not None else None   # the owner's own ticks, app by app
+    todo = [x[0] for x in plan if not x[4] and T.group_of(x[0]) not in set(keep) and (chosen is None or x[0] in chosen)]   # what the owner chose to keep stays on
     home = T.sh(serial, "cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME | tail -1").split("/")[0]
     before, done, rolled = mem_avail(serial), 0, False
     for k in range(0, len(todo), batch):
         part = set(todo[k:k + batch])
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
-            T.apply(serial, d, plan, "safe", part)
+            T.apply(serial, d, plan, "caution", part)
         out = buf.getvalue()
         ok_now = len(re.findall(r"^\s+ok ", out, re.M))
         if not healthy(serial, home):
@@ -368,7 +403,7 @@ def run_apply(serial, batch=4, install=False, replace_home=False, dns=False, kee
             break
         done += ok_now
     with contextlib.redirect_stdout(io.StringIO()):
-        T.tune(serial, d.get("tier", "essenziale") if anim else "pieno", dns)
+        T.tune(serial, d.get("tier", "essenziale") if anim else "pieno", dns, ultra)
     T.sh(serial, "sync")   # Android writes package states a little later: a reboot right now would lose them (seen on Fire OS 8.1)
     homed = None
     if replace_home and not rolled:   # Lume must be there; replace_google_home checks Home opens Lume and puts Google back if not
@@ -425,10 +460,11 @@ class H(BaseHTTPRequestHandler):
                 ip = re.sub(r"[^0-9.]", "", q.get("ip", ""))
                 r = classify(ip) or {"error": "nessuna TV riconosciuta a questo indirizzo"}
                 if r.get("kind") == "adb": r["state"] = T.probe(r["serial"])
+            elif self.path == "/api/dnscheck": r = dns_check()
             elif self.path == "/api/probe": r = {"state": T.probe(q["serial"])}
             elif self.path == "/api/inspect": r = inspect(q["serial"])
             elif self.path == "/api/report": r = {"url": report_url(q.get("serial", ""), str(q.get("outcome", ""))[:400])}
-            elif self.path == "/api/apply": r = run_apply(q["serial"], install=bool(q.get("install")), replace_home=bool(q.get("replaceHome")), dns=bool(q.get("dns")), keep=q.get("keep") or [], anim=q.get("anim", True))
+            elif self.path == "/api/apply": r = run_apply(q["serial"], install=bool(q.get("install")), replace_home=bool(q.get("replaceHome")), dns=bool(q.get("dns")), keep=q.get("keep") or [], anim=q.get("anim", True), selected=q.get("selected"), ultra=bool(q.get("ultra")))
             elif self.path == "/api/undo": r = run_undo(q["serial"])
             elif self.path == "/api/enable": r = enable_guide(q["brand"], int(q.get("year", 2022)), q.get("lang", "en"))
             elif self.path == "/api/adbstatus": r = {"ready": DEMO or adb_ready()}

@@ -515,7 +515,7 @@ def check(serial):
 PRIVATE_DNS = "dns.adguard-dns.com"   # blocks ads and trackers for every app (not YouTube's own ads); off again with undo
 
 
-def tune(serial, tier="essenziale", dns=False):
+def tune(serial, tier="essenziale", dns=False, ultra=False):
     """Apply the animation tuning (and, if asked, the private DNS), saving old values so undo can restore them."""
     old = {}
     sh(serial, "pm trim-caches 999G")   # app caches only: logins and downloads stay
@@ -525,6 +525,9 @@ def tune(serial, tier="essenziale", dns=False):
         sh(serial, "settings put global private_dns_mode hostname")
         sh(serial, f"settings put global private_dns_specifier {PRIVATE_DNS}")
     scale = {"essenziale": "0.5", "equilibrato": "0.7", "pieno": "1.0"}.get(tier, "0.5")
+    if ultra:
+        scale = "0.3"   # ultra: the shortest animations that still look like animations
+        sh(serial, "cmd package bg-dexopt-job")   # let Android finish optimising the apps' code now, not in the night (Android 8+; harmless if unknown)
     if scale == "1.0" and not dns:
         print("TV potente: animazioni lasciate com'è"); return
     if scale == "1.0":
