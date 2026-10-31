@@ -16,19 +16,19 @@ import { loadFont } from "@remotion/google-fonts/Inter";
 
 const { fontFamily } = loadFont("normal", { weights: ["500", "700", "800"], subsets: ["latin"] });
 
-const AMBER = "#ff9f0a";
-const GREEN = "#30d158";
-const RED = "#ff453a";
-const INK = "#f5f5f7";
-const DIM = "#9a9aa6";
+export const AMBER = "#ff9f0a";
+export const GREEN = "#30d158";
+export const RED = "#ff453a";
+export const INK = "#f5f5f7";
+export const DIM = "#9a9aa6";
 const smooth = Easing.bezier(0.16, 1, 0.3, 1);
 
 // Real numbers, measured on a Fire TV Stick 4K Max with the same key presses (dumpsys gfxinfo), 2026-10-31.
-const BEFORE = { janky: 87, median: 28, p90: 42 }; // the stock Fire TV home, factory state
-const AFTER = { janky: 13, median: 9, p90: 17 }; // Lume, same stick, same keys
+export const BEFORE = { janky: 87, median: 28, p90: 42 }; // the stock Fire TV home, factory state
+export const AFTER = { janky: 13, median: 9, p90: 17 }; // Lume, same stick, same keys
 
 // The 16 packages TV Doctor switched off in the recorded run (Amazon's own extras).
-const OFF_LIST = [
+export const OFF_LIST = [
   "bueller.music", "bueller.photos", "dummy.music", "gamehub",
   "minitv.android.app", "ods.kindleconnect", "shoptv.client", "shoptv.firetv.client",
   "smarthomemapviewapp", "sneakpeek", "storm.lightning.tutorial", "tahoe",
@@ -37,7 +37,7 @@ const OFF_LIST = [
 
 // ---------------------------------------------------------------- helpers
 
-const useFade = (duration: number, inFrames = 7, outFrames = 9) => {
+export const useFade = (duration: number, inFrames = 7, outFrames = 9) => {
   const frame = useCurrentFrame();
   return interpolate(frame, [0, inFrames, duration - outFrames, duration], [0, 1, 1, 0], {
     extrapolateLeft: "clamp",
@@ -45,7 +45,7 @@ const useFade = (duration: number, inFrames = 7, outFrames = 9) => {
   });
 };
 
-const Words: React.FC<{
+export const Words: React.FC<{
   text: string;
   start?: number;
   size?: number;
@@ -92,7 +92,7 @@ const Words: React.FC<{
   );
 };
 
-const Sub: React.FC<{ text: string; start?: number; size?: number; color?: string }> = ({
+export const Sub: React.FC<{ text: string; start?: number; size?: number; color?: string }> = ({
   text,
   start = 30,
   size = 46,
@@ -107,7 +107,7 @@ const Sub: React.FC<{ text: string; start?: number; size?: number; color?: strin
   );
 };
 
-const Backdrop: React.FC = () => {
+export const Backdrop: React.FC = () => {
   const frame = useCurrentFrame();
   const drift = Math.sin(frame / 90);
   return (
@@ -122,7 +122,7 @@ const Backdrop: React.FC = () => {
   );
 };
 
-const Vignette: React.FC = () => (
+export const Vignette: React.FC = () => (
   <AbsoluteFill
     style={{
       background: "radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%)",
@@ -131,7 +131,7 @@ const Vignette: React.FC = () => (
   />
 );
 
-const TvFrame: React.FC<{ children: React.ReactNode; glow: string; width?: number }> = ({ children, glow, width = 1000 }) => (
+export const TvFrame: React.FC<{ children: React.ReactNode; glow: string; width?: number }> = ({ children, glow, width = 1000 }) => (
   <div
     style={{
       position: "relative",
@@ -149,7 +149,7 @@ const TvFrame: React.FC<{ children: React.ReactNode; glow: string; width?: numbe
 );
 
 /** A slow push-in: the camera creeping toward the screen for the whole scene. */
-const PushIn: React.FC<{ children: React.ReactNode; duration: number; to?: number }> = ({ children, duration, to = 1.07 }) => {
+export const PushIn: React.FC<{ children: React.ReactNode; duration: number; to?: number }> = ({ children, duration, to = 1.07 }) => {
   const frame = useCurrentFrame();
   const s = interpolate(frame, [0, duration], [1, to], { easing: Easing.bezier(0.3, 0, 0.7, 1) });
   return <div style={{ scale: String(s), transformOrigin: "50% 50%" }}>{children}</div>;
@@ -174,20 +174,21 @@ const frameTimes = (median: number, p90: number, seed: number, n = 46) => {
   });
 };
 
-const Bars: React.FC<{ median: number; p90: number; seed: number; start?: number; height?: number }> = ({
+export const Bars: React.FC<{ median: number; p90: number; seed: number; start?: number; height?: number; width?: number }> = ({
   median,
   p90,
   seed,
   start = 30,
   height = 230,
+  width = 1000,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const ft = frameTimes(median, p90, seed);
   const max = 70;
-  const w = 1000 / ft.length;
+  const w = width / ft.length;
   return (
-    <div style={{ position: "relative", width: 1000, height }}>
+    <div style={{ position: "relative", width, height }}>
       <div
         style={{
           position: "absolute",
@@ -234,7 +235,7 @@ const Bars: React.FC<{ median: number; p90: number; seed: number; start?: number
   );
 };
 
-const Count: React.FC<{ to: number; start: number; size?: number; color: string; suffix?: string }> = ({
+export const Count: React.FC<{ to: number; start: number; size?: number; color: string; suffix?: string }> = ({
   to,
   start,
   size = 190,
@@ -251,7 +252,7 @@ const Count: React.FC<{ to: number; start: number; size?: number; color: string;
   );
 };
 
-const Chip: React.FC<{ text: string; color?: string; size?: number }> = ({ text, color = INK, size = 34 }) => (
+export const Chip: React.FC<{ text: string; color?: string; size?: number }> = ({ text, color = INK, size = 34 }) => (
   <div
     style={{
       fontFamily,
@@ -269,7 +270,7 @@ const Chip: React.FC<{ text: string; color?: string; size?: number }> = ({ text,
   </div>
 );
 
-const Foot: React.FC<{ text: string }> = ({ text }) => (
+export const Foot: React.FC<{ text: string }> = ({ text }) => (
   <div style={{ fontFamily, fontWeight: 500, fontSize: 26, color: "rgba(255,255,255,0.45)", textAlign: "center" }}>{text}</div>
 );
 
@@ -304,7 +305,7 @@ const SceneHook: React.FC = () => {
 };
 
 const D2 = 180;
-const CardCrop: React.FC<{ from: number; rate: number; height: number }> = ({ from, rate, height }) => {
+export const CardCrop: React.FC<{ from: number; rate: number; height: number }> = ({ from, rate, height }) => {
   const s = 1000 / 1040;
   return (
     <div
@@ -483,7 +484,7 @@ const SceneAfter: React.FC = () => {
 };
 
 const D5 = 180;
-const Finger: React.FC<{ path: [number, number][]; start: number }> = ({ path, start }) => {
+export const Finger: React.FC<{ path: [number, number][]; start: number }> = ({ path, start }) => {
   const frame = useCurrentFrame();
   const t = interpolate(frame, [start, start + 70], [0, path.length - 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const i = Math.min(Math.floor(t), path.length - 2);
@@ -554,21 +555,22 @@ const ScenePhone: React.FC = () => {
 };
 
 const D6 = 150;
-const Star: React.FC<{ size: number; color: string }> = ({ size, color }) => (
+export const Star: React.FC<{ size: number; color: string }> = ({ size, color }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.8} strokeLinejoin="round" strokeLinecap="round">
     <path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1.1 5.9L12 16.9l-5.3 2.8 1.1-5.9-4.3-4.1 5.9-.8z" />
   </svg>
 );
-const SceneEnd: React.FC = () => {
+export const SceneEnd: React.FC = () => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, height } = useVideoConfig();
+  const wide = height < 1500;
   const o = interpolate(frame, [0, 8], [0, 1], { extrapolateRight: "clamp" });
   const orb = spring({ frame: frame - 2, fps, config: { damping: 12, stiffness: 90 } });
   const pulse = 1 + Math.sin(frame / 10) * 0.025;
   const url = spring({ frame: frame - 44, fps, config: { damping: 200 } });
   return (
     <AbsoluteFill style={{ opacity: o, alignItems: "center", justifyContent: "center" }}>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 36, translate: "0px -40px" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: wide ? 24 : 36, translate: wide ? "0px -30px" : "0px -40px", scale: wide ? "0.8" : "1" }}>
         <div
           style={{
             width: 300,
@@ -603,7 +605,7 @@ const SceneEnd: React.FC = () => {
           <Star size={50} color={AMBER} /> Star it on GitHub
         </div>
       </div>
-      <div style={{ position: "absolute", bottom: 230, left: 0, right: 0 }}>
+      <div style={{ position: "absolute", bottom: wide ? 28 : 230, left: 0, right: 0 }}>
         <Foot text="Real screens and measurements from a Fire TV Stick 4K Max. Not affiliated with Amazon." />
       </div>
     </AbsoluteFill>

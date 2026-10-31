@@ -60,7 +60,7 @@ Pin a comment with the address and "tell us your TV model: we are building the l
 
 ## The first video is made
 
-`lume-suite-promo.mp4` (37 s, vertical, English on screen, with captions in `lume-suite-promo.en.srt`) is a release asset: https://github.com/GPire/lume-suite/releases/download/v0.1.0/lume-suite-promo.mp4. It follows Video 1 and Video 2 above in one cut, with real footage and the measured numbers. How it was built: [video/README.md](../video/README.md).
+`lume-suite-promo.mp4` (37 s, vertical, English on screen, with captions in `lume-suite-promo.en.srt`) is a release asset: https://github.com/GPire/lume-suite/releases/download/v0.1.0/lume-suite-promo.mp4. A 16:9 cut for YouTube is `lume-suite-promo-16x9.mp4` in the same release. It follows Video 1 and Video 2 above in one cut, with real footage and the measured numbers. How it was built: [video/README.md](../video/README.md).
 
 Post it as is. Titles to test (no hashtags, no emoji):
 
