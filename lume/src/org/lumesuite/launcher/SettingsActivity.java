@@ -399,6 +399,7 @@ public class SettingsActivity extends Activity {
                 int sec = Suggestions.advanceSeconds(this);
                 return sec == 0 ? "Off" : "Every " + sec + " s";
             }, this::chooseAdvance);
+            row("Transition", () -> "fade".equals(Suggestions.transition(this)) ? "Fade" : "Slide", this::chooseTransition);
             row("Refresh now", () -> "", () -> {
                 Suggestions.changed(this);
                 Toast.makeText(this, It.t("The carousel will refresh on Home"), Toast.LENGTH_SHORT).show();
@@ -1157,9 +1158,18 @@ public class SettingsActivity extends Activity {
                 }).setNegativeButton(It.t("Cancel"), null).show();
     }
 
+    void chooseTransition() {
+        String[] names = {"Slide", "Fade"};
+        dialog("Transition").setSingleChoiceItems(names, "fade".equals(Suggestions.transition(this)) ? 1 : 0, (d, w) -> {
+            Suggestions.prefs(this).edit().putString("hero_transition", w == 1 ? "fade" : "slide").apply();
+            refreshAll();
+            d.dismiss();
+        }).show();
+    }
+
     void chooseAdvance() {
-        int[] secs = {0, 6, 8, 12};
-        String[] names = {"Off", "Every 6 s", "Every 8 s", "Every 12 s"};
+        int[] secs = {0, 10, 15, 20, 30, 60};
+        String[] names = {"Off", "Every 10 s", "Every 15 s", "Every 20 s", "Every 30 s", "Every 60 s"};
         int cur = 0;
         for (int i = 0; i < secs.length; i++) if (secs[i] == Suggestions.advanceSeconds(this)) cur = i;
         dialog("Auto-advance").setSingleChoiceItems(names, cur, (d, w) -> {

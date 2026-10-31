@@ -112,7 +112,7 @@ final class It {
         p("Switch", "Cambia"); p("Welcome", "Benvenuto"); p("Get", "Ottieni"); p("Buy", "Acquista"); p("Rent", "Noleggia");
         p("Not set", "Non impostato"); p("Not needed", "Non necessario"); p("When", "Quando");
         p("Update every", "Aggiorna ogni"); p("Update weather every", "Aggiorna il meteo ogni");
-        p("Every 6 s", "Ogni 6 s"); p("Every 8 s", "Ogni 8 s"); p("Every 12 s", "Ogni 12 s");
+        p("Every 10 s", "Ogni 10 s"); p("Every 15 s", "Ogni 15 s"); p("Every 20 s", "Ogni 20 s"); p("Every 30 s", "Ogni 30 s"); p("Every 60 s", "Ogni 60 s"); p("Every 6 s", "Ogni 6 s"); p("Every 8 s", "Ogni 8 s"); p("Every 12 s", "Ogni 12 s");
 
         // ---- core labels in every supported language (it, es, de, fr, pt)
         q("Power Off", "Spegni", "Apagar", "Ausschalten", "Éteindre", "Desligar");
@@ -272,6 +272,9 @@ final class It {
         q("So the phone remote can open apps and search while you watch", "Così il telecomando sul telefono apre app e cerca mentre guardi", "Para que el mando del teléfono abra apps y busque mientras ves algo", "Damit die Telefon-Fernbedienung Apps öffnen und suchen kann, während du schaust", "Pour que la télécommande du téléphone ouvre des apps et lance des recherches pendant que vous regardez", "Para o comando no telemóvel abrir apps e pesquisar enquanto vê");
         q("This TV has no page for it. TV Doctor or Lume\u2019s Optimize this TV can allow it.", "Questa TV non ha la pagina per questo. Lo può consentire TV Doctor oppure Ottimizza questa TV di Lume.", "Este televisor no tiene esa página. TV Doctor u Optimizar este televisor de Lume pueden permitirlo.", "Dieser Fernseher hat dafür keine Seite. TV Doctor oder Lumes TV-Optimierung kann es erlauben.", "Ce téléviseur n\u2019a pas cette page. TV Doctor ou l\u2019optimisation de Lume peut l\u2019autoriser.", "Esta TV não tem essa página. O TV Doctor ou o Otimizar esta TV do Lume podem permitir.");
         q("Type from your phone", "Scrivi dal telefono", "Escribe desde el teléfono", "Vom Telefon tippen", "Écrire depuis le téléphone", "Escrever no telemóvel");
+        q("Transition", "Transizione", "Transición", "Übergang", "Transition", "Transição");
+        q("Slide", "Scorrimento", "Deslizar", "Gleiten", "Glisser", "Deslizar");
+        q("Fade", "Dissolvenza", "Fundido", "Überblenden", "Fondu", "Desvanecer");
         q("Voice assistant", "Assistente vocale", "Asistente de voz", "Sprachassistent", "Assistant vocal", "Assistente de voz");
         q("None on this TV", "Nessuno su questa TV", "Ninguno en esta TV", "Keiner auf diesem Fernseher", "Aucun sur ce téléviseur", "Nenhum nesta TV");
         q("This TV has no voice assistant app.", "Questa TV non ha un\u2019app di assistente vocale.", "Esta TV no tiene una aplicación de asistente de voz.", "Dieser Fernseher hat keine Sprachassistenten-App.", "Ce téléviseur n\u2019a pas d\u2019application d\u2019assistant vocal.", "Esta TV não tem uma aplicação de assistente de voz.");

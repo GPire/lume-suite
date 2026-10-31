@@ -2215,7 +2215,7 @@ public class MainActivity extends Activity {
         handler.removeCallbacks(heroAdvance);
         if (continueMode()) return;  // Up Next stays put
         int sec = Suggestions.advanceSeconds(this);
-        if (sec > 0 && heroIsNews()) sec = Math.max(sec, 15);  // time to read a story
+        if (sec > 0 && heroIsNews()) sec = Math.max(sec, 20);  // time to read a story
         if (sec > 0 && heroShown && resumed) handler.postDelayed(heroAdvance, sec * 1000L);
     }
 
@@ -2429,11 +2429,19 @@ public class MainActivity extends Activity {
             old.setAlpha(0f);
             return;
         }
+        if ("fade".equals(Suggestions.transition(this))) {   // a long, quiet dissolve: nothing moves sideways
+            next.setTranslationX(0);
+            next.setAlpha(0f);
+            next.animate().alpha(1f).setDuration(Motion.d(1500)).setInterpolator(EASE).start();
+            old.animate().cancel();
+            old.animate().alpha(0f).setDuration(Motion.d(1500)).setInterpolator(EASE).withEndAction(() -> old.setTranslationX(0)).start();
+            return;
+        }
         next.setTranslationX(screenW * 0.12f * dir);
         next.setAlpha(0f);
-        next.animate().translationX(0).alpha(1f).setDuration(Motion.d(650)).setInterpolator(EASE).start();
+        next.animate().translationX(0).alpha(1f).setDuration(Motion.d(900)).setInterpolator(EASE).start();
         old.animate().cancel();
-        old.animate().translationX(-screenW * 0.06f * dir).alpha(0f).setDuration(Motion.d(650))
+        old.animate().translationX(-screenW * 0.06f * dir).alpha(0f).setDuration(Motion.d(900))
                 .setInterpolator(EASE).withEndAction(() -> old.setTranslationX(0)).start();
     }
 

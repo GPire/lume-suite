@@ -224,8 +224,13 @@ final class Suggestions {
         return new HashSet<>(prefs(c).getStringSet(K_LANGS, new HashSet<>()));
     }
 
+    /** How the carousel artwork changes: "slide" (tvOS) or a slow "fade". */
+    static String transition(Context c) {
+        return "fade".equals(prefs(c).getString("hero_transition", "slide")) ? "fade" : "slide";
+    }
+
     static int advanceSeconds(Context c) {
-        return prefs(c).getInt(K_ADVANCE, 8);
+        return prefs(c).getInt(K_ADVANCE, 15);   // 8 s was too quick to read a card: calmer by default
     }
 
     /** Bumped on every settings change so the home screen knows to refetch. */
