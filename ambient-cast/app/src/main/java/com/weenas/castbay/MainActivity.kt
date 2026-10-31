@@ -97,7 +97,7 @@ class MainActivity : ComponentActivity() {
         Diagnostics.init(this)
         Diagnostics.record("app", "Opened")
         if (intent?.getStringExtra("demo") == "lyrics") {   // developer demo of the lyrics screen, see DemoLyrics
-            setContent { CastBayTheme { com.weenas.castbay.ui.screen.DemoLyrics() } }
+            setContent { CastBayTheme { com.weenas.castbay.ui.screen.DemoLyrics(english = intent?.getStringExtra("lang") == "en") } }
             DevShot.maybe(this)
             return
         }
@@ -106,7 +106,7 @@ class MainActivity : ComponentActivity() {
             setContent {
                 CastBayTheme {
                     androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier.fillMaxSize().background(androidx.compose.ui.graphics.Color(0xFF1A1230))) {
-                        com.weenas.castbay.ui.PlaybackHints(Unit, "iPhone di Giulia", demo == "hints_music", false, 0, androidx.compose.ui.Modifier.fillMaxSize())
+                        com.weenas.castbay.ui.PlaybackHints(Unit, "Anna's iPhone", demo == "hints_music", false, 0, androidx.compose.ui.Modifier.fillMaxSize())
                     }
                 }
             }

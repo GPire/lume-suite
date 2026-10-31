@@ -25,7 +25,7 @@ const smooth = Easing.bezier(0.16, 1, 0.3, 1);
 
 // Real numbers, measured on a Fire TV Stick 4K Max with the same key presses (dumpsys gfxinfo), 2026-10-31.
 export const BEFORE = { janky: 87, median: 28, p90: 42 }; // the stock Fire TV home, factory state
-export const AFTER = { janky: 13, median: 9, p90: 17 }; // Lume, same stick, same keys
+export const AFTER = { janky: 8, median: 9, p90: 14 }; // Lume, same stick, same keys
 
 // The 16 packages TV Doctor switched off in the recorded run (Amazon's own extras).
 export const OFF_LIST = [
