@@ -8,7 +8,8 @@ A.STATE.clear()
 info = A.inspect("fixture")
 ids = {g["id"]: g for g in info["groups"]}
 assert "games" in ids and "privacy" in ids and ids["games"]["keep"] is False
-assert "assistant" in ids and ids["assistant"]["keep"] is True, "assistant is kept by default"
+assert {g: k for g, _, k in T.KEEP_GROUPS}["assistant"] is True and {g: k for g, _, k in T.KEEP_GROUPS}["cast"] is True, "assistant and casting are kept by default"
+assert T.group_of("com.google.android.katniss") == "assistant" and T.group_of("com.amazon.vizzini") == "assistant"
 assert all(i["group"] for i in info["items"] if i["pkg"] in ("com.google.android.play.games", "com.google.android.feedback"))
 print("TUTTO OK keep")
 

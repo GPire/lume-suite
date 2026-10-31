@@ -2,43 +2,54 @@
 
 [English](README.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Português](README.pt.md) · [简体中文](README.zh.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [العربية](README.ar.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Bahasa Indonesia](README.id.md)
 
-A calmer TV. Three parts that work as one:
+<p align="center"><img src="docs/img/lume-home.jpg" alt="Lume home screen with a big clock, a dock of app cards and a painting as background" width="720"></p>
 
-- **TV Doctor**: plug it in, press one button, and your TV is cleaned and tuned. It recognises the brand, model, year and system, removes what slows or watches you (reversibly), and tells you, step by step, how to switch on what your TV needs. No coding agent, no command line.
-- **Lume**: a home screen for Android TV, Google TV and Fire TV. A big glass clock, a dock of sharp app cards, Control Center, Recent Apps, markets, news, weather in several cities, a health page, three looks (Liquid Glass, Graphite, High contrast), and full control from a phone. Adapts to the power of the TV and to the country it is in.
-- **Ambient Cast**: an AirPlay receiver with Apple Music-style lyrics and screen mirroring, so an iPhone can show music and video on the TV.
+**A calmer TV.** Open one app on your computer: it finds your TV by itself, installs a clean home screen, and switches off what slows it down or watches you. Nothing is deleted and everything can be undone. No coding agent, no command line, no account.
 
-## Install: no coding agent, no command line
+## Start here (3 steps)
 
-**One link for everyone: https://gpire.github.io/lume-suite/** (it picks your computer, shows the TV address to copy). Or one command: `curl -fsSL https://gpire.github.io/lume-suite/install.sh | sh` (Mac, Linux) / `irm https://gpire.github.io/lume-suite/install.ps1 | iex` (Windows): downloads TV Doctor, checks its SHA-256 and starts it in automatic mode.
+1. **Download the app for your computer** (the TV and the computer must be on the same Wi-Fi):
 
-**From a computer (any TV on your Wi-Fi)**
-1. Open the [latest release](https://github.com/GPire/lume-suite/releases/latest) and download **TV-Doctor.zip**. Unzip it.
-2. Double-click **TV Doctor.command** (Mac), **TV Doctor.bat** (Windows) or run `./tv-doctor.sh` (Linux). Your browser opens.
-3. Press **Find my TV**. It recognises the brand, model, year and system, installs **Lume, Ambient Cast and the Gallery** on Android-based TVs (each file checked against its SHA-256 first), shows what it would turn off, and waits for your OK. Every change can be undone from the same page.
+   | Your computer | Download | Then |
+   |---|---|---|
+   | Mac (Apple chip: M1, M2, M3, M4) | [TV-Doctor-mac-apple-chip.zip](https://github.com/GPire/lume-suite/releases/latest/download/TV-Doctor-mac-apple-chip.zip) | unzip, **right-click "TV Doctor" > Open** |
+   | Mac (Intel) | [TV-Doctor-mac-intel.zip](https://github.com/GPire/lume-suite/releases/latest/download/TV-Doctor-mac-intel.zip) | unzip, **right-click "TV Doctor" > Open** |
+   | Windows | [TV-Doctor-windows.exe](https://github.com/GPire/lume-suite/releases/latest/download/TV-Doctor-windows.exe) | double-click; if Windows warns, **More info > Run anyway** |
+   | Linux | [TV-Doctor-linux.tar.gz](https://github.com/GPire/lume-suite/releases/latest/download/TV-Doctor-linux.tar.gz) | unpack, run **TV Doctor** |
 
-**From the TV alone (Fire TV, Android TV, Google TV)**
-1. Install the free **Downloader** app from your TV's store.
-2. In Downloader enter `github.com/GPire/lume-suite/releases/latest/download/lume-launcher.apk` and install. Repeat with `ambient-cast.apk` if you want AirPlay.
-3. Open **Lume** and follow its setup. Cleaning the TV (turning off apps that slow it) needs a computer once: on a Fire TV, the TV cannot do it to itself.
+   The first time, Mac and Windows say the app is from an unknown developer. That is because it is not paid-for-signed, not because anything is wrong: each file has a `.sha256` next to it, and the full source is in this repository.
+2. **The app opens in your browser and looks for your TV on its own.** If it asks, switch on *Developer options > USB / network debugging* on the TV; it shows you how.
+3. **Press the big button.** It recognises the brand, model, year and system, installs Lume, Ambient Cast and the Gallery, and switches off the useless apps. You choose what to keep (voice assistant, casting...). Everything can be undone from the same page.
 
-**Samsung, LG, Roku, VIDAA** are closed systems: TV Doctor tells you what is and is not possible for your model and year. See [docs/GOOGLE_TV_AND_TIZEN.md](docs/GOOGLE_TV_AND_TIZEN.md). An HDMI stick gives these TVs the full experience.
+*Prefer one line?* Mac/Linux: `curl -fsSL https://gpire.github.io/lume-suite/install.sh | sh` · Windows PowerShell: `irm https://gpire.github.io/lume-suite/install.ps1 | iex`. Or open **https://gpire.github.io/lume-suite/**.
 
-Nothing is installed on your computer, and nothing is uninstalled from your TV: apps are only turned off, never removed.
+**From the TV alone** (Fire TV, Android TV, Google TV): install the free **Downloader** app, enter `github.com/GPire/lume-suite/releases/latest/download/lume-launcher.apk`. Cleaning the TV still needs a computer once.
+
+**Samsung, LG, Roku, VIDAA** are closed systems: TV Doctor tells you what is and is not possible for your model and year ([details](docs/GOOGLE_TV_AND_TIZEN.md)). An HDMI stick gives these TVs the full experience.
+
+**Something wrong?** The app has a *Report your TV* link: it prepares the report, you read it on GitHub and press Submit. Every report makes the next TV work better.
+
+## What is inside
+
+- **TV Doctor** recognises the TV (brand, model, year, system), turns off what slows or watches you in small safe groups, checks the TV still answers after each group (and undoes the group if not), and keeps a backup so you can go back. Fire TV, Google TV and Android TV: lists from the community plus brand sets (TCL, Sony, Xiaomi, Nvidia). It can also replace the stock Google TV home with Lume, if you choose to.
+- **Lume** is a home screen for Android TV, Google TV and Fire TV: a big glass clock, a dock of sharp cards, Control Center, Recent Apps, markets, news, weather in several cities, a health page, three looks (glass, graphite, high contrast), the TV's own voice assistant, and full control from a phone.
+- **Ambient Cast** is an AirPlay receiver with Apple Music-style lyrics and screen mirroring, so an iPhone can show music and video on the TV.
+
+<p align="center"><img src="docs/img/lume-control_center.jpg" alt="Lume Control Center" width="350"> <img src="docs/img/lume-markets.jpg" alt="Lume markets page" width="350"></p>
 
 Release files are signed with this project's key (certificate SHA-256 `09:9C:A1:B2:91:12:0A:BF:2C:B2:EB:79:9B:76:81:58:3D:3C:52:E4:00:91:1B:A0:83:3F:2A:CA:A1:92:A7:B6`) and listed with their checksums in `SHA256SUMS`.
 
 ## What works today (honest status)
 
-| Part | Tested on real hardware | Notes |
+| Part | Tested on | Notes |
 |---|---|---|
-| TV Doctor on Fire TV | Fire TV Stick 4K Max (Fire OS 8.1) | Full cycle: find, plan, apply in safe groups, check, undo |
-| TV Doctor on Google/Android TV | Simulated scenarios only | 8 simulated brands pass; no real device yet |
-| TV Doctor on Samsung, LG, Roku, VIDAA | Guides only | These systems are closed: TV Doctor explains what is and is not possible, per year |
-| Lume | Fire TV Stick 4K Max | Also meant for Android and Google TV; not yet tested there |
-| Ambient Cast | Fire TV Stick 4K Max | AirPlay music and mirroring need testing with more iPhones |
+| TV Doctor on Fire TV | Real: Fire TV Stick 4K Max (Fire OS 8.1) | Full cycle: find, plan, apply in safe groups, check, undo |
+| TV Doctor on Google TV / Android TV | A real Android TV 14 system image (emulator) and 8 simulated brands | Detect, clean, undo, Home replacement, reboot: verified. No physical Google TV yet |
+| TV Doctor on Samsung, LG, Roku, VIDAA | Guides only | These systems are closed: it explains what is possible, per year |
+| Lume | Real Fire TV Stick 4K Max; Android TV 14 image | Setup, Home, Control Center, markets, news, weather verified |
+| Ambient Cast | Real Fire TV Stick 4K Max | AirPlay music and mirroring need testing with more iPhones; synced lyrics and Sing mode not yet checked on a real song |
 
-Details in [docs/DEVICE_SUPPORT.md](docs/DEVICE_SUPPORT.md).
+Details in [docs/DEVICE_SUPPORT.md](docs/DEVICE_SUPPORT.md) and how we compare with similar projects in [docs/COMPARISON.md](docs/COMPARISON.md).
 
 ## Languages
 
