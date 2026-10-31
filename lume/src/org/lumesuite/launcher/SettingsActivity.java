@@ -1,5 +1,6 @@
 package org.lumesuite.launcher;
 
+import android.os.Build;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -52,7 +53,7 @@ public class SettingsActivity extends Activity {
     // tvOS-style pages: the main list opens a page per section; Back returns to the main list.
     static final String ROOT = "root", PROFILES = "Profiles", SHELF = "Top Shelf", PRESENT = "Presentation",
             INPUTS = "Inputs", WEATHER = "Weather", WATCHING = "Continue Watching", HOME = "Home",
-            PERMS = "Permissions", ABOUT = "About", PHONE = "Phone control";
+            PERMS = "Permissions", ABOUT = "About", PHONE = "Phone control", OPTIMIZE = "Optimize this TV";
 
     FrameLayout leftPane;
     ScrollView scroller;
@@ -104,6 +105,7 @@ public class SettingsActivity extends Activity {
             case HOME: pageHome(); break;
             case PERMS: pagePermissions(); break;
             case PHONE: pagePhone(); break;
+            case OPTIMIZE: pageOptimize(); break;
             case ABOUT: pageAbout(); break;
             default: pageRoot(); break;
         }
@@ -217,6 +219,7 @@ public class SettingsActivity extends Activity {
             case HOME: grad = new int[]{0xFF30D158, 0xFF1E9E48}; glyph = "house"; break;
             case PERMS: grad = new int[]{0xFF8E8E93, 0xFF48484A}; glyph = "shield"; break;
             case PHONE: grad = new int[]{0xFF5E5CE6, 0xFF3634A3}; glyph = "remote"; break;
+            case OPTIMIZE: grad = new int[]{0xFFFF9F0A, 0xFFE0640A}; glyph = "bolt"; break;
             default: grad = new int[]{0xFF8E8E93, 0xFF3A3A3C}; glyph = "gear"; break;
         }
         android.graphics.Bitmap b = android.graphics.Bitmap.createBitmap(w, h, android.graphics.Bitmap.Config.ARGB_8888);
@@ -246,6 +249,7 @@ public class SettingsActivity extends Activity {
             return on.isEmpty() ? "Off" : on.size() > 2 ? on.size() + " sources" : String.join(" & ", on);
         });
         nav(PHONE, () -> org.lumesuite.launcher.present.Presenter.remoteEnabled(this) ? "On" : "Off");
+        nav(OPTIMIZE, () -> TvOptimize.saved(this).isEmpty() ? "" : It.f("%d apps off", TvOptimize.saved(this).size()));
         nav(PRESENT, () -> org.lumesuite.launcher.present.Presenter.enabled(this) ? "On" : "Off");
         if (!Inputs.list(this).isEmpty()) nav(INPUTS, () -> Inputs.showCard(this) ? "On" : "Off");
         nav(WEATHER, () -> !Weather.enabled(this) ? "Off" : Weather.place(this).isEmpty() ? "On" : Weather.place(this));
@@ -453,6 +457,95 @@ public class SettingsActivity extends Activity {
     }
 
     /** Phone control: the remote page on a phone (keys, apps, search by typing, backgrounds), behind its own switch and PIN. */
+    // ---- Optimize this TV: the TV talks to its own debugging service, no computer needed
+    String optStatus = "";
+    TvOptimize.Plan optPlan;
+
+    void ui(Runnable r) {
+        runOnUiThread(() -> {
+            r.run();
+            refreshAll();
+        });
+    }
+
+    /** Connects to this TV's debugging service and reads what could be cleaned. onReady runs on the screen thread. */
+    void optCheck(Runnable onReady) {
+        optStatus = It.t("Checking...");
+        refreshAll();
+        new Thread(() -> {
+            try {
+                ui(() -> optStatus = It.t("Look at the TV: choose Always allow"));
+                AdbClient a = AdbClient.connect(this, "127.0.0.1", 5555, 120000);
+                try {
+                    TvOptimize.Plan p = TvOptimize.plan(this, a);
+                    ui(() -> {
+                        optPlan = p;
+                        optStatus = p.safe.isEmpty() ? It.t("Nothing to clean: this TV is already tidy") : It.f("%d apps can be turned off", p.safe.size());
+                        if (onReady != null) onReady.run();
+                    });
+                } finally {
+                    a.close();
+                }
+            } catch (AdbClient.NotReady e) {
+                ui(() -> optStatus = e.waitingForOk ? It.t("Waiting for your OK on the TV") : It.t("Debugging is off: see how to turn it on"));
+            } catch (Exception e) {
+                android.util.Log.w("LumeOptimize", "check failed", e);
+                ui(() -> optStatus = It.t("Could not check this TV"));
+            }
+        }).start();
+    }
+
+    void optClean() {
+        if (optPlan == null || optPlan.safe.isEmpty()) {
+            optCheck(() -> {
+                if (optPlan != null && !optPlan.safe.isEmpty()) optClean();
+            });
+            return;
+        }
+        final List<String> pkgs = new ArrayList<>(optPlan.safe);
+        dialog(It.f("Turn off %d apps?", pkgs.size())).setMessage(It.t("They are only switched off, never deleted, and Undo turns them back on."))
+                .setPositiveButton(It.t("Clean now"), (d, w) -> new Thread(() -> {
+                    try (AdbClient a = AdbClient.connect(this, "127.0.0.1", 5555, 15000)) {
+                        ui(() -> optStatus = It.t("Cleaning..."));
+                        TvOptimize.Result r = TvOptimize.apply(this, a, optPlan, pkgs);
+                        ui(() -> {
+                            optPlan = null;
+                            optStatus = r.rolledBack ? It.t("Stopped: the TV did not answer well, the last group was turned back on")
+                                    : It.f("Done: %d apps turned off", r.done);
+                        });
+                    } catch (Exception e) {
+                        android.util.Log.w("LumeOptimize", "clean failed", e);
+                        ui(() -> optStatus = It.t("Could not clean this TV"));
+                    }
+                }).start())
+                .setNegativeButton(It.t("Not Now"), null).show();
+    }
+
+    void optUndo() {
+        new Thread(() -> {
+            try (AdbClient a = AdbClient.connect(this, "127.0.0.1", 5555, 15000)) {
+                int n = TvOptimize.undo(this, a);
+                ui(() -> {
+                    optPlan = null;
+                    optStatus = It.f("Turned %d apps back on", n);
+                });
+            } catch (Exception e) {
+                ui(() -> optStatus = It.t("Could not check this TV"));
+            }
+        }).start();
+    }
+
+    void pageOptimize() {
+        row("Check this TV", () -> optStatus.isEmpty() ? "" : optStatus, () -> optCheck(null));
+        row("Clean now", () -> optPlan != null ? It.f("%d apps", optPlan.safe.size()) : "", this::optClean);
+        row("Undo", () -> TvOptimize.saved(this).isEmpty() ? "" : It.f("%d apps off", TvOptimize.saved(this).size()), this::optUndo);
+        row("How to turn debugging on", () -> "", () -> dialog(It.t("Turn debugging on"))
+                .setMessage(Build.MANUFACTURER.equalsIgnoreCase("Amazon")
+                        ? It.t("Settings > My Fire TV > About: press the Fire TV name 7 times. Then Settings > My Fire TV > Developer options > ADB debugging: On.")
+                        : It.t("Settings > System > About: press Build 7 times. Then Settings > System > Developer options > USB debugging: On."))
+                .setPositiveButton("OK", null).show());
+    }
+
     void pagePhone() {
         row("Phone control", () -> org.lumesuite.launcher.present.Presenter.remoteEnabled(this) ? "On" : "Off", () ->
                 org.lumesuite.launcher.present.Presenter.setRemote(this, !org.lumesuite.launcher.present.Presenter.remoteEnabled(this)));

@@ -1,0 +1,190 @@
+{
+ "fire": {
+  "safe": {
+   "com.amazon.shoptv.firetv.client": "Amazon Shopping on the TV (ads and shopping rows)",
+   "com.amazon.shoptv.client": "Amazon Shopping client",
+   "com.amazon.ods.kindleconnect": "Kindle connect service",
+   "com.amazon.bueller.music": "Amazon Music app",
+   "com.amazon.dummy.music": "Amazon Music placeholder",
+   "com.amazon.bueller.photos": "Amazon Photos app",
+   "com.amazon.minitv.android.app": "Amazon miniTV app",
+   "com.amazon.tahoe": "Amazon Kids (FreeTime)",
+   "com.amazon.gamehub": "Luna / Game Hub",
+   "com.amazon.tv.website_launcher": "Website launcher tiles",
+   "com.amazon.smarthomemapviewapp": "Smart Home map app",
+   "com.amazon.storm.lightning.tutorial": "Remote tutorial",
+   "com.amazon.tmm.tutorial": "Tutorial",
+   "com.amazon.tv.releasenotes": "Release notes screen",
+   "com.amazon.sneakpeek": "Promotional previews",
+   "com.android.printservice.recommendation": "Print service recommendations"
+  },
+  "caution": {
+   "com.amazon.tv.acr": "Automatic content recognition: what you watch is reported",
+   "com.amazon.hybridadidservice": "Advertising ID service",
+   "com.amazon.wifilocker": "Saves Wi-Fi passwords to the Amazon cloud",
+   "com.amazon.device.metrics": "Device metrics",
+   "com.amazon.client.metrics.api": "Metrics API",
+   "com.amazon.wirelessmetrics.service": "Wireless metrics",
+   "com.amazon.device.logmanager": "Log manager (uploads logs)",
+   "com.amazon.dp.logger": "Data platform logger",
+   "com.amazon.perfcollection": "Performance data collection",
+   "com.fireos.usagestats.proxy": "Usage statistics proxy",
+   "com.amazon.privacypassservice": "Privacy pass service"
+  }
+ },
+ "google": {
+  "safe": {
+   "com.google.android.play.games": "Play Games (unused on a TV)",
+   "com.google.android.feedback": "Sends feedback and crash reports to Google",
+   "com.android.tv.feedbackconsent": "Consent screen for the feedback reports",
+   "com.google.android.tv.remotecontrol.logging": "Remote-control usage logging",
+   "com.android.printspooler": "Printing (a TV does not print)",
+   "com.google.android.partnersetup": "Partner setup (one-shot, already done)",
+   "com.google.android.onetimeinitializer": "One-time initialiser (already done)",
+   "com.google.android.syncadapters.calendar": "Calendar sync (a TV has no calendar)",
+   "com.google.android.backdrop": "Old Daydream backdrop screensaver",
+   "com.android.adservices.api": "Android ad-services API (ad profiling)",
+   "com.android.ondevicepersonalization.services": "On-device ad personalisation"
+  },
+  "caution": {
+   "com.google.android.tvrecommendations": "Recommendation rows on Google's own Home go empty",
+   "com.google.android.leanbacklauncher.recommendations": "Recommendation rows on the old Android TV Home",
+   "com.android.dreams.basic": "The basic screensaver",
+   "com.google.android.apps.tv.dreamx": "Ambient-mode screensaver with recommendations (falls back to the basic one)",
+   "com.google.android.videos": "Google TV store and rentals: the Shop tab and past purchases stop working",
+   "com.google.android.katniss": "Google Assistant: the remote's microphone button stops working",
+   "com.google.android.youtube.tvmusic": "YouTube Music app",
+   "com.google.android.youtube.tvunplugged": "YouTube TV app",
+   "com.google.android.marvin.talkback": "TalkBack screen reader (turn back on if anyone needs it)"
+  }
+ },
+ "brand": {
+  "xiaomi": {
+   "safe": {
+    "com.mitv.tvhome.mitvplus": "Mi TV+ rows (PatchWall)",
+    "com.mitv.tvhome.michannel": "Mi channel rows (PatchWall)"
+   },
+   "caution": {
+    "com.mitv.tvhome.atv": "Mi TV home (PatchWall)"
+   }
+  },
+  "sony": {
+   "safe": {
+    "com.sony.dtv.promos": "Sony promotions",
+    "com.sony.dtv.sonyselect": "Sony Select promo row",
+    "com.sony.dtv.multiscreendemo": "Demo screen",
+    "com.sony.dtv.ecodashboard": "Eco dashboard",
+    "com.sony.dtv.smarthelp": "Smart help pop-ups"
+   },
+   "caution": {
+    "com.sony.dtv.helpguidecontents": "Help guide contents",
+    "com.sony.dtv.sonytab": "Sony tab"
+   }
+  },
+  "nvidia": {
+   "safe": {
+    "com.nvidia.stats": "Usage statistics",
+    "com.nvidia.enhancedlogging": "Extra logging",
+    "com.nvidia.feedback": "Feedback reports",
+    "com.nvidia.diagtools": "Diagnostic tools",
+    "com.nvidia.shield.remotediagnostic": "Remote diagnostics",
+    "com.nvidia.SHIELD.Platform.Analyser": "Platform analyser",
+    "com.nvidia.factorybundling": "Factory bundling"
+   },
+   "caution": {}
+  },
+  "tcl": {
+   "safe": {
+    "com.tcl.bootadservice": "Ads at start-up",
+    "com.tcl.overseasappshow": "App ads",
+    "com.tcl.notereminder": "Reminder pop-ups",
+    "com.tcl.messagebox": "Promotional message box",
+    "com.tcl.esticker": "Electronic sticker ads"
+   },
+   "caution": {
+    "com.tcl.dashboard": "TCL dashboard",
+    "com.tcl.appmarket2": "TCL app market",
+    "com.tcl.browser": "TCL browser",
+    "com.tcl.guard": "TCL guard",
+    "com.tcl.usercenter": "TCL user centre",
+    "com.tcl.tvweishi": "TCL tvweishi service"
+   }
+  }
+ },
+ "never": {
+  "exact": [
+   "amazon.fireos",
+   "android",
+   "com.amazon.dcp",
+   "com.amazon.device.software.ota",
+   "com.amazon.firehomestarter",
+   "com.amazon.fireinputdevices",
+   "com.amazon.firelauncher",
+   "com.amazon.platform",
+   "com.amazon.tcomm",
+   "com.amazon.tv.launcher",
+   "com.amazon.tv.livetv",
+   "com.amazon.tv.settings.v2",
+   "com.amazon.venezia",
+   "com.amazon.vizzini",
+   "com.amazon.whisperlink.core.android",
+   "com.android.bluetooth",
+   "com.android.onetimeinitializer",
+   "com.android.phone",
+   "com.android.settings",
+   "com.android.shell",
+   "com.android.systemui",
+   "com.android.vending",
+   "com.google.android.apps.mediashell",
+   "com.google.android.apps.tv.launcherx",
+   "com.google.android.configupdater",
+   "com.google.android.gms",
+   "com.google.android.gsf",
+   "com.google.android.inputmethod.latin",
+   "com.google.android.katniss.setup",
+   "com.google.android.leanbacklauncher",
+   "com.google.android.rkpdapp",
+   "com.google.android.tungsten.setupwraith",
+   "com.google.android.tv.dfuservice",
+   "com.google.android.tv.provision",
+   "com.google.android.tv.remote.service",
+   "com.google.android.tvlauncher",
+   "com.google.android.webview",
+   "com.petrobot.hume",
+   "com.sony.dtv.airplay",
+   "com.sony.dtv.sonysystemservice",
+   "com.tcl.setupwizard",
+   "com.tcl.suspension",
+   "com.tcl.ttvs",
+   "com.tcl.tv",
+   "com.tcl.tvinput",
+   "com.weenas.castbay",
+   "io.github.toolicious.homeonfire",
+   "org.droidtv.homeintentresolver",
+   "org.droidtv.tvsystem",
+   "org.lumesuite.cast",
+   "org.lumesuite.gallery"
+  ],
+  "prefix": [
+   "com.android.providers.",
+   "com.android.inputmethod",
+   "com.android.server.",
+   "com.android.networkstack",
+   "com.android.permissioncontroller",
+   "com.android.packageinstaller",
+   "com.google.android.gms.",
+   "com.mediatek.",
+   "com.qualcomm.",
+   "vendor.",
+   "android.ext."
+  ],
+  "words": [
+   "tvinput",
+   "hdmi",
+   "livetv",
+   "inputmethod",
+   "tvcenter",
+   "inputservice"
+  ]
+ }
+}

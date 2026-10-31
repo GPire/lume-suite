@@ -1,0 +1,157 @@
+package org.lumesuite.launcher;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Build;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+
+/**
+ * Cleans this TV from the TV: the same lists as TV Doctor (assets/optimize.json, exported from tv-doctor/tvdoctor.py), the same
+ * rules (small groups, a health check after each, the last group turned back on at the first doubt, nothing ever uninstalled).
+ * Apps are only switched off with `pm disable-user`; the list is kept so Undo turns them on again.
+ */
+final class TvOptimize {
+    private TvOptimize() {
+    }
+
+    static final class Plan {
+        final List<String> safe = new ArrayList<>();
+        String home = "";
+    }
+
+    static final class Result {
+        int done;
+        boolean rolledBack;
+    }
+
+    private static JSONObject lists(Context c) throws Exception {
+        try (InputStream in = c.getAssets().open("optimize.json")) {
+            java.io.ByteArrayOutputStream b = new java.io.ByteArrayOutputStream();
+            byte[] buf = new byte[8192];
+            for (int n; (n = in.read(buf)) > 0; ) b.write(buf, 0, n);
+            return new JSONObject(b.toString("UTF-8"));
+        }
+    }
+
+    private static boolean never(JSONObject nv, String p) throws Exception {
+        JSONArray ex = nv.getJSONArray("exact"), pre = nv.getJSONArray("prefix"), words = nv.getJSONArray("words");
+        for (int i = 0; i < ex.length(); i++) if (ex.getString(i).equals(p)) return true;
+        for (int i = 0; i < pre.length(); i++) if (p.startsWith(pre.getString(i))) return true;
+        for (int i = 0; i < words.length(); i++) if (p.contains(words.getString(i))) return true;
+        return false;
+    }
+
+    private static Set<String> packages(String out) {
+        Set<String> s = new HashSet<>();
+        for (String l : out.split("\n")) if (l.startsWith("package:")) s.add(l.substring(8).trim());
+        return s;
+    }
+
+    static String homePackage(AdbClient a) throws Exception {
+        String h = a.shell("cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME | tail -1");
+        int i = h.indexOf('/');
+        return i > 0 ? h.substring(0, i).trim() : "";
+    }
+
+    /** What could be switched off on this TV, from the curated safe lists for its system and brand. */
+    static Plan plan(Context c, AdbClient a) throws Exception {
+        JSONObject all = lists(c), nv = all.getJSONObject("never");
+        Set<String> system = packages(a.shell("pm list packages -s")), off = packages(a.shell("pm list packages -d"));
+        Plan plan = new Plan();
+        plan.home = homePackage(a);
+        List<JSONObject> sets = new ArrayList<>();
+        String maker = (Build.MANUFACTURER + " " + Build.BRAND).toLowerCase(Locale.ROOT);
+        if (maker.contains("amazon")) sets.add(all.getJSONObject("fire").getJSONObject("safe"));
+        else sets.add(all.getJSONObject("google").getJSONObject("safe"));
+        JSONObject brand = all.getJSONObject("brand");
+        for (java.util.Iterator<String> it = brand.keys(); it.hasNext(); ) {
+            String k = it.next();
+            if (maker.contains(k)) sets.add(brand.getJSONObject(k).getJSONObject("safe"));
+        }
+        Set<String> seen = new LinkedHashSet<>();
+        for (JSONObject set : sets) {
+            for (java.util.Iterator<String> it = set.keys(); it.hasNext(); ) {
+                String p = it.next();
+                if (system.contains(p) && !off.contains(p) && !p.equals(plan.home) && !never(nv, p)) seen.add(p);
+            }
+        }
+        plan.safe.addAll(seen);
+        return plan;
+    }
+
+    private static boolean healthy(AdbClient a, String home) {
+        try {
+            if (!"1".equals(a.shell("getprop sys.boot_completed"))) return false;
+            return home.isEmpty() || homePackage(a).equals(home);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /** Four at a time, a health check after each group; the first doubt turns that group back on and stops. */
+    static Result apply(Context c, AdbClient a, Plan plan, List<String> pkgs) throws Exception {
+        Result r = new Result();
+        SharedPreferences sp = c.getSharedPreferences("optimize", Context.MODE_PRIVATE);
+        Set<String> saved = new LinkedHashSet<>(sp.getStringSet("disabled", new HashSet<>()));
+        for (int i = 0; i < pkgs.size(); i += 4) {
+            List<String> group = pkgs.subList(i, Math.min(i + 4, pkgs.size()));
+            List<String> done = new ArrayList<>();
+            for (String p : group) {
+                if (!p.matches("[A-Za-z0-9._]{1,200}")) continue;
+                try {
+                    String res = a.shell("pm disable-user --user 0 " + p);
+                    if (res.contains("new state: disabled")) {
+                        done.add(p);
+                        saved.add(p);   // written at once: if anything stops here, Undo still knows
+                        sp.edit().putStringSet("disabled", new HashSet<>(saved)).apply();
+                    }
+                } catch (java.io.IOException e) {
+                    r.rolledBack = true;   // the TV stopped answering in the middle of a group: put the group back
+                    break;
+                }
+            }
+            if (r.rolledBack || !healthy(a, plan.home)) {
+                for (String p : done) {
+                    try {
+                        a.shell("pm enable " + p);
+                        saved.remove(p);
+                    } catch (java.io.IOException ignored) {
+                    }
+                }
+                sp.edit().putStringSet("disabled", new HashSet<>(saved)).apply();
+                r.rolledBack = true;
+                return r;
+            }
+            r.done += done.size();
+        }
+        a.shell("sync");
+        return r;
+    }
+
+    static Set<String> saved(Context c) {
+        return c.getSharedPreferences("optimize", Context.MODE_PRIVATE).getStringSet("disabled", new HashSet<>());
+    }
+
+    static int undo(Context c, AdbClient a) throws Exception {
+        int n = 0;
+        Set<String> left = new HashSet<>(saved(c));
+        for (String p : new ArrayList<>(left)) {
+            if (!p.matches("[A-Za-z0-9._]{1,200}")) continue;
+            a.shell("pm enable " + p);
+            left.remove(p);
+            n++;
+        }
+        c.getSharedPreferences("optimize", Context.MODE_PRIVATE).edit().putStringSet("disabled", left).apply();
+        return n;
+    }
+}
