@@ -68,17 +68,18 @@
     "com.mitv.tvhome.atv": "Mi TV home (PatchWall)"
    }
   },
-  "nvidia": {
+  "sony": {
    "safe": {
-    "com.nvidia.stats": "Usage statistics",
-    "com.nvidia.enhancedlogging": "Extra logging",
-    "com.nvidia.feedback": "Feedback reports",
-    "com.nvidia.diagtools": "Diagnostic tools",
-    "com.nvidia.shield.remotediagnostic": "Remote diagnostics",
-    "com.nvidia.SHIELD.Platform.Analyser": "Platform analyser",
-    "com.nvidia.factorybundling": "Factory bundling"
+    "com.sony.dtv.promos": "Sony promotions",
+    "com.sony.dtv.sonyselect": "Sony Select promo row",
+    "com.sony.dtv.multiscreendemo": "Demo screen",
+    "com.sony.dtv.ecodashboard": "Eco dashboard",
+    "com.sony.dtv.smarthelp": "Smart help pop-ups"
    },
-   "caution": {}
+   "caution": {
+    "com.sony.dtv.helpguidecontents": "Help guide contents",
+    "com.sony.dtv.sonytab": "Sony tab"
+   }
   },
   "tcl": {
    "safe": {
@@ -97,18 +98,17 @@
     "com.tcl.tvweishi": "TCL tvweishi service"
    }
   },
-  "sony": {
+  "nvidia": {
    "safe": {
-    "com.sony.dtv.promos": "Sony promotions",
-    "com.sony.dtv.sonyselect": "Sony Select promo row",
-    "com.sony.dtv.multiscreendemo": "Demo screen",
-    "com.sony.dtv.ecodashboard": "Eco dashboard",
-    "com.sony.dtv.smarthelp": "Smart help pop-ups"
+    "com.nvidia.stats": "Usage statistics",
+    "com.nvidia.enhancedlogging": "Extra logging",
+    "com.nvidia.feedback": "Feedback reports",
+    "com.nvidia.diagtools": "Diagnostic tools",
+    "com.nvidia.shield.remotediagnostic": "Remote diagnostics",
+    "com.nvidia.SHIELD.Platform.Analyser": "Platform analyser",
+    "com.nvidia.factorybundling": "Factory bundling"
    },
-   "caution": {
-    "com.sony.dtv.helpguidecontents": "Help guide contents",
-    "com.sony.dtv.sonytab": "Sony tab"
-   }
+   "caution": {}
   }
  },
  "groups": [

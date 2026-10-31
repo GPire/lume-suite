@@ -2,7 +2,7 @@
 
 [English](README.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Português](README.pt.md) · [简体中文](README.zh.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [العربية](README.ar.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Bahasa Indonesia](README.id.md)
 
-एक शांत टीवी। तीन हिस्से जो मिलकर काम करते हैं: **TV Doctor** (एक बटन से टीवी की सफ़ाई और ऑप्टिमाइज़ेशन, बिना कोड), **Lume** (Android TV, Google TV और Fire TV के लिए होम स्क्रीन) और **Ambient Cast** (गीत के बोल और स्क्रीन मिररिंग वाला AirPlay रिसीवर)।
+एक शांत टीवी। तीन हिस्से जो मिलकर काम करते हैं: **TV Doctor** (एक बटन से टीवी की सफ़ाई और ऑप्टिमाइज़ेशन, बिना कोड), **Lume** (Android TV, Google TV और Fire TV के लिए होम स्क्रीन) और **Lume Cast** (गीत के बोल और स्क्रीन मिररिंग वाला AirPlay रिसीवर)।
 
 ## शुरू कैसे करें
 

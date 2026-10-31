@@ -14,7 +14,7 @@
     <string name="waiting_title">Pronta. Scegli questa TV dal tuo iPhone.</string>
     <string name="starting">Un momento…</string>
     <string name="stopping">Arresto…</string>
-    <string name="advertising_only_title">Ambient Cast è visibile sulla rete locale</string>
+    <string name="advertising_only_title">Lume Cast è visibile sulla rete locale</string>
     <string name="advertising_only_detail">Solo anteprima della ricerca: lo streaming AirPlay non è ancora disponibile.</string>
     <string name="connecting">Connessione…</string>
     <string name="connected">Connesso</string>
@@ -45,7 +45,7 @@
     <string name="press_back_again">Premi di nuovo Indietro per interrompere la trasmissione</string>
     <string name="awaiting_next_video">In attesa del prossimo video…</string>
     <string name="awaiting_next_video_help">Premi Indietro per interrompere la trasmissione</string>
-    <string name="press_back_to_quit">Premi di nuovo Indietro per chiudere Ambient Cast; i telefoni non potranno trasmettere</string>
+    <string name="press_back_to_quit">Premi di nuovo Indietro per chiudere Lume Cast; i telefoni non potranno trasmettere</string>
     <string name="airplay_audio">Audio AirPlay</string>
     <string name="cover_art">Copertina</string>
     <string name="music_play">Riproduci</string>
@@ -77,17 +77,17 @@
     <string name="setting_test_versions">Versioni di prova</string>
     <string name="setting_check_updates_note">Una volta al giorno chiede a castbay.weenas.com (o a GitHub) il numero dell\'ultima versione; non viene inviato nulla su questa TV.</string>
     <string name="setting_error_reports">Invia segnalazioni di errore</string>
-    <string name="setting_error_reports_note">Se Ambient Cast si ferma all\'improvviso, invia una segnalazione del problema (l\'errore e il registro recente, senza titoli, nomi e link) al prossimo avvio. Spento: viene chiesto ogni volta.</string>
+    <string name="setting_error_reports_note">Se Lume Cast si ferma all\'improvviso, invia una segnalazione del problema (l\'errore e il registro recente, senza titoli, nomi e link) al prossimo avvio. Spento: viene chiesto ogni volta.</string>
     <string name="setting_usage_stats">Invia statistiche d\'uso anonime</string>
     <string name="setting_usage_stats_note">Una volta al giorno: quante trasmissioni di ogni tipo e per quanto tempo (a fasce), risoluzione e codec della duplicazione, errori, modello di questo dispositivo e versione di Android, e le impostazioni in uso. Mai nomi, titoli, link o indirizzi. Disattivandola si cancella quanto inviato.</string>
     <string name="update_notes">Novità</string>
-    <string name="changelog_title">Novità di Ambient Cast %1$s</string>
+    <string name="changelog_title">Novità di Lume Cast %1$s</string>
     <string name="changelog_installed">Questa TV ha la %1$s. Tutte le modifiche da allora:</string>
     <string name="setting_screen_saver">Schermata musica a riposo</string>
     <string name="setting_screen_saver_note">Contro il burn-in: dopo 10 minuti senza tasti o tocchi, la schermata musicale si attenua e si sposta un poco. Schermo spento: dopo 2 minuti diventa nera (il più scuro che una TV possa mostrare) mentre la musica continua. Qualsiasi tasto, tocco o nuova trasmissione la riattiva; i tasti multimediali continuano a funzionare. Non mentre sono visibili i testi.</string>
     <string name="screen_saver_burn_in">Contro il burn-in</string>
     <string name="screen_saver_music_off">Schermo spento</string>
-    <string name="crash_ask">Ambient Cast si è fermato all\'improvviso l\'ultima volta. Inviare una segnalazione per aiutare a risolvere?</string>
+    <string name="crash_ask">Lume Cast si è fermato all\'improvviso l\'ultima volta. Inviare una segnalazione per aiutare a risolvere?</string>
     <string name="crash_send">Invia</string>
     <string name="crash_dismiss">Chiudi</string>
     <string name="crash_sending">Invio della segnalazione…</string>
@@ -97,7 +97,7 @@
     <string name="setting_reset">Ripristina impostazioni</string>
     <string name="setting_reset_action">Ripristina</string>
     <string name="setting_reset_confirm">Premi ancora per ripristinare</string>
-    <string name="setting_reset_note">Il nome del dispositivo, la verifica delle trasmissioni e ogni altra impostazione tornano come all\'installazione di Ambient Cast.</string>
+    <string name="setting_reset_note">Il nome del dispositivo, la verifica delle trasmissioni e ogni altra impostazione tornano come all\'installazione di Lume Cast.</string>
     <string name="section_playback">Riproduzione</string>
     <string name="section_playback_note">Si applicano subito. Durante la trasmissione, premi Giù o Menu sul telecomando per cambiarle.</string>
     <string name="setting_device_name">Nome del dispositivo</string>
@@ -118,8 +118,8 @@
     <string name="setting_lyrics">Mostra i testi della musica</string>
     <string name="setting_lyrics_note">Cerca i testi su lrclib.net in base a titolo e artista del brano.</string>
     <string name="setting_open_on_cast">Apri durante la trasmissione</string>
-    <string name="setting_open_on_cast_note">Apre Ambient Cast quando un dispositivo inizia a duplicare lo schermo o a riprodurre un video mentre è visibile un\'altra app o la schermata Home. Serve il permesso «Mostra sopra le altre app» (si apre la sua pagina nelle impostazioni). Se la TV non ha questa pagina, un computer può concederlo: adb shell appops set org.lumesuite.cast SYSTEM_ALERT_WINDOW allow</string>
-    <string name="open_on_cast_toast">Apri Ambient Cast sulla TV per vedere la trasmissione</string>
+    <string name="setting_open_on_cast_note">Apre Lume Cast quando un dispositivo inizia a duplicare lo schermo o a riprodurre un video mentre è visibile un\'altra app o la schermata Home. Serve il permesso «Mostra sopra le altre app» (si apre la sua pagina nelle impostazioni). Se la TV non ha questa pagina, un computer può concederlo: adb shell appops set org.lumesuite.cast SYSTEM_ALERT_WINDOW allow</string>
+    <string name="open_on_cast_toast">Apri Lume Cast sulla TV per vedere la trasmissione</string>
     <string name="setting_append_tv_name">Aggiungi dopo il nome della TV</string>
     <string name="setting_append_tv_name_note">I telefoni vedono: %1$s</string>
     <string name="about">Informazioni</string>
@@ -128,7 +128,7 @@
     <string name="about_source">Codice sorgente</string>
     <string name="about_licenses">Licenze open source</string>
     <string name="licenses_title">Licenze open source</string>
-    <string name="licenses_intro">Ambient Cast è software libero con licenza GPL-3.0, derivato da CastBay (weenas) e costruito sui progetti open source qui sotto. Il sorgente di questa versione è a disposizione di chi riceve l\'app. Scegline uno per leggerne la licenza.</string>
+    <string name="licenses_intro">Lume Cast è software libero con licenza GPL-3.0, derivato da CastBay (weenas) e costruito sui progetti open source qui sotto. Il sorgente di questa versione è a disposizione di chi riceve l\'app. Scegline uno per leggerne la licenza.</string>
     <string name="licenses_castbay">Questa app</string>
     <string name="licenses_uxplay">Ricevitore AirPlay</string>
     <string name="licenses_raop">Connessioni e audio AirPlay (in UxPlay)</string>
@@ -145,7 +145,7 @@
     <string name="about_license">Open source con licenza GPL-3.0, basato su UxPlay, libplist, Apple ALAC e Media3.</string>
     <string name="about_update">È disponibile la versione %1$s</string>
     <string name="about_scan_update">Inquadra con il telefono per scaricare la nuova versione</string>
-    <string name="about_scan">Inquadra con il telefono per scaricare Ambient Cast</string>
+    <string name="about_scan">Inquadra con il telefono per scaricare Lume Cast</string>
     <string name="about_scan_link">Nessun browser qui: inquadra con il telefono per aprire %1$s</string>
     <string name="update_install">Scarica e installa %1$s</string>
     <string name="update_downloading">Download… %1$d%%</string>
@@ -220,7 +220,7 @@
     <string name="update_checking">Controllo…</string>
     <string name="update_latest">Questa è l\'ultima versione.</string>
     <string name="update_check_failed">Impossibile controllare. Verifica la rete e riprova.</string>
-    <string name="notification_channel">Servizio Ambient Cast</string>
+    <string name="notification_channel">Servizio Lume Cast</string>
     <string name="notification_starting">Avvio del ricevitore</string>
     <string name="notification_waiting">In attesa di trasmissioni AirPlay o DLNA</string>
     <string name="notification_discovery_only">Pubblicazione dell\'individuazione AirPlay</string>
@@ -282,13 +282,13 @@
     <string name="home_step_screen">Centro di controllo → Duplica schermo → questa TV.</string>
     <string name="info_based_on">Basato su</string>
     <string name="about_origin">Progetto originale (CastBay)</string>
-    <string name="about_privacy_text">Ambient Cast non invia nulla su di te: nessun account, nessuna statistica, nessuna segnalazione automatica. Le uniche richieste sono per i testi delle canzoni (lrclib.net, solo se li attivi) e per i quadri sullo sfondo (Wikimedia Commons).</string>
-    <string name="about_source_text">Ambient Cast deriva da CastBay e ne condivide la licenza GPL-3.0: il sorgente di questa versione è a disposizione di chi riceve l\'app.</string>
+    <string name="about_privacy_text">Lume Cast non invia nulla su di te: nessun account, nessuna statistica, nessuna segnalazione automatica. Le uniche richieste sono per i testi delle canzoni (lrclib.net, solo se li attivi) e per i quadri sullo sfondo (Wikimedia Commons).</string>
+    <string name="about_source_text">Lume Cast deriva da CastBay e ne condivide la licenza GPL-3.0: il sorgente di questa versione è a disposizione di chi riceve l\'app.</string>
     <string name="section_mirroring_note">Solo per duplicare lo schermo di un telefono, non per video e musica delle app. Modificarle riavvia il ricevitore.</string>
     <string name="setting_test_versions_note">Propone anche le versioni di prova (beta) quando disponibili, per verificare una correzione. Possono essere meno stabili; la versione successiva le sostituisce.</string>
-    <string name="update_installing">Conferma l\'aggiornamento nel programma di installazione. La prima volta, consenti l\'installazione di app da Ambient Cast.</string>
+    <string name="update_installing">Conferma l\'aggiornamento nel programma di installazione. La prima volta, consenti l\'installazione di app da Lume Cast.</string>
     <string name="update_failed_checksum">Il download non corrisponde alla somma di controllo della versione, quindi non è stato installato. Riprova.</string>
-    <string name="update_failed_installer">Questa TV non ha un programma di installazione che Ambient Cast possa aprire.</string>
+    <string name="update_failed_installer">Questa TV non ha un programma di installazione che Lume Cast possa aprire.</string>
     <string name="report_confirm">Invia i dettagli di questo dispositivo, gli eventi qui sotto e il registro recente dell\'app (circa %1$d KB). Titoli di brani e video, link, nomi di dispositivi e indirizzi internet vengono prima rimossi.</string>
     <string name="report_done_hint">Indica questo ID quando segnali il problema.</string>
     <string name="netcheck_network_other">Connessa tramite una rete che non è Wi-Fi né Ethernet (indirizzo IP %1$s); i telefoni sulla tua Wi-Fi potrebbero non raggiungerla.</string>
@@ -298,9 +298,9 @@
     <string name="help_airplay_apps">In Apple Music, YouTube e altre app tocca l\'icona AirPlay mentre riproduci e scegli «%1$s».\nLa TV riproduce il video direttamente da internet: il telefono può bloccarsi o fare altro.</string>
     <string name="help_dlna">Altre app hanno un loro tasto cast, di solito una TV. Toccalo e scegli «%1$s».\nFunziona da Android, con DLNA attivo nelle Impostazioni.</string>
     <string name="help_android">Trasmetti video e musica con il tasto cast delle app, come in «Il tasto cast delle app».\nLa duplicazione integrata di Android (Miracast, Google Cast) non è ancora supportata.</string>
-    <string name="help_mac">Fai clic su Centro di controllo nella barra dei menu → Duplica schermo e scegli «%1$s».\nLa musica dell\'app Musica del Mac non può essere inviata ad Ambient Cast: usa una cifratura che la libreria AirPlay open source non supporta.</string>
+    <string name="help_mac">Fai clic su Centro di controllo nella barra dei menu → Duplica schermo e scegli «%1$s».\nLa musica dell\'app Musica del Mac non può essere inviata ad Lume Cast: usa una cifratura che la libreria AirPlay open source non supporta.</string>
     <string name="help_remote">Video: OK mette in pausa o riprende; Sinistra e Destra saltano di 10 secondi.\nMusica: Sinistra e Destra scelgono un pulsante; OK lo preme.\nGiù o Menu: il menu di riproduzione (immagine, audio, sottotitoli, testi…).\nIndietro due volte: interrompe. Home: continua in sottofondo.</string>
-    <string name="help_not_found">• Collega telefono e TV alla stessa Wi-Fi, non a una rete ospiti.\n• Controlla che Ambient Cast sia aperto e mostri «Pronta».\n• Se il router ha l\'«isolamento AP» attivo, i dispositivi non si vedono: disattivalo.\n• Riapri Ambient Cast o riavvia la TV e riprova.</string>
+    <string name="help_not_found">• Collega telefono e TV alla stessa Wi-Fi, non a una rete ospiti.\n• Controlla che Lume Cast sia aperto e mostri «Pronta».\n• Se il router ha l\'«isolamento AP» attivo, i dispositivi non si vedono: disattivalo.\n• Riapri Lume Cast o riavvia la TV e riprova.</string>
     <string name="help_access">Scegli in Impostazioni → Connessione → Verifica delle trasmissioni:\n• Conferma: la prima volta che un dispositivo trasmette, la TV chiede se consentirlo; poi trasmetti di nuovo dal dispositivo.\n• PIN: la prima volta inserisci il PIN a 4 cifre mostrato dalla TV.\n• Password: ogni dispositivo inserisce la password impostata.\nIl tasto cast delle app (DLNA) non può inserire PIN o password: con queste opzioni la TV chiede la prima volta che un telefono trasmette da un\'app.\nIn «Dispositivi che hanno trasmesso» puoi bloccare un dispositivo o rimuoverli tutti.</string>
     <!-- TV health -->
     <string name="health_button">Salute</string>
@@ -329,7 +329,7 @@
     <string name="health_mb_free">MB liberi</string>
     <string name="health_manual_title">%1$d cose da sistemare</string>
     <string name="health_manual_body">Questa Fire TV non permette di pulirsi da sola. Apri TV Doctor su un computer nella stessa Wi-Fi: un clic, tutto annullabile.</string>
-    <string name="about_free">Ambient Cast è software libero con licenza GPL-3.0. I crediti dei progetti su cui si basa e il codice sorgente sono in Licenze open source.</string>
+    <string name="about_free">Lume Cast è software libero con licenza GPL-3.0. I crediti dei progetti su cui si basa e il codice sorgente sono in Licenze open source.</string>
     <string name="section_tv">TV</string>
     <string name="tv_model">Modello</string>
     <string name="tv_system">Sistema</string>

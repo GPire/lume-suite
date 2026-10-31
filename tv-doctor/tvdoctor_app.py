@@ -197,7 +197,7 @@ def find_tvs():
                 try:
                     mk, md = (T.sh(r["serial"], "getprop ro.product.manufacturer").strip(), T.sh(r["serial"], "getprop ro.product.model").strip())
                     nice = FIRE_MODELS.get(md) or f"{mk} {md}".strip()
-                    own = re.sub(r"^Ambient Cast \((.*)\)$", r"\1", r["name"])   # our own AirPlay service names the TV after its owner
+                    own = re.sub(r"^(?:Lume|Ambient) Cast \((.*)\)$", r"\1", r["name"])   # our own AirPlay service names the TV after its owner
                     r["name"] = nice + ("" if own == r["serial"].split(":")[0] else f" ({own})") if own != r["name"] or r["name"] != r["serial"].split(":")[0] else nice
                 except BaseException:
                     pass
@@ -307,8 +307,8 @@ def report_url(serial, outcome=""):
 
 
 REPO = "GPire/lume-suite"
-SUITE = [("lume-launcher.apk", "Lume", "org.lumesuite.launcher"), ("ambient-cast.apk", "Ambient Cast", "org.lumesuite.cast"),
-         ("ambient-gallery.apk", "Galleria", "org.lumesuite.gallery")]
+SUITE = [("lume-launcher.apk", "Lume", "org.lumesuite.launcher"), ("ambient-cast.apk", "Lume Cast", "org.lumesuite.cast"),
+         ("ambient-gallery.apk", "Lume Gallery", "org.lumesuite.gallery")]
 DOWNLOADS = os.path.join(os.path.expanduser("~"), ".tvdoctor", "downloads")
 
 
@@ -359,7 +359,7 @@ def suite_files(local_dir=None, api=None, fetch=None):
 
 
 def install_suite(serial, d, files=None):
-    """Lume, Ambient Cast and the Gallery onto an Android-based TV (Android 7+); one answer per app."""
+    """Lume, Lume Cast and the Gallery onto an Android-based TV (Android 7+); one answer per app."""
     if d["family"] not in ("fireos", "google-tv", "android-tv", "android-other") or int(d.get("sdk") or 0) < 24:
         return [{"app": n, "ok": False, "why": "questa TV non lo permette"} for _, n, _ in SUITE]
     got = files or suite_files()

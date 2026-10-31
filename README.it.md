@@ -10,7 +10,7 @@
 
 1. **Scarica l'app per il tuo computer** (TV e computer sulla stessa Wi-Fi): [Mac con chip Apple](https://github.com/GPire/lume-suite/releases/latest/download/TV-Doctor-mac-apple-chip.zip) · [Mac Intel](https://github.com/GPire/lume-suite/releases/latest/download/TV-Doctor-mac-intel.zip) · [Windows](https://github.com/GPire/lume-suite/releases/latest/download/TV-Doctor-windows.exe) · [Linux](https://github.com/GPire/lume-suite/releases/latest/download/TV-Doctor-linux.tar.gz). Su Mac: decomprimi e **clic destro su "TV Doctor" > Apri**. Su Windows: doppio clic, e se compare l'avviso **Ulteriori informazioni > Esegui comunque** (l'avviso c'è perché l'app non è firmata a pagamento, non perché ci sia un problema: il codice è qui).
 2. **L'app si apre nel browser e cerca la TV da sola.** Se serve, attiva *Opzioni sviluppatore > Debug USB/di rete* sulla TV: ti mostra come.
-3. **Premi il pulsante grande.** Riconosce marca, modello, anno e sistema, installa Lume, Ambient Cast e Galleria e spegne le app inutili. Scegli tu cosa tenere (assistente vocale, trasmissione...). Si annulla tutto dalla stessa pagina.
+3. **Premi il pulsante grande.** Riconosce marca, modello, anno e sistema, installa Lume, Lume Cast e Lume Gallery e spegne le app inutili. Scegli tu cosa tenere (assistente vocale, trasmissione...). Si annulla tutto dalla stessa pagina.
 
 *Preferisci una riga?* Mac/Linux: `curl -fsSL https://gpire.github.io/lume-suite/install.sh | sh` · Windows PowerShell: `irm https://gpire.github.io/lume-suite/install.ps1 | iex`. Oppure apri **https://gpire.github.io/lume-suite/**.
 

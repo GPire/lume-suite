@@ -8,7 +8,7 @@ Read from the projects' own pages and from community reports; where a claim was 
 |---|---|---|
 | Turn off preinstalled apps (ads, telemetry) | Yes, over ADB, without root | Apps are turned off, never removed, so everything can be undone. TV Doctor does it in small groups with a health check after each. |
 | Replace the Home screen | Yes, on most sets | Install the new launcher first, then turn off the old one, or the TV can show a black screen. TV Doctor never turns off the Home. TCL, Philips and Chromecast with Google TV each have a known trap (see `tv-doctor/known_issues.json`). |
-| Install Lume, Ambient Cast and the Gallery | Yes (Android 7 or newer) | TV Doctor installs them from this repository's release, after checking each file's SHA-256. |
+| Install Lume, Lume Cast and the Gallery | Yes (Android 7 or newer) | TV Doctor installs them from this repository's release, after checking each file's SHA-256. |
 | Keep ADB open | **Not by itself on Android 14** | Wireless debugging picks a random port and closes it on restart: a security measure, not a fault. Switch it back on after a restart (the pairing stays), or run `adb tcpip 5555` from a paired computer. A third-party app (adb-auto-enable) automates this, but says it was tested only on Chromecast with Google TV. |
 
 Reference projects: CleanYourTV (MIT, phone-only, lists for 47 brands), TV Slim (Apache-2.0), Free My TV (MIT), tvOS Launcher (Apache-2.0), Aerial (MIT).
@@ -21,7 +21,7 @@ Reference projects: CleanYourTV (MIT, phone-only, lists for 47 brands), TV Slim 
 | Privacy and ad settings, DNS blocking | Yes | Per year, in `tv-doctor/closed_tvs.json`. DNS blocking cannot remove rows from the Home screen, and apps with fixed addresses bypass it. |
 | Ads inside YouTube | Yes, in developer mode | **TizenBrew** (GPL-3.0, about 1.7k stars) installs web modules without Tizen Studio; its **TizenTube** module (GPL-3.0, about 2.4k stars) removes YouTube ads and skips sponsored segments. Third-party projects, not ours. |
 | Another Home screen | Yes on many sets | **Free My TV** (MIT): developer mode, then its installer. It runs as an app, not as the real Home, and 2015-2016 sets cannot use the TizenBrew installer. |
-| Run Lume, Ambient Cast | **No** | They are Android apps. Tizen needs web apps: a "Lume for Samsung" would be a separate project, and does not exist yet. An Android streaming stick on HDMI gives the full Lume experience on any TV. |
+| Run Lume, Lume Cast | **No** | They are Android apps. Tizen needs web apps: a "Lume for Samsung" would be a separate project, and does not exist yet. An Android streaming stick on HDMI gives the full Lume experience on any TV. |
 
 ## So, for a TV that is closed
 

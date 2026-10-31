@@ -40,7 +40,7 @@ object Servers {
         throw failure ?: IOException("no address")
     }
 
-    /** Ambient Cast runs no server: both addresses are empty unless a build sets one, and then nothing is sent. */
+    /** Lume Cast runs no server: both addresses are empty unless a build sets one, and then nothing is sent. */
     private fun bases(context: Context): List<String> =
         listOfNotNull(
             context.getString(R.string.server_url).takeIf { it.isNotEmpty() },

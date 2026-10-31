@@ -33,7 +33,7 @@ final class Motion {
     }
 
     /**
-     * The starting level when the person has not chosen: the same tiers as TV Doctor and Ambient Cast. Up to 2.2 GB
+     * The starting level when the person has not chosen: the same tiers as TV Doctor and Lume Cast. Up to 2.2 GB
      * (a stick, an older TV) or a low-RAM device starts Reduced; with more room it starts Full.
      */
     static int defaultLevel(Context c) {

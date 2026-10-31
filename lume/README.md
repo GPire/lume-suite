@@ -9,12 +9,12 @@ Lume is derived from Hume Launcher by Petrobot (Apache-2.0). See NOTICE.
 ## What it does
 
 - **One focus per screen.** A full-screen carousel with Continue Watching first, a glass dock, a six-across app grid.
-- **Adapts to the TV.** The same three profiles as Ambient Cast and TV Doctor: essential (up to 2.2 GB), balanced
+- **Adapts to the TV.** The same three profiles as Lume Cast and TV Doctor: essential (up to 2.2 GB), balanced
   (up to 3.3 GB), full. Calm motion on a stick, everything where there is room. Nothing runs at rest.
 - **Tidy by default.** Vendor tools nobody needs on a home screen (early access, profile pickers, system monitors)
   are tucked away on the first run, one step from coming back.
 - **Six languages**: Italian, English, Spanish, German, French, Portuguese.
-- **Works with** Ambient Cast for AirPlay and with TV Doctor for cleaning a TV safely.
+- **Works with** Lume Cast for AirPlay and with TV Doctor for cleaning a TV safely.
 
 ## Build
 

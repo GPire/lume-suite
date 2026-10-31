@@ -1,4 +1,4 @@
-# Ambient Cast
+# Lume Cast
 
 An AirPlay and DLNA receiver for Android TV and Fire TV, derived from CastBay 1.8.9 by weenas (GPL-3.0). The original README is kept as `README.castbay.md`.
 

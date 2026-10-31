@@ -10,7 +10,7 @@ import android.provider.Settings
  */
 object DeviceName {
     /** Debug builds (installed beside the release app) are listed apart from it. */
-    val BRAND = if (com.weenas.castbay.BuildConfig.DEBUG) "Ambient Cast Dev" else "Ambient Cast"
+    val BRAND = if (com.weenas.castbay.BuildConfig.DEBUG) "Lume Cast Dev" else "Lume Cast"
 
     /** mDNS names are at most 63 bytes; a little under, as the advertiser allows. */
     private const val MAX_BYTES = 60

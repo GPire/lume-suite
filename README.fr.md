@@ -2,7 +2,7 @@
 
 [English](README.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Português](README.pt.md) · [简体中文](README.zh.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [العربية](README.ar.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Bahasa Indonesia](README.id.md)
 
-Une télé plus sereine. Trois parties qui fonctionnent ensemble : **TV Doctor** (nettoie et optimise la TV en un clic, sans code), **Lume** (écran d’accueil pour Android TV, Google TV et Fire TV) et **Ambient Cast** (récepteur AirPlay avec paroles et recopie d’écran).
+Une télé plus sereine. Trois parties qui fonctionnent ensemble : **TV Doctor** (nettoie et optimise la TV en un clic, sans code), **Lume** (écran d’accueil pour Android TV, Google TV et Fire TV) et **Lume Cast** (récepteur AirPlay avec paroles et recopie d’écran).
 
 ## Pour commencer
 

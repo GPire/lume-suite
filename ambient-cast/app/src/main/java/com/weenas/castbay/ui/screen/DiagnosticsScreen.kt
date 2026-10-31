@@ -82,7 +82,7 @@ fun DiagnosticsScreen() {
                             events = Diagnostics.events()
                         }
                     })
-                    // Uploading went to CastBay's server; Ambient Cast runs none, so the button only shows if a build sets one.
+                    // Uploading went to CastBay's server; Lume Cast runs none, so the button only shows if a build sets one.
                     if (stringResource(R.string.server_url).isNotEmpty()) HomeButton(stringResource(R.string.report_upload), onClick = {
                         upload = Upload.Preparing
                         scope.launch {

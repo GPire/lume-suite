@@ -25,9 +25,9 @@ object UpnpDescriptions {
   <device>
     <deviceType>${Ssdp.MEDIA_RENDERER}</deviceType>
     <friendlyName>${Soap.escape(friendlyName)}</friendlyName>
-    <manufacturer>Ambient Cast</manufacturer>
+    <manufacturer>Lume Cast</manufacturer>
     <modelDescription>AirPlay and DLNA receiver for Android TVs, car displays and tablets</modelDescription>
-    <modelName>Ambient Cast</modelName>
+    <modelName>Lume Cast</modelName>
     <modelNumber>1</modelNumber>
     <UDN>uuid:$uuid</UDN>
     <dlna:X_DLNADOC>DMR-1.50</dlna:X_DLNADOC>

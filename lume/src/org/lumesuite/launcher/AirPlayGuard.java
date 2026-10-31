@@ -32,7 +32,7 @@ final class AirPlayGuard {
     static void check(Context ctx, boolean force) {
         Context c = ctx.getApplicationContext();
         long now = System.currentTimeMillis();
-        // Ambient Cast looks after its own visibility (a foreground service started at boot); restarting the other
+        // Lume Cast looks after its own visibility (a foreground service started at boot); restarting the other
         // receiver beside it would put two AirPlay names on the network.
         if (Suggestions.installed(c, "org.lumesuite.cast")) return;
         if (busy || !Suggestions.installed(c, PKG) || (!force && now - lastCheck < 10 * 60 * 1000L)) return;

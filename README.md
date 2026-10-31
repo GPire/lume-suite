@@ -1,6 +1,17 @@
-# Lume Suite
+<p align="center"><img src="docs/img/banner.svg" alt="Lume: a calmer TV" width="100%"></p>
 
-[English](README.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Português](README.pt.md) · [简体中文](README.zh.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [العربية](README.ar.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Bahasa Indonesia](README.id.md)
+<h3 align="center">TV Doctor · Lume · Lume Cast: one calmer TV, for Fire TV, Google TV and Android TV</h3>
+
+<p align="center">
+  <a href="https://gpire.github.io/lume-suite/"><img alt="Get started" src="https://img.shields.io/badge/GET%20STARTED-open%20the%20page-ff9f0a?style=for-the-badge&labelColor=0b0b10"></a>
+  <a href="https://github.com/GPire/lume-suite/releases/latest"><img alt="Download" src="https://img.shields.io/github/v/release/GPire/lume-suite?style=for-the-badge&label=DOWNLOAD&color=0a84ff&labelColor=0b0b10"></a>
+</p>
+
+<p align="center">
+  <a href="README.md">English</a> · <a href="README.it.md">Italiano</a> · <a href="README.es.md">Español</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a> · <a href="README.pt.md">Português</a> · <a href="README.zh.md">简体中文</a> · <a href="README.hi.md">हिन्दी</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a> · <a href="README.ar.md">العربية</a> · <a href="README.ru.md">Русский</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.id.md">Bahasa Indonesia</a>
+</p>
+
+---
 
 <p align="center"><img src="docs/img/lume-home.jpg" alt="Lume home screen with a big clock, a dock of app cards and a painting as background" width="720"></p>
 
@@ -19,7 +30,7 @@
 
    The first time, Mac and Windows say the app is from an unknown developer. That is because it is not paid-for-signed, not because anything is wrong: each file has a `.sha256` next to it, and the full source is in this repository.
 2. **The app opens in your browser and looks for your TV on its own.** If it asks, switch on *Developer options > USB / network debugging* on the TV; it shows you how.
-3. **Press the big button.** It recognises the brand, model, year and system, installs Lume, Ambient Cast and the Gallery, and switches off the useless apps. You choose what to keep (voice assistant, casting...). Everything can be undone from the same page.
+3. **Press the big button.** It recognises the brand, model, year and system, installs Lume, Lume Cast and Lume Gallery, and switches off the useless apps. You choose what to keep (voice assistant, casting...). Everything can be undone from the same page.
 
 *Prefer one line?* Mac/Linux: `curl -fsSL https://gpire.github.io/lume-suite/install.sh | sh` · Windows PowerShell: `irm https://gpire.github.io/lume-suite/install.ps1 | iex`. Or open **https://gpire.github.io/lume-suite/**.
 
@@ -33,7 +44,7 @@
 
 - **TV Doctor** recognises the TV (brand, model, year, system), turns off what slows or watches you in small safe groups, checks the TV still answers after each group (and undoes the group if not), and keeps a backup so you can go back. Fire TV, Google TV and Android TV: lists from the community plus brand sets (TCL, Sony, Xiaomi, Nvidia). It can also replace the stock Google TV home with Lume, if you choose to.
 - **Lume** is a home screen for Android TV, Google TV and Fire TV: a big glass clock, a dock of sharp cards, Control Center, Recent Apps, markets, news, weather in several cities, a health page, three looks (glass, graphite, high contrast), the TV's own voice assistant, and full control from a phone.
-- **Ambient Cast** is an AirPlay receiver with Apple Music-style lyrics and screen mirroring, so an iPhone can show music and video on the TV.
+- **Lume Cast** is an AirPlay receiver with Apple Music-style lyrics and screen mirroring, so an iPhone can show music and video on the TV.
 
 <p align="center"><img src="docs/img/lume-control_center.jpg" alt="Lume Control Center" width="350"> <img src="docs/img/lume-markets.jpg" alt="Lume markets page" width="350"></p>
 
@@ -47,7 +58,7 @@ Release files are signed with this project's key (certificate SHA-256 `09:9C:A1:
 | TV Doctor on Google TV / Android TV | A real Android TV 14 system image (emulator) and 8 simulated brands | Detect, clean, undo, Home replacement, reboot: verified. No physical Google TV yet |
 | TV Doctor on Samsung, LG, Roku, VIDAA | Guides only | These systems are closed: it explains what is possible, per year |
 | Lume | Real Fire TV Stick 4K Max; Android TV 14 image | Setup, Home, Control Center, markets, news, weather verified |
-| Ambient Cast | Real Fire TV Stick 4K Max | AirPlay music and mirroring need testing with more iPhones; synced lyrics and Sing mode not yet checked on a real song |
+| Lume Cast | Real Fire TV Stick 4K Max | AirPlay music and mirroring need testing with more iPhones; synced lyrics and Sing mode not yet checked on a real song |
 
 Details in [docs/DEVICE_SUPPORT.md](docs/DEVICE_SUPPORT.md) and how we compare with similar projects in [docs/COMPARISON.md](docs/COMPARISON.md).
 
@@ -61,4 +72,4 @@ This is early software, tested on one real device. Read [docs/LAUNCH_READINESS.m
 
 ## Licences
 
-Each part has its own licence, listed in [LICENSE.md](LICENSE.md). Lume is derived from Hume Launcher by Petrobot (Apache-2.0) and Ambient Cast from CastBay by weenas (GPL-3.0); credits in [NOTICE.md](NOTICE.md).
+Each part has its own licence, listed in [LICENSE.md](LICENSE.md). Lume is derived from Hume Launcher by Petrobot (Apache-2.0) and Lume Cast from CastBay by weenas (GPL-3.0); credits in [NOTICE.md](NOTICE.md).

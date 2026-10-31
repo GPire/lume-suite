@@ -363,7 +363,7 @@ private fun ColumnScope.GeneralPage(
         SwitchSetting(stringResource(R.string.setting_test_versions), settings.testVersions) { viewModel.setTestVersions(it) }
         Text(stringResource(R.string.setting_test_versions_note), color = Color.Gray, fontSize = 14.sp)
     }
-    // Error reports and usage statistics went to CastBay's servers; Ambient Cast sends nothing, so no switches.
+    // Error reports and usage statistics went to CastBay's servers; Lume Cast sends nothing, so no switches.
     CardDivider()
     // Two presses, so a stray OK doesn't wipe the device name and password.
     var armed by remember { mutableStateOf(false) }

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Gets the OpenSSL release Ambient Cast is built against (sources are not stored in this repository: 140 MB, mostly tests).
+# Gets the OpenSSL release Lume Cast is built against (sources are not stored in this repository: 140 MB, mostly tests).
 # Run it once before the first build; tools/build-openssl.sh then compiles it for Android.
 set -euo pipefail
 cd "$(dirname "$0")/.."

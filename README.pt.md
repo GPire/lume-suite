@@ -2,7 +2,7 @@
 
 [English](README.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Português](README.pt.md) · [简体中文](README.zh.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [العربية](README.ar.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Bahasa Indonesia](README.id.md)
 
-Uma TV mais tranquila. Três partes que funcionam juntas: **TV Doctor** (limpa e otimiza a TV com um botão, sem código), **Lume** (ecrã inicial para Android TV, Google TV e Fire TV) e **Ambient Cast** (recetor AirPlay com letras e espelhamento).
+Uma TV mais tranquila. Três partes que funcionam juntas: **TV Doctor** (limpa e otimiza a TV com um botão, sem código), **Lume** (ecrã inicial para Android TV, Google TV e Fire TV) e **Lume Cast** (recetor AirPlay com letras e espelhamento).
 
 ## Como começar
 

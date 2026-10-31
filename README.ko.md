@@ -2,7 +2,7 @@
 
 [English](README.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Português](README.pt.md) · [简体中文](README.zh.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [العربية](README.ar.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Bahasa Indonesia](README.id.md)
 
-더 차분한 TV. 함께 작동하는 세 부분: **TV Doctor**(버튼 하나로 TV 정리·최적화, 코드 불필요), **Lume**(Android TV, Google TV, Fire TV용 홈 화면), **Ambient Cast**(가사와 화면 미러링을 지원하는 AirPlay 수신기).
+더 차분한 TV. 함께 작동하는 세 부분: **TV Doctor**(버튼 하나로 TV 정리·최적화, 코드 불필요), **Lume**(Android TV, Google TV, Fire TV용 홈 화면), **Lume Cast**(가사와 화면 미러링을 지원하는 AirPlay 수신기).
 
 ## 시작하기
 

@@ -26,7 +26,7 @@
     <string name="health_mb_free">MB livres</string>
     <string name="health_manual_title">%1$d coisas para arrumar</string>
     <string name="health_manual_body">Esta Fire TV não permite limpar-se sozinha. Abra o TV Doctor num computador na mesma Wi-Fi: um clique, tudo anulável.</string>
-    <string name="about_free">O Ambient Cast é software livre sob GPL-3.0. Créditos e código-fonte em Licenças de código aberto.</string>
+    <string name="about_free">O Lume Cast é software livre sob GPL-3.0. Créditos e código-fonte em Licenças de código aberto.</string>
     <string name="waiting_title">Pronta. Escolha esta TV no seu iPhone.</string>
     <string name="settings">Definições</string>
     <string name="help">Ajuda</string>

@@ -2,7 +2,7 @@
 
 [English](README.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Português](README.pt.md) · [简体中文](README.zh.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [العربية](README.ar.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Bahasa Indonesia](README.id.md)
 
-Более спокойный телевизор. Три части работают вместе: **TV Doctor** (очищает и настраивает ТВ одной кнопкой, без кода), **Lume** (домашний экран для Android TV, Google TV и Fire TV) и **Ambient Cast** (приёмник AirPlay с текстами песен и зеркалированием экрана).
+Более спокойный телевизор. Три части работают вместе: **TV Doctor** (очищает и настраивает ТВ одной кнопкой, без кода), **Lume** (домашний экран для Android TV, Google TV и Fire TV) и **Lume Cast** (приёмник AirPlay с текстами песен и зеркалированием экрана).
 
 ## Как начать
 

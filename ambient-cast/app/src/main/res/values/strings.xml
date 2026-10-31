@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ambient Cast</string>
+    <string name="app_name">Lume Cast</string>
     <string name="app_tagline">AirPlay and DLNA, ready on your TV</string>
     <string name="app_slogan">Your music. Your screen. One tap.</string>
 
@@ -18,7 +18,7 @@
     <string name="waiting_title">Ready. Pick this TV on your iPhone.</string>
     <string name="starting">Getting ready…</string>
     <string name="stopping">Stopping…</string>
-    <string name="advertising_only_title">Ambient Cast is visible on the local network</string>
+    <string name="advertising_only_title">Lume Cast is visible on the local network</string>
     <string name="advertising_only_detail">Discovery preview only — AirPlay streaming is not available yet.</string>
     <string name="connecting">Connecting…</string>
     <string name="connected">Connected</string>
@@ -54,7 +54,7 @@
     <string name="press_back_again">Press Back again to stop casting</string>
     <string name="awaiting_next_video">Waiting for the next video…</string>
     <string name="awaiting_next_video_help">Press Back to stop casting</string>
-    <string name="press_back_to_quit">Press Back again to quit Ambient Cast; phones won\'t be able to cast</string>
+    <string name="press_back_to_quit">Press Back again to quit Lume Cast; phones won\'t be able to cast</string>
     <string name="airplay_audio">AirPlay audio</string>
     <string name="cover_art">Cover art</string>
     <string name="music_play">Play</string>
@@ -92,17 +92,17 @@
     <string name="setting_test_versions_note">Also offers test versions of CastBay (marked beta) when one is published, to help check a fix. They may be less stable; the next release replaces them. Asks GitHub; nothing about this TV is sent.</string>
     <string name="setting_check_updates_note">Once a day, asks castbay.weenas.com (or GitHub) for the latest version number; nothing about this TV is sent.</string>
     <string name="setting_error_reports">Send Error Reports</string>
-    <string name="setting_error_reports_note">If Ambient Cast stops unexpectedly, send a problem report (the error and the app\'s recent log, with titles, names and links taken out) when it next starts. Off: you are asked each time.</string>
+    <string name="setting_error_reports_note">If Lume Cast stops unexpectedly, send a problem report (the error and the app\'s recent log, with titles, names and links taken out) when it next starts. Off: you are asked each time.</string>
     <string name="setting_usage_stats">Send Anonymous Usage Statistics</string>
     <string name="setting_usage_stats_note">Once a day: how many casts of each kind and how long (in bands), mirroring resolution and codec, failures, this device\'s model and Android version, and the settings in use. Never names, titles, links or addresses. Turning it off deletes what was sent.</string>
     <string name="update_notes">What\'s New</string>
-    <string name="changelog_title">What\'s new in Ambient Cast %1$s</string>
+    <string name="changelog_title">What\'s new in Lume Cast %1$s</string>
     <string name="changelog_installed">This TV has %1$s. Every change since then:</string>
     <string name="setting_screen_saver">Music Screen When Idle</string>
     <string name="setting_screen_saver_note">Against burn-in: after 10 minutes without a key or tap, the music screen dims and shifts a little. Screen off: after 2 minutes it goes black (the dimmest a TV can show) while the music plays on. Any key, tap or new cast wakes it; media keys keep working. Not while lyrics are showing.</string>
     <string name="screen_saver_burn_in">Against burn-in</string>
     <string name="screen_saver_music_off">Screen off</string>
-    <string name="crash_ask">Ambient Cast stopped unexpectedly last time. Send a problem report to help fix it?</string>
+    <string name="crash_ask">Lume Cast stopped unexpectedly last time. Send a problem report to help fix it?</string>
     <string name="crash_send">Send</string>
     <string name="crash_dismiss">Dismiss</string>
     <string name="crash_sending">Sending the report…</string>
@@ -112,7 +112,7 @@
     <string name="setting_reset">Restore Defaults</string>
     <string name="setting_reset_action">Restore</string>
     <string name="setting_reset_confirm">Press again to restore</string>
-    <string name="setting_reset_note">The device name, casting verification and every other setting go back to how they were when Ambient Cast was installed.</string>
+    <string name="setting_reset_note">The device name, casting verification and every other setting go back to how they were when Lume Cast was installed.</string>
     <string name="section_playback">Playback</string>
     <string name="section_playback_note">These apply right away. While casting, press Down or Menu on the remote to change them.</string>
     <string name="setting_device_name">Device Name</string>
@@ -133,8 +133,8 @@
     <string name="setting_lyrics">Show lyrics for music</string>
     <string name="setting_lyrics_note">Looks up lyrics on lrclib.net by the song\'s title and artist.</string>
     <string name="setting_open_on_cast">Open When Casting</string>
-    <string name="setting_open_on_cast_note">Opens Ambient Cast when a device starts mirroring or playing a video while another app or the home screen is showing. Needs "Display over other apps" for Ambient Cast (this opens its settings page). If your TV has no such page, a computer can grant it: adb shell appops set org.lumesuite.cast SYSTEM_ALERT_WINDOW allow</string>
-    <string name="open_on_cast_toast">Open Ambient Cast on the TV to see the cast</string>
+    <string name="setting_open_on_cast_note">Opens Lume Cast when a device starts mirroring or playing a video while another app or the home screen is showing. Needs "Display over other apps" for Lume Cast (this opens its settings page). If your TV has no such page, a computer can grant it: adb shell appops set org.lumesuite.cast SYSTEM_ALERT_WINDOW allow</string>
+    <string name="open_on_cast_toast">Open Lume Cast on the TV to see the cast</string>
     <string name="setting_append_tv_name">Add the TV\'s name after it</string>
     <string name="setting_append_tv_name_note">Phones see: %1$s</string>
     <string name="frame_rate_fps">%1$d FPS</string>
@@ -146,7 +146,7 @@
     <string name="about_source">Source code</string>
     <string name="about_licenses">Open-Source Licenses</string>
     <string name="licenses_title">Open-source licenses</string>
-    <string name="licenses_intro">Ambient Cast is free software under the GPL-3.0, derived from CastBay (weenas) and built on the open-source projects below. The source of this version is available to whoever receives the app. Choose one to read its license.</string>
+    <string name="licenses_intro">Lume Cast is free software under the GPL-3.0, derived from CastBay (weenas) and built on the open-source projects below. The source of this version is available to whoever receives the app. Choose one to read its license.</string>
     <string name="licenses_castbay">This app</string>
     <string name="licenses_uxplay">AirPlay receiver</string>
     <string name="licenses_raop">AirPlay connections and audio (in UxPlay)</string>
@@ -168,17 +168,17 @@
     <string name="update_install">Download and install %1$s</string>
     <string name="update_downloading">Downloading… %1$d%%</string>
     <string name="update_downloading_unknown">Downloading…</string>
-    <string name="update_installing">Confirm the update in the installer. The first time, allow installing apps from Ambient Cast.</string>
+    <string name="update_installing">Confirm the update in the installer. The first time, allow installing apps from Lume Cast.</string>
     <string name="update_failed_download">The download failed. Check the network and try again.</string>
     <string name="update_failed_checksum">The download doesn\'t match the release\'s checksum, so it wasn\'t installed. Try again.</string>
-    <string name="update_failed_installer">This TV has no installer Ambient Cast can open. Scan the code to download the update instead.</string>
+    <string name="update_failed_installer">This TV has no installer Lume Cast can open. Scan the code to download the update instead.</string>
     <string name="update_retry">Try again</string>
     <string name="about_diagnostics">Diagnostics</string>
     <string name="diagnostics_title">Diagnostics</string>
     <string name="diagnostics_note">Kept on this device; sent only if you choose Upload log. To report a problem, upload it (or photograph this screen) and give the report ID in your problem report.</string>
     <string name="report_upload">Upload log</string>
     <string name="report_preparing">Collecting the log…</string>
-    <string name="report_confirm">This sends this device\'s details, the events below and the app\'s recent log (about %1$d KB) to the Ambient Cast website, where it is kept for 90 days. Song and video titles, links, device names and internet addresses are taken out first.</string>
+    <string name="report_confirm">This sends this device\'s details, the events below and the app\'s recent log (about %1$d KB) to the Lume Cast website, where it is kept for 90 days. Song and video titles, links, device names and internet addresses are taken out first.</string>
     <string name="report_send">Upload</string>
     <string name="report_cancel">Cancel</string>
     <string name="report_sending">Uploading…</string>
@@ -249,7 +249,7 @@
     <string name="update_check_failed">Couldn\'t check. Check the network and try again.</string>
 
     <!-- Notification -->
-    <string name="notification_channel">Ambient Cast Service</string>
+    <string name="notification_channel">Lume Cast Service</string>
     <string name="notification_starting">Starting receiver</string>
     <string name="notification_waiting">Waiting for AirPlay or DLNA casting</string>
     <string name="notification_discovery_only">Publishing AirPlay discovery</string>
@@ -287,7 +287,7 @@
     <string name="help_android_title">Android phones</string>
     <string name="help_android">Cast video and music with apps\' own cast button, as in “Apps\' own cast button”.\nAndroid\'s built-in screen mirroring (Miracast, Google Cast) isn\'t supported yet.</string>
     <string name="help_mac_title">Mac</string>
-    <string name="help_mac">Click Control Center in the menu bar → Screen Mirroring and pick “%1$s”.\nMusic from the Mac’s Music app can’t be sent to Ambient Cast: it uses an encryption the open-source AirPlay library doesn’t support.</string>
+    <string name="help_mac">Click Control Center in the menu bar → Screen Mirroring and pick “%1$s”.\nMusic from the Mac’s Music app can’t be sent to Lume Cast: it uses an encryption the open-source AirPlay library doesn’t support.</string>
     <string name="help_remote_title">The remote</string>
     <string name="help_remote">Video: OK pauses or resumes; Left and Right skip back or ahead 10 seconds.\nMusic: Left and Right choose a button; OK presses it.\nDown or Menu: the playback menu (picture, audio, subtitles, lyrics…).\nBack twice: stop casting. Home: keep playing in the background.</string>
     <string name="help_touch_title">Touch and buttons</string>
@@ -299,7 +299,7 @@
     <string name="menu_seconds">%1$d s</string>
     <string name="section_playback_note_touch">These apply right away. While casting, tap the screen to change them.</string>
     <string name="help_not_found_title">Your phone can\'t find this TV?</string>
-    <string name="help_not_found">• Connect the phone and TV to the same Wi-Fi, not a guest network.\n• Check that Ambient Cast is open, showing “Ready”.\n• If the router has “AP isolation” on, devices can\'t see each other; turn it off.\n• Reopen Ambient Cast or restart the TV and try again.</string>
+    <string name="help_not_found">• Connect the phone and TV to the same Wi-Fi, not a guest network.\n• Check that Lume Cast is open, showing “Ready”.\n• If the router has “AP isolation” on, devices can\'t see each other; turn it off.\n• Reopen Lume Cast or restart the TV and try again.</string>
     <string name="help_video_title">A video won\'t play?</string>
     <string name="help_video">AirPlay and DLNA videos are fetched by the TV itself. If your phone needs a proxy or VPN to open them (e.g. YouTube), so does the TV.</string>
     <string name="info_access">Verification</string>
@@ -334,8 +334,8 @@
     <string name="home_step_screen">Control Center → Screen Mirroring → this TV.</string>
     <string name="info_based_on">Based on</string>
     <string name="about_origin">Original project (CastBay)</string>
-    <string name="about_privacy_text">Ambient Cast sends nothing about you: no account, no statistics, no automatic reports. Its only requests are for song lyrics (lrclib.net, and only if you turn lyrics on) and for the paintings on the wall (Wikimedia Commons).</string>
-    <string name="about_source_text">Ambient Cast is derived from CastBay and shares its GPL-3.0 licence: the source of this version is available to whoever receives the app.</string>
+    <string name="about_privacy_text">Lume Cast sends nothing about you: no account, no statistics, no automatic reports. Its only requests are for song lyrics (lrclib.net, and only if you turn lyrics on) and for the paintings on the wall (Wikimedia Commons).</string>
+    <string name="about_source_text">Lume Cast is derived from CastBay and shares its GPL-3.0 licence: the source of this version is available to whoever receives the app.</string>
     <!-- TV health -->
     <string name="health_button">Health</string>
     <string name="health_title">TV health</string>
@@ -363,7 +363,7 @@
     <string name="health_mb_free">MB free</string>
     <string name="health_manual_title">%1$d things to tidy</string>
     <string name="health_manual_body">This Fire TV does not allow cleaning itself. Open TV Doctor on a computer on the same Wi-Fi: one click, fully undoable.</string>
-    <string name="about_free">Ambient Cast is free software under the GPL-3.0. Credits to the projects it is built on, and its source, are under Open-Source Licenses.</string>
+    <string name="about_free">Lume Cast is free software under the GPL-3.0. Credits to the projects it is built on, and its source, are under Open-Source Licenses.</string>
     <string name="section_tv">TV</string>
     <string name="tv_model">Model</string>
     <string name="tv_system">System</string>

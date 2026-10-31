@@ -2,7 +2,7 @@
 
 [English](README.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Português](README.pt.md) · [简体中文](README.zh.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [العربية](README.ar.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Bahasa Indonesia](README.id.md)
 
-TV yang lebih tenang. Tiga bagian yang bekerja bersama: **TV Doctor** (membersihkan dan mengoptimalkan TV dengan satu tombol, tanpa kode), **Lume** (layar utama untuk Android TV, Google TV, dan Fire TV), dan **Ambient Cast** (penerima AirPlay dengan lirik dan mirroring layar).
+TV yang lebih tenang. Tiga bagian yang bekerja bersama: **TV Doctor** (membersihkan dan mengoptimalkan TV dengan satu tombol, tanpa kode), **Lume** (layar utama untuk Android TV, Google TV, dan Fire TV), dan **Lume Cast** (penerima AirPlay dengan lirik dan mirroring layar).
 
 ## Cara memulai
 

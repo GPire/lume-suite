@@ -20,7 +20,7 @@ val gitCommit = providers.exec {
 
 // Installing a downloaded update needs REQUEST_INSTALL_PACKAGES, declared in its own manifest so
 // that store builds (-Pcastbay.selfUpdate=false) leave the permission out altogether.
-val selfUpdate = (project.findProperty("castbay.selfUpdate") as String?)?.toBoolean() ?: false  // Ambient Cast never looks at the original project's releases
+val selfUpdate = (project.findProperty("castbay.selfUpdate") as String?)?.toBoolean() ?: false  // Lume Cast never looks at the original project's releases
 androidComponents {
     onVariants { variant ->
         if (selfUpdate) variant.sources.manifests.addStaticManifestFile("src/selfUpdate/AndroidManifest.xml")
@@ -39,8 +39,8 @@ android {
         // Changed only for a release. versionName follows semantic versioning: the middle
         // number for new features (1.1.0), the last for fixes only (1.1.1), the first for big
         // changes. versionCode goes up by one with each release.
-        versionCode = 4
-        versionName = "0.1.0"
+        versionCode = 5
+        versionName = "0.1.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Only the ABIs the AirPlay library (airplay/) is built for: other libraries also ship x86
         // and x86_64 code, and an APK carrying those would install on x86 devices and crash there.

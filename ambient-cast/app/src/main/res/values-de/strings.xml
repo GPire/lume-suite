@@ -26,7 +26,7 @@
     <string name="health_mb_free">MB frei</string>
     <string name="health_manual_title">%1$d Dinge aufräumen</string>
     <string name="health_manual_body">Dieser Fire TV kann sich nicht selbst aufräumen. Öffne TV Doctor an einem Computer im selben WLAN: ein Klick, alles rückgängig.</string>
-    <string name="about_free">Ambient Cast ist freie Software unter der GPL-3.0. Danksagungen und Quellcode stehen unter Open-Source-Lizenzen.</string>
+    <string name="about_free">Lume Cast ist freie Software unter der GPL-3.0. Danksagungen und Quellcode stehen unter Open-Source-Lizenzen.</string>
     <string name="waiting_title">Bereit. Wähle diesen Fernseher auf deinem iPhone.</string>
     <string name="settings">Einstellungen</string>
     <string name="help">Hilfe</string>

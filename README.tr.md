@@ -2,7 +2,7 @@
 
 [English](README.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Português](README.pt.md) · [简体中文](README.zh.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [العربية](README.ar.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Bahasa Indonesia](README.id.md)
 
-Daha sakin bir televizyon. Birlikte çalışan üç parça: **TV Doctor** (tek tuşla TV'yi temizler ve ayarlar, kod gerekmez), **Lume** (Android TV, Google TV ve Fire TV için ana ekran) ve **Ambient Cast** (şarkı sözleri ve ekran yansıtma sunan AirPlay alıcısı).
+Daha sakin bir televizyon. Birlikte çalışan üç parça: **TV Doctor** (tek tuşla TV'yi temizler ve ayarlar, kod gerekmez), **Lume** (Android TV, Google TV ve Fire TV için ana ekran) ve **Lume Cast** (şarkı sözleri ve ekran yansıtma sunan AirPlay alıcısı).
 
 ## Nasıl başlanır
 

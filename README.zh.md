@@ -2,7 +2,7 @@
 
 [English](README.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Português](README.pt.md) · [简体中文](README.zh.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [العربية](README.ar.md) · [Русский](README.ru.md) · [Türkçe](README.tr.md) · [Bahasa Indonesia](README.id.md)
 
-更安静的电视。三个部分协同工作：**TV Doctor**（一键清理并优化电视，无需代码）、**Lume**（适用于 Android TV、Google TV 和 Fire TV 的主屏幕）和 **Ambient Cast**（支持歌词和屏幕镜像的 AirPlay 接收器）。
+更安静的电视。三个部分协同工作：**TV Doctor**（一键清理并优化电视，无需代码）、**Lume**（适用于 Android TV、Google TV 和 Fire TV 的主屏幕）和 **Lume Cast**（支持歌词和屏幕镜像的 AirPlay 接收器）。
 
 ## 快速开始
 
