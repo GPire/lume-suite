@@ -13,3 +13,11 @@
 不会从电视卸载任何内容：应用只是被停用。
 
 [English: full details, status and licences](README.md)
+
+### 把手机当遥控器
+
+在 Lume 中：控制中心，再点手机按钮。扫描二维码并输入数字，会打开类似 Apple TV 遥控器的触控面板（滑动移动、轻点选择、长按为菜单），带音量、应用、搜索、用户档案和一键场景。请允许一次“从手机打开应用”（TV Doctor 会替你完成）。
+
+<p align="center"><img src="docs/img/phone-remote.jpg" alt="" width="260"></p>
+
+如果它帮到了你，点个 Star 能让更多人找到它。在 Issues 里告诉我们你的电视型号，比什么都有价值。

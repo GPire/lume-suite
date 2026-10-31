@@ -54,6 +54,10 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import com.weenas.castbay.viewmodel.AirPlayViewModel
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.gestures.detectTapGestures
 import kotlinx.coroutines.delay
 
 /** Settings' pages, one tab each. */
@@ -84,7 +88,7 @@ fun SettingsScreen(viewModel: AirPlayViewModel) {
         Unit
     }
     val narrow = isNarrowScreen()
-    AppBackground {
+    AppBackground(calm = true) {
         Column(modifier = Modifier.fillMaxSize().padding(horizontal = if (narrow) 16.dp else 48.dp, vertical = 24.dp)) {
             // The title and the tabs (one focus stop: Left and Right switch pages, Down enters
             // one). No Back button: the remote's Back key leaves, as on other TV apps.
@@ -398,8 +402,8 @@ private fun SettingsCard(content: @Composable ColumnScope.() -> Unit) {
             .fillMaxWidth()
             .clip(RoundedCornerShape(26.dp))
             .background(CARD_BACKGROUND)
-            .border(1.dp, Color(0x26FFFFFF), RoundedCornerShape(26.dp))
-            .padding(start = 28.dp, end = 20.dp, top = 12.dp, bottom = 12.dp),
+            .border(1.dp, Color(0x33FFFFFF), RoundedCornerShape(26.dp))
+            .padding(start = 20.dp, end = 14.dp, top = 10.dp, bottom = 10.dp),
         content = content
     )
 }
@@ -417,7 +421,7 @@ private fun CardDivider() {
 }
 
 /** As the home screen's info panel. */
-private val CARD_BACKGROUND = Color(0x70000000)
+private val CARD_BACKGROUND = Color(0x24FFFFFF)
 private val CARD_DIVIDER = Color(0x1AFFFFFF)
 
 @Composable
@@ -592,9 +596,40 @@ fun PasswordSetting(value: String, onSaved: (String) -> Unit) {
 @Composable
 fun SwitchSetting(label: String, checked: Boolean, modifier: Modifier = Modifier, onChanged: (Boolean) -> Unit) {
     SettingLine(label) {
-        // Off and On side by side, like the other settings' choices.
-        SegmentedChoice(checked, listOf(false, true), { stringResource(if (it) R.string.on else R.string.off) }, modifier, onChanged)
+        // An iOS-style switch: the thumb springs across, green when on; Left and Right set it, OK flips it.
+        val interaction = remember { MutableInteractionSource() }
+        val focused by interaction.collectIsFocusedAsState()
+        val thumbX by androidx.compose.animation.core.animateDpAsState(
+            if (checked) 28.dp else 0.dp,
+            androidx.compose.animation.core.spring(dampingRatio = 0.55f, stiffness = 420f), label = "thumb"
+        )
+        val track by androidx.compose.animation.animateColorAsState(if (checked) Color(0xFF30D158) else Color(0x4DFFFFFF), label = "track")
+        Box(
+            modifier = modifier
+                .onPreviewKeyEvent { e ->
+                    if (e.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+                    when (e.key) {
+                        Key.DirectionLeft -> { if (checked) onChanged(false); true }
+                        Key.DirectionRight -> { if (!checked) onChanged(true); true }
+                        Key.DirectionCenter, Key.Enter, Key.NumPadEnter -> { onChanged(!checked); true }
+                        else -> false
+                    }
+                }
+                .focusable(interactionSource = interaction)
+                .pointerInputToggle { onChanged(!checked) }
+                .width(68.dp).height(40.dp)
+                .clip(RoundedCornerShape(50))
+                .background(track)
+                .border(2.dp, if (focused) Color.White else Color.Transparent, RoundedCornerShape(50))
+                .padding(4.dp)
+        ) {
+            Box(Modifier.offset(x = thumbX).size(32.dp).clip(RoundedCornerShape(50)).background(Color.White))
+        }
     }
+}
+
+private fun Modifier.pointerInputToggle(onTap: () -> Unit): Modifier = this.pointerInput(Unit) {
+    detectTapGestures { onTap() }
 }
 
 /**
@@ -611,8 +646,11 @@ private fun SettingLine(label: String, stacked: Boolean = false, control: @Compo
         }
         return
     }
+    var rowFocused by remember { mutableStateOf(false) }
+    val rowFill by androidx.compose.animation.animateColorAsState(if (rowFocused) Color(0x2EFFFFFF) else Color.Transparent, label = "rowFill")
     Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp).clip(RoundedCornerShape(18.dp)).background(rowFill)
+            .onFocusChanged { rowFocused = it.hasFocus }.padding(horizontal = 10.dp, vertical = 5.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(label, color = Color.White, fontSize = 18.sp, modifier = Modifier.weight(1f))

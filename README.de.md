@@ -13,3 +13,11 @@ Ein ruhigerer Fernseher. Drei Teile, die zusammenarbeiten: **TV Doctor** (reinig
 Es wird nichts vom Fernseher deinstalliert: Apps werden nur deaktiviert.
 
 [English: full details, status and licences](README.md)
+
+### Das Telefon als Fernbedienung
+
+In Lume: Kontrollzentrum, dann die Telefontaste. Code scannen, Zahl eingeben: Es öffnet sich eine Fläche im Stil der Apple-TV-Fernbedienung (wischen zum Bewegen, tippen zum Wählen, halten für Menü) mit Lautstärke, Apps, Suche, Profilen und Szenen auf Fingertipp. Erlaube einmal „Apps vom Telefon öffnen“ (TV Doctor erledigt das für dich).
+
+<p align="center"><img src="docs/img/phone-remote.jpg" alt="" width="260"></p>
+
+Wenn es geholfen hat, hilft ein Stern anderen, es zu finden. Sag uns in den Issues, welchen Fernseher du hast: Das ist mehr wert als alles andere.

@@ -56,7 +56,7 @@ fun HealthScreen(viewModel: AirPlayViewModel) {
     LaunchedEffect(phase) { if (keys) runCatching { primary.requestFocus() } }
 
     val shape = RoundedCornerShape(28.dp)
-    AppBackground {
+    AppBackground(calm = true) {
         Box(modifier = Modifier.fillMaxSize().padding(horizontal = 88.dp, vertical = 32.dp), contentAlignment = Alignment.CenterStart) {
             Column(
                 modifier = Modifier.widthIn(max = 720.dp).verticalScroll(rememberScrollState())

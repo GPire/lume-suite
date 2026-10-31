@@ -13,3 +13,11 @@ Uma TV mais tranquila. Três partes que funcionam juntas: **TV Doctor** (limpa e
 Nada é desinstalado da TV: as apps são apenas desativadas.
 
 [English: full details, status and licences](README.md)
+
+### O telemóvel como comando
+
+No Lume: Centro de controlo e o botão do telemóvel. Leia o código e escreva o número: abre-se uma superfície ao estilo do comando da Apple TV (deslize para mover, toque para escolher, mantenha para Menu), com volume, apps, pesquisa, perfis e cenas com um toque. Permita uma vez «Abrir apps a partir do telemóvel» (o TV Doctor faz isso por si).
+
+<p align="center"><img src="docs/img/phone-remote.jpg" alt="" width="260"></p>
+
+Se ajudou, uma estrela ajuda outras pessoas a encontrá-lo. Diga-nos que TV tem nas Issues: vale mais do que tudo.

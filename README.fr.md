@@ -13,3 +13,11 @@ Une télé plus sereine. Trois parties qui fonctionnent ensemble : **TV Doctor**
 Rien n’est désinstallé de la TV : les applications sont seulement désactivées.
 
 [English: full details, status and licences](README.md)
+
+### Le téléphone comme télécommande
+
+Dans Lume : Centre de contrôle, puis le bouton du téléphone. Scannez le code, tapez le nombre : une surface façon télécommande Apple TV s’ouvre (glissez pour bouger, touchez pour choisir, maintenez pour Menu), avec volume, apps, recherche, profils et scènes en un geste. Autorisez une fois « Ouvrir des apps depuis le téléphone » (TV Doctor le fait pour vous).
+
+<p align="center"><img src="docs/img/phone-remote.jpg" alt="" width="260"></p>
+
+Si cela vous a aidé, une étoile aide d’autres personnes à le trouver. Dites-nous quelle TV vous avez dans les Issues : cela vaut plus que tout.

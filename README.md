@@ -61,7 +61,9 @@
 
 In Lume: Control Center, then the phone button. Scan the code, type the number: the page that opens is an Apple TV Remote-style surface (swipe to move, tap to choose, hold for Menu), with volume, play/pause, apps and favourites, search on the TV, YouTube or the web, profiles, and one-tap scenes (Cinema, Night, Music). To open apps and search while you watch something else, allow **Open apps from your phone** (TV Doctor and "Optimize this TV" do it for you). To type into other apps and use Back from them, switch Lume on in the TV's Accessibility settings once.
 
-<p align="center"><img src="docs/img/lume-control_center.jpg" alt="Lume Control Center" width="350"> <img src="docs/img/lume-markets.jpg" alt="Lume markets page" width="350"></p>
+<p align="center"><img src="docs/img/lume-control_center.jpg" alt="Lume Control Center" width="350"> <img src="docs/img/lume-search.jpg" alt="Lume search" width="350"></p>
+<p align="center"><img src="docs/img/lume-markets.jpg" alt="Lume markets page" width="350"> <img src="docs/img/cast-settings.jpg" alt="Lume Cast settings" width="350"></p>
+<p align="center"><img src="docs/img/phone-remote.jpg" alt="The phone remote" width="260"></p>
 
 Release files are signed with this project's key (certificate SHA-256 `09:9C:A1:B2:91:12:0A:BF:2C:B2:EB:79:9B:76:81:58:3D:3C:52:E4:00:91:1B:A0:83:3F:2A:CA:A1:92:A7:B6`) and listed with their checksums in `SHA256SUMS`.
 

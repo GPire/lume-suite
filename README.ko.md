@@ -13,3 +13,11 @@
 TV에서 아무것도 삭제되지 않습니다. 앱은 비활성화만 됩니다.
 
 [English: full details, status and licences](README.md)
+
+### 스마트폰을 리모컨으로
+
+Lume에서 제어 센터의 전화 버튼을 누르세요. 코드를 스캔하고 숫자를 입력하면 Apple TV 리모컨 같은 화면이 열립니다(밀어서 이동, 탭하여 선택, 길게 눌러 메뉴). 볼륨, 앱, 검색, 프로필, 원터치 장면도 있습니다. “휴대폰에서 앱 열기”를 한 번만 허용하세요(TV Doctor가 대신 해 줍니다).
+
+<p align="center"><img src="docs/img/phone-remote.jpg" alt="" width="260"></p>
+
+도움이 되었다면 별을 눌러 다른 사람이 찾도록 도와주세요. Issues에 사용 중인 TV를 알려 주시면 무엇보다 큰 도움이 됩니다.

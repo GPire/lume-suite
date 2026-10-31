@@ -126,7 +126,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun Screens() {
     // Saved, so recreating the activity for a new language stays in Settings.
-    var currentScreen by rememberSaveable { mutableStateOf("mirror") }
+    // A developer hook (adb: --es screen settings|help|health|about) opens that screen first, to look at it without a remote.
+    val firstScreen = (androidx.compose.ui.platform.LocalContext.current as? android.app.Activity)?.intent?.getStringExtra("screen")
+        ?.takeIf { it in setOf("settings", "help", "health", "about", "licenses") } ?: "mirror"
+    var currentScreen by rememberSaveable { mutableStateOf(firstScreen) }
     val viewModel: AirPlayViewModel = viewModel()
 
     val navigateTo by viewModel.navigateTo.collectAsState()

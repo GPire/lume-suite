@@ -130,7 +130,7 @@ fun AboutScreen(viewModel: AirPlayViewModel) {
         }
     }
 
-    AppBackground {
+    AppBackground(calm = true) {
         // Centred on a TV; on a short screen (a car's, a phone on its side) it scrolls rather
         // than cutting off what's below the version.
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {

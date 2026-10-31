@@ -66,7 +66,7 @@ fun LicensesScreen() {
     var open by remember { mutableStateOf<Licence?>(null) }
     val licence = open
     BackHandler(enabled = licence != null) { open = null }
-    AppBackground {
+    AppBackground(calm = true) {
         if (licence == null) ComponentList(onOpen = { open = it }) else LicenceText(licence)
     }
 }

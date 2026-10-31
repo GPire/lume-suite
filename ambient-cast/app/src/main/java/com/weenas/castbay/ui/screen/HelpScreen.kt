@@ -80,7 +80,7 @@ fun HelpScreen(viewModel: AirPlayViewModel) {
     val gridState = rememberLazyGridState()
     val scope = rememberCoroutineScope()
 
-    AppBackground {
+    AppBackground(calm = true) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             state = gridState,

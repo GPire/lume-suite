@@ -13,3 +13,11 @@ Daha sakin bir televizyon. Birlikte çalışan üç parça: **TV Doctor** (tek t
 TV'den hiçbir şey kaldırılmaz: uygulamalar yalnızca devre dışı bırakılır.
 
 [English: full details, status and licences](README.md)
+
+### Telefon kumanda olarak
+
+Lume’da: Kontrol Merkezi, sonra telefon düğmesi. Kodu tarayın, sayıyı yazın: Apple TV kumandası tarzında bir yüzey açılır (hareket için kaydırın, seçmek için dokunun, Menü için basılı tutun); ses, uygulamalar, arama, profiller ve tek dokunuşluk sahneler vardır. “Telefondan uygulama aç” iznini bir kez verin (TV Doctor bunu sizin için yapar).
+
+<p align="center"><img src="docs/img/phone-remote.jpg" alt="" width="260"></p>
+
+Yardımcı olduysa bir yıldız, başkalarının bulmasına yardım eder. Issues’ta hangi TV’niz olduğunu yazın: her şeyden değerlidir.

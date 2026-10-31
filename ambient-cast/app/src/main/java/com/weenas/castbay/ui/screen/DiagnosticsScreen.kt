@@ -58,7 +58,7 @@ fun DiagnosticsScreen() {
     var checkResults by remember { mutableStateOf<List<NetworkCheck.Result>?>(null) }
     val scope = rememberCoroutineScope()
 
-    AppBackground {
+    AppBackground(calm = true) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(horizontal = 56.dp, vertical = 32.dp),

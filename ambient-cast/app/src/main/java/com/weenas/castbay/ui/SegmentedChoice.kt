@@ -101,7 +101,7 @@ fun <T> SegmentedChoice(
     val thumbWidth by animateDpAsState(bounds[selected]?.second ?: 0.dp, motion, label = "thumbWidth")
     // Unfocused, the choice stays visible but quieter, so the focused row stands out.
     val thumbColor by animateColorAsState(
-        if (focused) MaterialTheme.colorScheme.primary else Color(0x66FFFFFF),
+        if (focused) Color.White else Color(0x59FFFFFF),
         label = "thumbColor"
     )
 
@@ -156,7 +156,7 @@ fun <T> SegmentedChoice(
                     Text(
                         display(choice),
                         fontSize = 18.sp,
-                        color = if (index == selected) Color.White else Color.White.copy(alpha = 0.6f)
+                        color = if (index == selected) (if (focused) Color(0xFF111114) else Color.White) else Color.White.copy(alpha = 0.6f)
                     )
                 }
             }

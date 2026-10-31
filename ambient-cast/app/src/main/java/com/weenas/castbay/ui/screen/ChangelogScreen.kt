@@ -41,7 +41,7 @@ fun ChangelogScreen(viewModel: AirPlayViewModel) {
     val current = update ?: return
     val notes = current.notesSince(installed)
 
-    AppBackground {
+    AppBackground(calm = true) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(horizontal = 56.dp, vertical = 32.dp),

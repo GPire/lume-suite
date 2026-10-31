@@ -13,3 +13,11 @@ Una tele más tranquila. Tres partes que funcionan juntas: **TV Doctor** (limpia
 No se desinstala nada de la TV: las apps solo se desactivan.
 
 [English: full details, status and licences](README.md)
+
+### El teléfono como mando
+
+En Lume: Centro de control y el botón del teléfono. Escanea el código y escribe el número: se abre una superficie al estilo del mando de Apple TV (desliza para moverte, toca para elegir, mantén para Menú), con volumen, apps, búsqueda, perfiles y escenas de un toque. Permite una vez «Abrir apps desde el teléfono» (TV Doctor lo hace por ti).
+
+<p align="center"><img src="docs/img/phone-remote.jpg" alt="" width="260"></p>
+
+Si te ha servido, una estrella ayuda a que otros lo encuentren. Cuéntanos qué TV tienes en las Issues: vale más que cualquier otra cosa.

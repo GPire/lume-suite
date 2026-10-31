@@ -25,15 +25,18 @@ private val BACKGROUND_TONE = Color(0xFF0B0910)
  */
 private const val BACKGROUND_DIM = 0.76f
 
+/** Inner screens (Settings, Help, Health, About): the painting is only a hint of colour, so rows and text read clearly. */
+private const val CALM_DIM = 0.93f
+
 /**
  * The home and Settings backdrop: the launch artwork under a black veil, so text on top stays
  * readable. Playback screens keep a plain black background instead.
  */
 @Composable
-fun AppBackground(content: @Composable () -> Unit) {
+fun AppBackground(calm: Boolean = false, content: @Composable () -> Unit) {
     Box(modifier = Modifier.fillMaxSize().background(BACKGROUND_TONE)) {
         // The same painting wall as the waiting screen, so moving between screens never changes the room.
-        PaintingWall(dim = BACKGROUND_DIM)
+        PaintingWall(dim = if (calm) CALM_DIM else BACKGROUND_DIM)
         // Safe area: this Samsung (like many TVs) crops the edges, so nothing important sits within 3%.
         Box(modifier = Modifier.fillMaxSize().padding(horizontal = 32.dp, vertical = 18.dp)) { content() }
     }
