@@ -48,7 +48,7 @@ Your TV got slower and keeps showing ads. I made a free app that finds it, switc
 
 I built and open-sourced a tool that cleans smart TVs (Fire TV, Google TV, Android TV) without a command line: it recognises the model, switches off what slows it or sends data out in checked groups, and can undo everything. The interesting part was making something safe enough for non-technical people, and being honest about what is verified: https://github.com/GPire/lume-suite/blob/main/docs/SUPPORTED_TVS.md
 
-## Italiano (forum, gruppi Telegram e Facebook su Fire TV e Android TV, Reddit r/Italia, r/ItaliaPersonalFinance no)
+## Italiano (forum, gruppi Telegram e Facebook su Fire TV e Android TV, Reddit r/Italia)
 
 **Titolo:** Ho fatto un'app che pulisce Fire TV e Android TV con un solo pulsante (senza comandi, con annulla)
 
