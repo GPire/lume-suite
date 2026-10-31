@@ -13,7 +13,7 @@ Package data: Universal Android Debloater Next Generation (GPL-3.0), plus a cura
 Works on the Android family (Android TV, Google TV, Fire OS, Shield...). LG webOS, Samsung Tizen, Roku and
 VIDAA have no ADB: see the note printed by `detect` on those.
 """
-import argparse, json, os, subprocess, sys, time, urllib.request, re
+import argparse, json, os, socket, subprocess, sys, time, urllib.request, re
 
 FROZEN = getattr(sys, "frozen", False)   # the double-click app (PyInstaller): read-only files inside, the person's data outside
 HERE = getattr(sys, "_MEIPASS", None) or os.path.dirname(os.path.abspath(__file__))
@@ -113,6 +113,30 @@ def _builtin_adb(serial, args):
     return ""
 
 
+def probe(serial, wait=4):
+    """Is this TV ready? 'ok', 'auth' (it shows the "Allow debugging?" box and waits for the person) or 'fail'.
+    Never blocks for long: the box is shown to the person by the app, not hidden behind a 45 s wait."""
+    import shutil
+    host, _, port = serial.partition(":")
+    port = int(port or 5555)
+    if shutil.which("adb"):
+        try:
+            subprocess.run(["adb", "connect", serial], capture_output=True, text=True, timeout=15)
+            st = subprocess.run(["adb", "-s", serial, "get-state"], capture_output=True, text=True, timeout=10)
+            out = (st.stdout + st.stderr).lower()
+        except Exception:
+            return "fail"
+        return "ok" if out.strip().startswith("device") else "auth" if "unauthorized" in out else "fail"
+    import pyadb
+    try:
+        pyadb.connect(host, port, wait).close()
+        return "ok"
+    except socket.timeout:
+        return "auth"
+    except (OSError, ConnectionError):
+        return "fail"
+
+
 def adb(serial, *args, check=False):
     import shutil
     if not shutil.which("adb"):
@@ -124,18 +148,41 @@ def adb(serial, *args, check=False):
     return r.stdout.strip()
 
 
-def install_apk(serial, apk, progress=None):
-    """Put an app on the TV (or update it). Uses adb when it is installed, else the built-in client. Returns True on success."""
+def install_apk_text(serial, apk, progress=None):
+    """Put an app on the TV (or update it). Uses adb when it is installed, else the built-in client. Returns what the TV answered."""
     import shutil
     if FIXTURE is not None:
         FIXTURE.setdefault("installed", []).append(apk)
-        return True
+        return "Success"
     if shutil.which("adb"):
         r = subprocess.run(["adb"] + (["-s", serial] if serial else []) + ["install", "-r", apk], capture_output=True, text=True, timeout=300)
-        return "Success" in r.stdout
+        return r.stdout + r.stderr
     import pyadb
     host = (serial or "").split(":")[0]
-    return "Success" in pyadb.install(host, apk, int(serial.split(":")[1]) if serial and ":" in serial else 5555, progress)
+    return pyadb.install(host, apk, int(serial.split(":")[1]) if serial and ":" in serial else 5555, progress)
+
+
+def install_apk(serial, apk, progress=None):
+    return "Success" in install_apk_text(serial, apk, progress)
+
+
+# What an install failure means, in words for the person (the code is kept after it for a report).
+INSTALL_WHY = {
+    "UPDATE_INCOMPATIBLE": "c'è già una versione firmata in modo diverso (una versione di prova): toglila dalle Impostazioni > App della TV e riprova",
+    "VERSION_DOWNGRADE": "c'è già una versione più recente",
+    "INSUFFICIENT_STORAGE": "la TV non ha abbastanza spazio libero",
+    "OLDER_SDK": "questa TV ha un Android troppo vecchio",
+    "NO_MATCHING_ABIS": "questa TV ha un processore non supportato",
+}
+
+
+def install_why(text):
+    m = re.search(r"INSTALL_[A-Z_]*FAILED_([A-Z_]+)|FAILED_([A-Z_]+)", text)
+    code = (m.group(1) or m.group(2)) if m else ""
+    for k, v in INSTALL_WHY.items():
+        if k in text:
+            return v
+    return ("non riuscita (%s)" % (code or text.strip()[:60]))
 
 
 def sh(serial, command):

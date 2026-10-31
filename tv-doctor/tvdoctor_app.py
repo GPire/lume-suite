@@ -162,6 +162,12 @@ def enable_guide(brand, year, lang):
             "steps": [pick(x) for x in e["steps"]], "notes": notes, "os": {"tizen": "tizen", "webos": "webos", "roku": "roku", "vidaa": "vidaa"}.get(fam)}
 
 
+FIRE_MODELS = {"AFTKM": "Fire TV Stick 4K Max", "AFTKA": "Fire TV Stick 4K Max (2nd gen)", "AFTMM": "Fire TV Stick 4K", "AFTSS": "Fire TV Stick Lite",
+               "AFTSSS": "Fire TV Stick Lite (2nd gen)", "AFTT": "Fire TV Stick (2nd gen)", "AFTBAMR311": "Fire TV Stick (3rd gen)", "AFTMON001": "Fire TV Stick (3rd gen)",
+               "AFTN": "Fire TV (3rd gen)", "AFTB": "Fire TV (1st gen)", "AFTS": "Fire TV (2nd gen)", "AFTA": "Fire TV Cube", "AFTR": "Fire TV Cube (2nd gen)",
+               "AFTGAZL": "Fire TV Cube (3rd gen)", "AFTEU011": "Fire TV Omni", "AFTEU014": "Fire TV 4-Series", "AFTANNA": "Fire TV Omni QLED"}
+
+
 def find_tvs():
     if DEMO:
         return [{"kind": "adb", "serial": "demo:5555", "name": "Demo TV"}]
@@ -180,10 +186,19 @@ def find_tvs():
     addresses = sorted({f"{pre}.{i}" for i in range(1, 255)} | set(hints))
     with ThreadPoolExecutor(64) as ex:
         res = [r for r in ex.map(one, addresses) if r]
-    for r in res:
-        if r["kind"] == "adb":
-            T.adb(None, "connect", r["serial"])
-    return res
+    adbs = [r for r in res if r["kind"] == "adb"]
+    with ThreadPoolExecutor(8) as ex:
+        for r, state in zip(adbs, ex.map(lambda r: T.probe(r["serial"]), adbs)):
+            r["state"] = state
+            if state == "ok":   # a real name beats an address
+                try:
+                    mk, md = (T.sh(r["serial"], "getprop ro.product.manufacturer").strip(), T.sh(r["serial"], "getprop ro.product.model").strip())
+                    nice = FIRE_MODELS.get(md) or f"{mk} {md}".strip()
+                    own = re.sub(r"^Ambient Cast \((.*)\)$", r"\1", r["name"])   # our own AirPlay service names the TV after its owner
+                    r["name"] = nice + ("" if own == r["serial"].split(":")[0] else f" ({own})") if own != r["name"] or r["name"] != r["serial"].split(":")[0] else nice
+                except BaseException:
+                    pass
+    return [r for r in res if r["kind"] != "adb" or r["state"] != "fail"]
 
 
 def demo_fixture():
@@ -301,7 +316,9 @@ def install_suite(serial, d, files=None):
     res = []
     for apk, name, pkg in SUITE:
         try:
-            res.append({"app": name, "ok": bool(T.install_apk(serial, got["files"][apk]))})
+            out = T.install_apk_text(serial, got["files"][apk])
+            ok = "Success" in out
+            res.append({"app": name, "ok": ok} if ok else {"app": name, "ok": False, "why": T.install_why(out)})
         except Exception as e:
             res.append({"app": name, "ok": False, "why": str(e)[:120]})
     return res
@@ -407,7 +424,8 @@ class H(BaseHTTPRequestHandler):
             elif self.path == "/api/connect":
                 ip = re.sub(r"[^0-9.]", "", q.get("ip", ""))
                 r = classify(ip) or {"error": "nessuna TV riconosciuta a questo indirizzo"}
-                if r.get("kind") == "adb": T.adb(None, "connect", r["serial"])
+                if r.get("kind") == "adb": r["state"] = T.probe(r["serial"])
+            elif self.path == "/api/probe": r = {"state": T.probe(q["serial"])}
             elif self.path == "/api/inspect": r = inspect(q["serial"])
             elif self.path == "/api/report": r = {"url": report_url(q.get("serial", ""), str(q.get("outcome", ""))[:400])}
             elif self.path == "/api/apply": r = run_apply(q["serial"], install=bool(q.get("install")), replace_home=bool(q.get("replaceHome")), dns=bool(q.get("dns")), keep=q.get("keep") or [], anim=q.get("anim", True))
