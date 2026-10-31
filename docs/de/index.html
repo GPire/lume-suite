@@ -19,8 +19,8 @@ h2{font-size:22px;margin:0 0 6px}
 p{margin:0 0 14px}.dim{color:var(--dim)}
 .clock{font:300 clamp(70px,16vw,140px)/1 "Antonio","Arial Narrow",system-ui,sans-serif;letter-spacing:.02em;background:linear-gradient(#fff,rgba(255,255,255,.45));-webkit-background-clip:text;background-clip:text;color:transparent}
 .card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px;margin:18px 0;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
-.btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#111;font-weight:650;font-size:19px;padding:16px 26px;border-radius:40px;text-decoration:none;border:0;cursor:pointer;transition:transform .15s}
-.btn:hover{transform:scale(1.03)}.btn.ghost{background:var(--card);color:var(--text);border:1px solid var(--line)}
+.btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(180deg,#ffb340,#ff9f0a);color:#1a1000;box-shadow:0 8px 30px rgba(255,159,10,.32);font-weight:650;font-size:19px;padding:16px 26px;border-radius:40px;text-decoration:none;border:0;cursor:pointer;transition:transform .15s}
+.btn:hover{transform:scale(1.03)}.btn.ghost{background:var(--card);color:var(--text);border:1px solid var(--line);box-shadow:none}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .url{flex:1;min-width:260px;font:15px ui-monospace,Menlo,Consolas,monospace;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:14px;padding:14px 16px;overflow-wrap:break-word;word-break:normal}
 ol{padding-left:22px;margin:8px 0 0}li{margin:6px 0}details{margin:10px 0;padding:10px 0;border-top:1px solid var(--line)}summary{cursor:pointer;font-size:18px}ol.big li{margin:14px 0;line-height:1.45}.mobile .tvcard{display:none}.phone{border-color:rgba(255,159,10,.5)}.mobile .pccard{opacity:.92}
@@ -33,7 +33,7 @@ a{color:#7ab8ff}small{color:var(--dim)}
 <body>
 <main>
   <div class="clock" aria-hidden="true">18:30</div>
-  <h1 data-t="h1">Ein ruhigerer Fernseher.</h1>
+  <h1 data-t="h1">Dein langsamer Fernseher, in zwei Minuten repariert.</h1>
   <p class="dim" data-t="lead">TV Doctor findet deinen Fernseher, installiert Lume und Lume Cast und schaltet sicher und immer umkehrbar ab, was ihn bremst. Keine Befehle, keine Entwicklerwerkzeuge.</p>
 
   <div class="card phone" id="phonecard" hidden>

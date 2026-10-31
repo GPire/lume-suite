@@ -16,6 +16,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 select{background:var(--glass);color:var(--t1);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font:inherit;font-size:15px}
 .dots{display:flex;gap:8px;margin-bottom:20px}.dots i{height:5px;flex:1;border-radius:9px;background:var(--line);transition:background .4s}.dots i.on{background:var(--blue)}
 .card{background:var(--glass);border:1px solid var(--line);border-radius:28px;padding:32px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);animation:in .45s ease both}
+.gain{display:inline-block;background:rgba(48,209,88,.16);color:var(--ok);border-radius:20px;padding:4px 16px;font-weight:700;font-size:20px;opacity:0;transform:scale(.7);transition:opacity .4s,transform .6s cubic-bezier(.2,.9,.25,1.5)}.gain.on{opacity:1;transform:none}
 @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.card{animation:none}*{transition:none!important}}
 h1{font-size:32px;line-height:1.15;margin:0 0 10px;font-weight:700}
@@ -113,14 +114,17 @@ function autoCountdown(){let n=12;const bar=document.createElement("div");bar.cl
 async function doApply(){clearInterval(autoT);const inst=$("#inst")?$("#inst").checked:false;loading(t("working"),3);const r=await api("/api/apply",{serial:tv,install:inst,replaceHome:$("#rh")?$("#rh").checked:false,smarttube:$("#stube")?$("#stube").checked:false,dns:$("#dns")?$("#dns").checked:false,anim:$("#anim")?$("#anim").checked:true,keep:[...document.querySelectorAll(".kp:checked")].map(x=>x.dataset.g),ultra,selected:document.querySelector(".it")?[...document.querySelectorAll(".it:checked")].map(x=>x.dataset.p):undefined});
  window.lastOutcome=(r.rolledBack?'rolled back after the TV stopped answering; ':'')+(r.done||0)+' apps switched off'+(r.suite?'; suite: '+r.suite.map(x=>x.app+(x.ok?' ok':' FAILED')).join(', '):'');
  const chk='<svg class="check" viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="30"/><path d="M23 37l9 9 18-20"/></svg>';
- const mem=r.before&&r.after?'<div class="cmp"><span class="small">'+t("free")+'</span><div class="big">'+r.before+'</div><span class="arrow">&rarr;</span><div class="big ok">'+r.after+' <small>MB</small></div></div>':'';
+ const mem=r.before&&r.after?'<div class="cmp"><span class="small">'+t("free")+'</span><div class="big">'+r.before+'</div><span class="arrow">&rarr;</span><div class="big ok" id="cnt">'+r.before+' <small>MB</small></div></div>'+(r.after>r.before?'<div style="margin:6px 0 4px"><span class="gain" id="gn">+'+(r.after-r.before)+' MB</span></div>':''):'';
  const head=r.rolledBack?'<h1>'+t("done")+'</h1><div class="note">'+t("rb")+'</div>':chk+'<h1 class="ok">'+t("done")+'</h1><p><b>'+(r.done||0)+'</b> '+t("doneS")+'</p>';
  const su=r.suite?'<h3 style="margin:16px 0 4px;font-size:16px">'+t("suiteD")+'</h3>'+r.suite.map(x=>'<div class="note">'+(x.ok?'&#10003; ':'&#10007; ')+esc(x.app)+(x.ok?'':' - '+t("suiteNo")+(x.why?' ('+esc(x.why)+')':''))+'</div>').join(''):'';
  const ho=r.home===true?'<div class="note">&#10003; '+t("homeOk")+'</div>':r.home===false?'<div class="note">'+t("homeNo")+'</div>':'';
  const lk=(r.linked&&r.linked.length)?'<h3 style="margin:16px 0 4px;font-size:16px">'+t("linkT")+'</h3>'+r.linked.map(x=>'<div class="note">&#10003; '+esc(t({screensaver:"l_screensaver","home-button":"l_home",airplay:"l_airplay"}[x]||x))+'</div>').join(''):'';
  const shr=(r.before&&r.after&&r.after>r.before)?'<div class="row" style="margin-top:12px"><button class="ghost" id="sh">'+t("shareB")+'</button><span class="small" id="shm"></span></div>':'';
  show(head+mem+su+lk+ho+shr+'<div class="row"><button class="ghost" id="u">'+t("undo")+'</button><button class="ghost" id="h">'+t("again")+'</button></div>',3);
- $("#u").onclick=doUndo;$("#h").onclick=home;if($("#sh"))$("#sh").onclick=async()=>{try{await navigator.clipboard.writeText(t("shareT").replace("{a}",r.after).replace("{b}",r.before));$("#shm").textContent=t("copiedT")}catch(_){}}}
+ countUp(r.before,r.after);$("#u").onclick=doUndo;$("#h").onclick=home;if($("#sh"))$("#sh").onclick=async()=>{try{await navigator.clipboard.writeText(t("shareT").replace("{a}",r.after).replace("{b}",r.before));$("#shm").textContent=t("copiedT")}catch(_){}}}
+function countUp(a,b){const el=document.getElementById("cnt"),g=document.getElementById("gn");if(!el||!(b>a))return;
+ const set=v=>{el.firstChild.nodeValue=v+" "};if(matchMedia("(prefers-reduced-motion:reduce)").matches){set(b);if(g)g.classList.add("on");return}
+ const t0=performance.now(),D=1300;(function f(t){const k=Math.min(1,(t-t0)/D),e=1-Math.pow(1-k,3);set(Math.round(a+(b-a)*e));if(k<1)requestAnimationFrame(f);else if(g)g.classList.add("on")})(t0)}
 async function doUndo(){loading(t("working"),3);await api("/api/undo",{serial:tv});
  show('<h1 class="ok">'+t("undone")+'</h1><div class="row"><button id="h">'+t("again")+'</button></div>',3);$("#h").onclick=home}
 function closedPick(){const y=new Date().getFullYear();show('<h1>'+t("gT")+'</h1><p>'+t("gS")+'</p><div class="row"><select id="os"><option value="roku">Roku TV</option><option value="vidaa">Hisense VIDAA</option><option value="tizen">'+t("s").Samsung+'</option><option value="webos">'+t("s").LG+'</option></select><select id="yr">'+Array.from({length:y-2014},(_,i)=>y-i).map(v=>'<option>'+v+'</option>').join('')+'</select></div><div class="row"><button id="g">'+t("go")+'</button><button class="ghost" id="b">'+t("back")+'</button></div>',1);

@@ -15,7 +15,7 @@
 
 <p align="center"><img src="docs/img/lume-home.jpg" alt="Lume home screen with a big clock, a dock of app cards and a painting as background" width="720"></p>
 
-**Your TV got slower, louder and nosier. This puts it right in two minutes.** In our test on a Fire TV Stick 4K Max the stock home screen dropped frames 69 to 81 percent of the time; Lume dropped 28 percent, and about 25 MB more memory came free after the cleaning (one TV, one test; yours will differ, and the numbers are in [docs/DEVICE_SUPPORT.md](docs/DEVICE_SUPPORT.md)). No coding agent, no command line, no account.
+**Your TV got slower, louder and nosier, and nobody told you why. One button puts it right in two minutes, and you can undo every step.** In our test on a Fire TV Stick 4K Max the stock home screen dropped frames 69 to 81 percent of the time; Lume dropped 28 percent, and about 25 MB more memory came free after the cleaning (one TV, one test; yours will differ, and the numbers are in [docs/DEVICE_SUPPORT.md](docs/DEVICE_SUPPORT.md)). No coding agent, no command line, no account.
 
 **A calmer TV.** Open one app on your computer: it finds your TV by itself, installs a clean home screen, and switches off what slows it down or watches you. Nothing is deleted and everything can be undone. No coding agent, no command line, no account.
 

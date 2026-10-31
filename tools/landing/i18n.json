@@ -32,7 +32,7 @@
   "dlLin": "Download for Linux",
   "cmdT": "Or one command",
   "cmdS": "Paste it into Terminal (Mac, Linux) or PowerShell (Windows): it downloads TV Doctor, checks its signature and starts it by itself.",
-  "h1": "A calmer TV.",
+  "h1": "Your slow TV, fixed in two minutes.",
   "lead": "TV Doctor finds your TV, installs Lume and Lume Cast, and turns off, safely and always reversibly, what slows it down. No commands, no developer tools.",
   "pcT": "From a computer",
   "pcS": "Works with any TV on your Wi-Fi.",
@@ -58,7 +58,7 @@
   "mDesc": "TV Doctor finds your TV, installs Lume and Lume Cast, and switches off, safely and always reversibly, what slows it down. Free and open source."
  },
  "es": {
-  "h1": "Una TV más tranquila.",
+  "h1": "Tu TV lenta, arreglada en dos minutos.",
   "lead": "TV Doctor encuentra tu TV, instala Lume y Lume Cast y apaga, con seguridad y siempre de forma reversible, lo que la ralentiza. Sin comandos ni herramientas de desarrollo.",
   "pcT": "Desde un ordenador",
   "pcS": "Funciona con cualquier TV de tu Wi-Fi.",
@@ -109,7 +109,7 @@
   "mDesc": "TV Doctor encuentra tu TV, instala Lume y Lume Cast y apaga, sin riesgos y siempre de forma reversible, lo que la ralentiza. Gratis y de código abierto."
  },
  "de": {
-  "h1": "Ein ruhigerer Fernseher.",
+  "h1": "Dein langsamer Fernseher, in zwei Minuten repariert.",
   "lead": "TV Doctor findet deinen Fernseher, installiert Lume und Lume Cast und schaltet sicher und immer umkehrbar ab, was ihn bremst. Keine Befehle, keine Entwicklerwerkzeuge.",
   "pcT": "Vom Computer",
   "pcS": "Funktioniert mit jedem Fernseher in deinem WLAN.",
@@ -160,7 +160,7 @@
   "mDesc": "TV Doctor findet deinen Fernseher, installiert Lume und Lume Cast und schaltet sicher und umkehrbar ab, was ihn bremst. Kostenlos und Open Source."
  },
  "fr": {
-  "h1": "Une TV plus calme.",
+  "h1": "Votre TV lente, réparée en deux minutes.",
   "lead": "TV Doctor trouve votre TV, installe Lume et Lume Cast, et désactive, sans risque et toujours de façon réversible, ce qui la ralentit. Aucune commande, aucun outil de développeur.",
   "pcT": "Depuis un ordinateur",
   "pcS": "Fonctionne avec toute TV de votre Wi-Fi.",
@@ -211,7 +211,7 @@
   "mDesc": "TV Doctor trouve votre TV, installe Lume et Lume Cast, et désactive sans risque et toujours de façon réversible ce qui la ralentit. Gratuit et open source."
  },
  "pt": {
-  "h1": "Uma TV mais calma.",
+  "h1": "A sua TV lenta, resolvida em dois minutos.",
   "lead": "O TV Doctor encontra a sua TV, instala o Lume e o Lume Cast e desliga, com segurança e sempre de forma reversível, o que a abranda. Sem comandos nem ferramentas de programador.",
   "pcT": "A partir de um computador",
   "pcS": "Funciona com qualquer TV na sua Wi-Fi.",
