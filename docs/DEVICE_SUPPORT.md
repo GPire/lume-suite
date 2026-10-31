@@ -27,3 +27,13 @@
 | Lume Cast | English, Italian, Spanish, German, French, Portuguese |
 
 Translations were written by the author with machine help and have not been reviewed by native speakers. Corrections are welcome.
+
+## Phone remote and Lume Cast screens (2026-10-31)
+
+| Part | Tested on | Not yet |
+|---|---|---|
+| Phone remote: pairing, apps, search, volume, media keys, scenes, profiles list | Fire TV Stick 4K Max, driven from a computer over the network | A real phone swipe session; several TVs; Google TV |
+| Phone remote: voice assistant button | Starts Alexa's screen on Fire OS, but Alexa only listens from the remote's own button | Google Assistant / Gemini on Google TV |
+| Phone remote: typing into other apps | Needs Lume's accessibility switch; the check that it refuses cleanly without it passed | Typing with the switch on, in a real search box |
+| Lume Cast: connected banner, options hint, redesigned Settings, Help, Health, About | Fire TV Stick 4K Max (pictures taken on the TV) | Mirroring and music with the new screens in use |
+
