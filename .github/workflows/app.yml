@@ -16,7 +16,7 @@ jobs:
       matrix:
         include:
           - { os: macos-14, name: TV-Doctor-mac-apple-chip }
-          - { os: macos-13, name: TV-Doctor-mac-intel }
+          - { os: macos-15-intel, name: TV-Doctor-mac-intel }
           - { os: windows-latest, name: TV-Doctor-windows }
           - { os: ubuntu-latest, name: TV-Doctor-linux }
     runs-on: ${{ matrix.os }}

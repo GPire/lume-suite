@@ -1,6 +1,6 @@
 # Launch readiness (candid)
 
-Status on 2026-10-30. "Done" means built and checked by the author. Nothing here is marketing: it is the list of what could go wrong on a global launch.
+Status on 2026-10-31 (updated; first written 2026-10-30). "Done" means built and checked by the author. Nothing here is marketing: it is the list of what could go wrong on a global launch.
 
 ## 1. Decisions (taken on 2026-10-30, with reasons)
 
@@ -11,7 +11,7 @@ Status on 2026-10-30. "Done" means built and checked by the author. Nothing here
 | Repository name | `lume-suite` | Says what it is; the three parts live in one place. |
 | Credits | Kept as in `NOTICE.md` | They are licence obligations (Apache-2.0 and GPL-3.0), not a choice. |
 
-Still open: a trademark search for "Lume" and "Lume Cast" (only a quick web search was done; a minimal launcher called "Lumen" exists); the release signing key (the APKs here use a throw-away debug key, and users cannot update across signatures); a monitored e-mail for security and legal requests.
+Still open: a trademark search for "Lume" and "Lume Cast" (only a quick web search was done; a minimal launcher called "Lumen" exists); the release signing key is now in place (the published APKs are signed with it; keep two private copies, since without it no installed copy can be updated); a monitored e-mail for security and legal requests.
 
 ## 2. Legal and intellectual property
 
@@ -35,7 +35,7 @@ Open: only a Fire TV Stick 4K Max was tested on real hardware; Fire OS 8.1 has r
 ## 4. Quality and testing
 
 - Automated: 8 simulated TV scenarios and a protocol test for the built-in ADB client. None for Lume or Lume Cast.
-- Not done: a test matrix across Google TV and Android TV models; AirPlay tests with several iPhone and iOS versions; the CI workflows have never run on GitHub.
+- Not done: a test matrix across Google TV and Android TV models; AirPlay tests with several iPhone and iOS versions; the TV Doctor app workflow has now run on GitHub (Linux, Windows, Mac Apple chip built; the Intel Mac job moved from the retired `macos-13` to `macos-15-intel`).
 - Not audited: which paintings the gallery can fetch and their licences; right-to-left layout in Lume (only TV Doctor has it); screen-reader support.
 
 ## 5. Distribution reality
