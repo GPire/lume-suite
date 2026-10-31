@@ -33,7 +33,7 @@ jobs:
         shell: bash
         run: for t in test_*.py; do python "$t" > /dev/null || exit 1; done
       - run: python tv-doctor/build_app.py ${{ matrix.name }}
-      - name: Package (keeps the permission to run: a browser download loses it)
+      - name: Package so the executable bit survives a browser download
         shell: bash
         run: |
           cd tv-doctor/dist-app
