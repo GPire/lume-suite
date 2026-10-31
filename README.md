@@ -15,6 +15,8 @@
 
 <p align="center"><img src="docs/img/lume-home.jpg" alt="Lume home screen with a big clock, a dock of app cards and a painting as background" width="720"></p>
 
+**Your TV got slower, louder and nosier. This puts it right in two minutes.** In our test on a Fire TV Stick 4K Max the stock home screen dropped frames 69 to 81 percent of the time; Lume dropped 28 percent, and about 25 MB more memory came free after the cleaning (one TV, one test; yours will differ, and the numbers are in [docs/DEVICE_SUPPORT.md](docs/DEVICE_SUPPORT.md)). No coding agent, no command line, no account.
+
 **A calmer TV.** Open one app on your computer: it finds your TV by itself, installs a clean home screen, and switches off what slows it down or watches you. Nothing is deleted and everything can be undone. No coding agent, no command line, no account.
 
 ## Start here (3 steps)
@@ -87,3 +89,8 @@ This is early software, tested on one real device. Read [docs/LAUNCH_READINESS.m
 ## Licences
 
 Each part has its own licence, listed in [LICENSE.md](LICENSE.md). Lume is derived from Hume Launcher by Petrobot (Apache-2.0) and Lume Cast from CastBay by weenas (GPL-3.0); credits in [NOTICE.md](NOTICE.md).
+
+## Help it reach other people
+
+If this made your TV better, a star on this page is the cheapest way to help someone with the same TV find it. Telling us which TV you have is worth more: use *Report your TV* in the app or open an [issue](https://github.com/GPire/lume-suite/issues/new/choose). Questions and ideas: [Discussions](https://github.com/GPire/lume-suite/discussions). Security: see [SECURITY.md](SECURITY.md). Maintainer: [@GPire](https://github.com/GPire).
+

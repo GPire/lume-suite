@@ -1,5 +1,7 @@
 # Credits
 
+Copyright 2026 Lume Suite contributors, for the new code and the modifications described in `LICENSE.md`. The credits below are licence obligations and are kept in full.
+
 - **Hume Launcher** by Petrobot, Apache-2.0: the starting point of Lume.
 - **tvOS Launcher** by techgenius, Apache-2.0: the Recent Apps screen in Lume is adapted from it (see lume/NOTICE for the changes).
 - **CastBay** by weenas, GPL-3.0: the starting point of Lume Cast. **UxPlay** (GPL-3.0) and **OpenSSL** are bundled inside it.

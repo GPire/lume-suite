@@ -818,6 +818,16 @@ public class SettingsActivity extends Activity {
         row("Based on", () -> "Hume Launcher, Petrobot", () -> { });
         row("Weather", () -> Weather.sourceName(Weather.source(this)), () -> { });
         row("News", () -> News.sources(this).size() + " newsrooms", () -> { });
+        if (UpdateCheck.newer == null) UpdateCheck.check(this, this::refreshAll);   // only while this page is open, never in the background
+        row("Updates", UpdateCheck::describe, () -> {
+            String n = UpdateCheck.newer;
+            if (n != null && !n.isEmpty() && !n.equals("?")) {
+                Toast.makeText(this, It.t("Open this page with Downloader or a browser:") + " " + UpdateCheck.PAGE, Toast.LENGTH_LONG).show();
+            } else {
+                UpdateCheck.newer = null;
+                UpdateCheck.check(this, this::refreshAll);
+            }
+        });
     }
 
     boolean screensaverAllowed() {

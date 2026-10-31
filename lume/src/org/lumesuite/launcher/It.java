@@ -275,6 +275,12 @@ final class It {
         q("Transition", "Transizione", "Transición", "Übergang", "Transition", "Transição");
         q("Slide", "Scorrimento", "Deslizar", "Gleiten", "Glisser", "Deslizar");
         q("Fade", "Dissolvenza", "Fundido", "Überblenden", "Fondu", "Desvanecer");
+        q("Updates", "Aggiornamenti", "Actualizaciones", "Updates", "Mises à jour", "Atualizações");
+        q("Checking\u2026", "Controllo\u2026", "Comprobando\u2026", "Prüfe\u2026", "Vérification\u2026", "A verificar\u2026");
+        q("Up to date", "Aggiornato", "Al día", "Aktuell", "À jour", "Atualizado");
+        q("Could not check", "Controllo non riuscito", "No se pudo comprobar", "Prüfung fehlgeschlagen", "Vérification impossible", "Não foi possível verificar");
+        q("New version", "Nuova versione", "Nueva versión", "Neue Version", "Nouvelle version", "Nova versão");
+        q("Open this page with Downloader or a browser:", "Apri questa pagina con Downloader o un browser:", "Abre esta página con Downloader o un navegador:", "Öffne diese Seite mit Downloader oder einem Browser:", "Ouvrez cette page avec Downloader ou un navigateur :", "Abra esta página com o Downloader ou um navegador:");
         q("Voice assistant", "Assistente vocale", "Asistente de voz", "Sprachassistent", "Assistant vocal", "Assistente de voz");
         q("None on this TV", "Nessuno su questa TV", "Ninguno en esta TV", "Keiner auf diesem Fernseher", "Aucun sur ce téléviseur", "Nenhum nesta TV");
         q("This TV has no voice assistant app.", "Questa TV non ha un\u2019app di assistente vocale.", "Esta TV no tiene una aplicación de asistente de voz.", "Dieser Fernseher hat keine Sprachassistenten-App.", "Ce téléviseur n\u2019a pas d\u2019application d\u2019assistant vocal.", "Esta TV não tem uma aplicação de assistente de voz.");

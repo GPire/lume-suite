@@ -85,13 +85,15 @@ for base, dirs, files in os.walk(ROOT):
             continue
         for n, line in enumerate(text.splitlines(), 1):
             low = line.lower()
+            if "<!--contact-->" in line:   # the maintainer's public contact, on purpose
+                continue
             for label, rx in PATTERNS:
                 m = rx.search(line)
                 if not m:
                     continue
                 if label == "private address" and is_test(rel):   # sample addresses in tests are not anyone's network
                     continue
-                if label == "e-mail" and ("this@" in line or m.group(0) == "git@github.com"):   # Kotlin labels and clone URLs
+                if label == "e-mail" and ("this@" in line or m.group(0) == "git@github.com" or "<!--contact-->" in line):   # Kotlin labels and clone URLs
                     continue
                 hits.append((rel, n, label, m.group(0)))
             for w in WORDS:
