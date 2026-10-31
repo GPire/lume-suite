@@ -9,4 +9,5 @@ if not os.path.exists(path):
 have = json.load(open(path, encoding="utf-8"))
 assert have["fire"]["safe"] == T.FIRE_SAFE and have["google"]["safe"] == T.GOOGLE_TV_SAFE, "run tools/export_lists.py"
 assert set(have["never"]["exact"]) == set(T.NEVER_EXACT) and have["never"]["words"] == list(T.NEVER_WORDS), "run tools/export_lists.py"
+assert [g["id"] for g in have["groups"]] == [g for g, _, _ in T.KEEP_GROUPS], "run tools/export_lists.py"
 print("TUTTO OK liste uguali")

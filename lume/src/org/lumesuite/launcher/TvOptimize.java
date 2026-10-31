@@ -29,6 +29,32 @@ final class TvOptimize {
         String home = "";
     }
 
+    /** The plan the guided wizard made, handed from its "allow" page to its "choose" page. */
+    static Plan current;
+
+    /** Which thing a person may want to keep an app for (voice assistant, casting...), or null. */
+    static String group(Context c, String pkg) {
+        try {
+            JSONArray gs = lists(c).getJSONArray("groups");
+            for (int i = 0; i < gs.length(); i++) {
+                JSONObject g = gs.getJSONObject(i);
+                JSONArray w = g.getJSONArray("words");
+                for (int k = 0; k < w.length(); k++) if (pkg.toLowerCase(Locale.ROOT).contains(w.getString(k))) return g.getString("id");
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+    static boolean keepByDefault(Context c, String id) {
+        try {
+            JSONArray gs = lists(c).getJSONArray("groups");
+            for (int i = 0; i < gs.length(); i++) if (gs.getJSONObject(i).getString("id").equals(id)) return gs.getJSONObject(i).getBoolean("keep");
+        } catch (Exception ignored) {
+        }
+        return false;
+    }
+
     static final class Result {
         int done;
         boolean rolledBack;
@@ -116,11 +142,14 @@ final class TvOptimize {
                         sp.edit().putStringSet("disabled", new HashSet<>(saved)).apply();
                     }
                 } catch (java.io.IOException e) {
+                    android.util.Log.w("LumeOptimize", "disable failed: " + p, e);
                     r.rolledBack = true;   // the TV stopped answering in the middle of a group: put the group back
                     break;
                 }
             }
-            if (r.rolledBack || !healthy(a, plan.home)) {
+            boolean ok = !r.rolledBack && healthy(a, plan.home);
+            if (!ok) {
+                android.util.Log.w("LumeOptimize", "group rolled back (health check failed or the TV stopped answering)");
                 for (String p : done) {
                     try {
                         a.shell("pm enable " + p);

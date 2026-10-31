@@ -83,19 +83,27 @@ final class AdbClient implements Closeable {
         }
     }
 
+    private int nextId = 1;
+
     String shell(String command) throws IOException {
-        send(A_OPEN, 1, 0, ("shell:" + command + "\0").getBytes());
+        final int id = nextId++;   // a new channel number per command: the TV may still be closing the last one
+        send(A_OPEN, id, 0, ("shell:" + command + "\0").getBytes());
         ByteArrayOutputStream res = new ByteArrayOutputStream();
+        int remote = 0;
         boolean ready = false;
         while (true) {
             ByteBuffer m = recv();
-            int cmd = m.getInt(0), a0 = m.getInt(4);
+            int cmd = m.getInt(0), a0 = m.getInt(4), a1 = m.getInt(8);
+            if (a1 != id && cmd != A_CNXN) continue;   // another channel's leftovers
             if (cmd == A_OKAY) {
+                remote = a0;
                 ready = true;
             } else if (cmd == A_WRTE) {
                 res.write(payload);
-                send(A_OKAY, 1, a0, new byte[0]);
+                send(A_OKAY, id, a0, new byte[0]);
             } else if (cmd == A_CLSE) {
+                if (remote == 0) remote = a0;
+                send(A_CLSE, id, remote, new byte[0]);
                 break;
             }
         }

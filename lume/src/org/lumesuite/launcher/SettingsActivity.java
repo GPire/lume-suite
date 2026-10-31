@@ -536,6 +536,7 @@ public class SettingsActivity extends Activity {
     }
 
     void pageOptimize() {
+        row("Guided cleaning", () -> "", () -> startActivity(new Intent(this, SetupActivity.class).putExtra("only_clean", true)));
         row("Check this TV", () -> optStatus.isEmpty() ? "" : optStatus, () -> optCheck(null));
         row("Clean now", () -> optPlan != null ? It.f("%d apps", optPlan.safe.size()) : "", this::optClean);
         row("Undo", () -> TvOptimize.saved(this).isEmpty() ? "" : It.f("%d apps off", TvOptimize.saved(this).size()), this::optUndo);

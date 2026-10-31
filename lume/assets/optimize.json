@@ -68,19 +68,6 @@
     "com.mitv.tvhome.atv": "Mi TV home (PatchWall)"
    }
   },
-  "sony": {
-   "safe": {
-    "com.sony.dtv.promos": "Sony promotions",
-    "com.sony.dtv.sonyselect": "Sony Select promo row",
-    "com.sony.dtv.multiscreendemo": "Demo screen",
-    "com.sony.dtv.ecodashboard": "Eco dashboard",
-    "com.sony.dtv.smarthelp": "Smart help pop-ups"
-   },
-   "caution": {
-    "com.sony.dtv.helpguidecontents": "Help guide contents",
-    "com.sony.dtv.sonytab": "Sony tab"
-   }
-  },
   "nvidia": {
    "safe": {
     "com.nvidia.stats": "Usage statistics",
@@ -109,8 +96,135 @@
     "com.tcl.usercenter": "TCL user centre",
     "com.tcl.tvweishi": "TCL tvweishi service"
    }
+  },
+  "sony": {
+   "safe": {
+    "com.sony.dtv.promos": "Sony promotions",
+    "com.sony.dtv.sonyselect": "Sony Select promo row",
+    "com.sony.dtv.multiscreendemo": "Demo screen",
+    "com.sony.dtv.ecodashboard": "Eco dashboard",
+    "com.sony.dtv.smarthelp": "Smart help pop-ups"
+   },
+   "caution": {
+    "com.sony.dtv.helpguidecontents": "Help guide contents",
+    "com.sony.dtv.sonytab": "Sony tab"
+   }
   }
  },
+ "groups": [
+  {
+   "id": "assistant",
+   "words": [
+    "katniss",
+    "alexa",
+    "vizzini",
+    "voice",
+    "assistant"
+   ],
+   "keep": true
+  },
+  {
+   "id": "cast",
+   "words": [
+    "mediashell",
+    "chromecast",
+    "cast.receiver",
+    "airplay"
+   ],
+   "keep": true
+  },
+  {
+   "id": "games",
+   "words": [
+    "games",
+    "gamehub",
+    "luna"
+   ],
+   "keep": false
+  },
+  {
+   "id": "music",
+   "words": [
+    "music"
+   ],
+   "keep": false
+  },
+  {
+   "id": "shopping",
+   "words": [
+    "shoptv",
+    "shopping"
+   ],
+   "keep": false
+  },
+  {
+   "id": "video",
+   "words": [
+    "youtube.tvunplugged",
+    "videos",
+    "minitv",
+    "tubitv",
+    "netflix",
+    "disney",
+    "amazonvideo"
+   ],
+   "keep": false
+  },
+  {
+   "id": "screensaver",
+   "words": [
+    "dreamx",
+    "dreams",
+    "backdrop",
+    "screensaver"
+   ],
+   "keep": false
+  },
+  {
+   "id": "kids",
+   "words": [
+    "tahoe",
+    "kids"
+   ],
+   "keep": false
+  },
+  {
+   "id": "smarthome",
+   "words": [
+    "smarthome",
+    "homekit"
+   ],
+   "keep": false
+  },
+  {
+   "id": "recommendations",
+   "words": [
+    "recommendations",
+    "tvrecommendations",
+    "sonyselect",
+    "promos",
+    "mitvplus",
+    "michannel"
+   ],
+   "keep": false
+  },
+  {
+   "id": "privacy",
+   "words": [
+    "acr",
+    "feedback",
+    "logging",
+    "adservices",
+    "ondevicepersonalization",
+    "stats",
+    "diag",
+    "analyser",
+    "bootad",
+    "adshow"
+   ],
+   "keep": false
+  }
+ ],
  "never": {
   "exact": [
    "amazon.fireos",

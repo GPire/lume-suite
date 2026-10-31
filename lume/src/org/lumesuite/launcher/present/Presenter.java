@@ -136,6 +136,11 @@ public final class Presenter {
         return pairing.pin;
     }
 
+    /** A QR code for any text (the project page, for TVs that need the computer). */
+    public static android.graphics.Bitmap qrOf(String text, int size) {
+        return Qr.bitmap(text, size);
+    }
+
     /** QR code for the admin address (Settings shows it with the pairing code). */
     public static android.graphics.Bitmap qr(int size) {
         return Qr.bitmap(address(), size);

@@ -78,6 +78,15 @@ public class SetupActivity extends Activity {
         setContentView(root);
         Clicks.quiet(root);
 
+        if (getIntent().getBooleanExtra("only_clean", false)) {   // the guided cleaning, from Settings or from first run
+            onlyClean = true;
+            cleanNeedsComputer = getIntent().getBooleanExtra("computer", false);   // adb: --ez computer true shows the computer page
+            steps.add(this::cleanGuide);
+            steps.add(this::cleanChoose);
+            steps.add(this::cleanDone);
+            show(0, 0);
+            return;
+        }
         onlyLook = getIntent().getBooleanExtra("only_look", false);   // from Settings: just the looks, then back
         if (onlyLook) {
             steps.add(this::look);
@@ -88,6 +97,7 @@ public class SetupActivity extends Activity {
         steps.add(this::profile);
         steps.add(this::look);
         steps.add(this::optimize);
+        steps.add(this::cleanOffer);
         // Home content, weather and presentation decide themselves (our gallery on the shelf, weather on, presentation off):
         // a first run is five pages, and each of those stays one step away in Settings.
         steps.add(this::homeAndPermissions);
@@ -129,15 +139,17 @@ public class SetupActivity extends Activity {
         page.animate().alpha(1f).translationX(0).setDuration(Motion.d(dir == 0 ? 120 : 320)).start();
     }
 
-    boolean onlyLook;
+    boolean onlyLook, onlyClean;
 
     void next() {
         if (onlyLook) { finish(); return; }
+        if (onlyClean && index == steps.size() - 1) { finish(); return; }
         show(index + 1, 1);
     }
 
     void back() {
         if (onlyLook) { finish(); return; }
+        if (onlyClean && index == 0) { finish(); return; }
         if (index > 0) show(index - 1, -1);
     }
 
@@ -826,6 +838,231 @@ public class SetupActivity extends Activity {
         w.status(wifi ? "✓ Allowed" : "Allow  ›", wifi);
         buttons("Continue", this::next);
         dots();
+    }
+
+    // ---------------------------------------------------------------- guided cleaning (no computer)
+
+    /** First run: one optional page that opens the guided cleaning. */
+    void cleanOffer() {
+        title("Make it lighter");
+        subtitle("Lume can switch off apps that slow your TV down or watch you. It takes a minute and you can undo it.");
+        buttons("Start", () -> startActivity(new Intent(this, SetupActivity.class).putExtra("only_clean", true)));
+        TextView skip = button("Skip", false, this::next);
+        ((LinearLayout) page.getChildAt(page.getChildCount() - 1)).addView(skip);
+        dots();
+    }
+
+    boolean cleanAllowed, cleanBusy;
+    String cleanNote = "";
+    int cleanState = -1;
+
+    boolean devOn() {
+        try {
+            return android.provider.Settings.Global.getInt(getContentResolver(), android.provider.Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0) == 1;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    boolean adbOn() {
+        try {
+            return android.provider.Settings.Global.getInt(getContentResolver(), android.provider.Settings.Global.ADB_ENABLED, 0) == 1;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /** 0: developer options off, 1: debugging off, 2: ready to allow, 3: allowed. */
+    int cleanProgress() {
+        return cleanAllowed ? 3 : !devOn() ? 0 : !adbOn() ? 1 : 2;
+    }
+
+    void openSettingsFor(String action) {
+        try {
+            startActivity(new Intent(action).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        } catch (Exception e) {
+            try {
+                startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
+    boolean cleanNeedsComputer;
+
+    /** Android 11+ TVs that only offer encrypted Wireless debugging: the same cleaning, from a computer, in one scan. */
+    void cleanComputer() {
+        title("This TV needs a computer once");
+        subtitle("It only offers Wireless debugging, which a TV cannot use on itself. Scan this with a phone or open the address on a computer: TV Doctor finds this TV and does the rest.");
+        ImageView qr = new ImageView(this);
+        qr.setImageBitmap(org.lumesuite.launcher.present.Presenter.qrOf("https://gpire.github.io/lume-suite/", u(150)));
+        LinearLayout.LayoutParams qlp = new LinearLayout.LayoutParams(u(150), u(150));
+        qlp.topMargin = u(8);
+        page.addView(qr, qlp);
+        TextView url = subtitle("gpire.github.io/lume-suite");
+        buttons("Done", () -> { if (onlyClean) finish(); else next(); });
+        ((LinearLayout) page.getChildAt(page.getChildCount() - 1)).addView(button("Try again", false, () -> { cleanNeedsComputer = false; show(index, 0); }));
+    }
+
+    void cleanGuide() {
+        if (cleanNeedsComputer) {
+            cleanComputer();
+            return;
+        }
+        boolean fire = android.os.Build.MANUFACTURER.equalsIgnoreCase("Amazon");
+        int st = cleanProgress();
+        cleanState = st;
+        title("Clean your TV");
+        subtitle("Two switches, once. Lume sees when you have turned each one on.");
+        LinearLayout l = list();
+        Row a = row(l, "Developer options", st == 0 ? (fire ? "Press the Fire TV name 7 times" : "Press Build 7 times") : "", ACTION, false, () -> { });
+        a.status(st >= 1 ? "✓ " + It.t("On") : It.t("Off"), st >= 1);
+        Row b = row(l, "Debugging", st == 1 ? (fire ? "Turn on ADB debugging" : "Turn on USB debugging") : "", ACTION, false, () -> { });
+        b.status(st >= 2 ? "✓ " + It.t("On") : It.t("Off"), st >= 2);
+        Row c = row(l, "Allow Lume", st == 2 ? It.t("On the TV choose Always allow, then OK") : cleanNote, ACTION, false, () -> { });
+        c.status(st >= 3 ? "✓ " + It.t("Allowed") : cleanBusy ? "..." : "", st >= 3);
+        firstChoice = null;   // these rows only report; the focus starts on the button that does the next thing
+        String label = st == 0 ? "Open About" : st == 1 ? "Open Developer options" : st == 2 ? "Allow" : "Continue";
+        buttons(label, () -> {
+            if (st == 0) openSettingsFor(android.provider.Settings.ACTION_DEVICE_INFO_SETTINGS);
+            else if (st == 1) openSettingsFor(android.provider.Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
+            else if (st == 2) cleanAllow();
+            else next();
+        });
+        TextView skip = button("Not Now", false, () -> { if (onlyClean) finish(); else next(); });
+        ((LinearLayout) page.getChildAt(page.getChildCount() - 1)).addView(skip);
+        // Lume watches the switches: the page moves on by itself when one is turned on.
+        handler.postDelayed(new Runnable() {
+            @Override public void run() {
+                if (index >= steps.size() || steps.get(index) != null && cleanProgress() != cleanState && !cleanBusy) show(index, 0);
+                else handler.postDelayed(this, 1500);
+            }
+        }, 1500);
+    }
+
+    void cleanAllow() {
+        if (cleanBusy) return;
+        cleanBusy = true;
+        cleanNote = "";
+        show(index, 0);
+        new Thread(() -> {
+            try (AdbClient adb = AdbClient.connect(this, "127.0.0.1", 5555, 120000)) {
+                TvOptimize.current = TvOptimize.plan(this, adb);
+                runOnUiThread(() -> {
+                    cleanAllowed = true;
+                    cleanBusy = false;
+                    show(index + 1, 1);
+                });
+            } catch (AdbClient.NotReady e) {
+                runOnUiThread(() -> {
+                    cleanBusy = false;
+                    cleanNote = It.t(e.waitingForOk ? "Waiting for your OK on the TV" : "Debugging is off: see how to turn it on");
+                    cleanNeedsComputer = !e.waitingForOk && adbOn();   // debugging is on but the port stays closed: Wireless debugging only
+                    show(index, 0);
+                });
+            } catch (Exception e) {
+                android.util.Log.w("LumeOptimize", "allow failed", e);
+                runOnUiThread(() -> {
+                    cleanBusy = false;
+                    cleanNote = It.t("Could not check this TV");
+                    show(index, 0);
+                });
+            }
+        }).start();
+    }
+
+    final java.util.Map<String, Boolean> keepChoice = new java.util.LinkedHashMap<>();
+    int cleanCount;
+    TextView cleanCountView;
+
+    List<String> cleanSelection() {
+        List<String> out = new ArrayList<>();
+        if (TvOptimize.current == null) return out;
+        for (String p : TvOptimize.current.safe) {
+            String g = TvOptimize.group(this, p);
+            if (g == null || !Boolean.TRUE.equals(keepChoice.get(g))) out.add(p);
+        }
+        return out;
+    }
+
+    void cleanChoose() {
+        TvOptimize.Plan plan = TvOptimize.current;
+        if (plan == null || plan.safe.isEmpty()) {
+            title("All done");
+            subtitle("Nothing to clean: this TV is already tidy");
+            buttons("Done", this::next);
+            return;
+        }
+        title("Ready to clean");
+        cleanCountView = subtitle("");
+        LinearLayout l = list();
+        java.util.LinkedHashSet<String> groups = new java.util.LinkedHashSet<>();
+        for (String p : plan.safe) {
+            String g = TvOptimize.group(this, p);
+            if (g != null) groups.add(g);
+        }
+        for (String g : groups) {
+            if (!keepChoice.containsKey(g)) keepChoice.put(g, TvOptimize.keepByDefault(this, g));
+            Row r = row(l, It.f("Keep %s", It.t(groupName(g))), "", SWITCH, Boolean.TRUE.equals(keepChoice.get(g)), () -> { });
+            r.view.setOnClickListener(v -> {
+                boolean now = !Boolean.TRUE.equals(keepChoice.get(g));
+                keepChoice.put(g, now);
+                r.set(now);
+                updateCleanCount();
+            });
+        }
+        updateCleanCount();
+        buttons("Clean now", this::cleanApply);
+    }
+
+    static String groupName(String g) {
+        switch (g) {
+            case "assistant": return "the voice assistant";
+            case "cast": return "casting from my phone";
+            case "video": return "video apps";
+            case "screensaver": return "the screensaver";
+            case "kids": return "kids mode";
+            case "smarthome": return "smart home";
+            case "privacy": return "telemetry";
+            default: return g;   // games, music, shopping, recommendations
+        }
+    }
+
+    void updateCleanCount() {
+        int n = cleanSelection().size();
+        if (cleanCountView != null) cleanCountView.setText(It.f("%d apps will be switched off. Choose what to keep.", n));
+    }
+
+    int cleanDone;
+    boolean cleanRolled;
+
+    void cleanApply() {
+        if (cleanBusy) return;
+        cleanBusy = true;
+        List<String> pkgs = cleanSelection();
+        if (cleanCountView != null) cleanCountView.setText(It.t("Cleaning..."));
+        new Thread(() -> {
+            try (AdbClient adb = AdbClient.connect(this, "127.0.0.1", 5555, 15000)) {
+                TvOptimize.Result r = TvOptimize.apply(this, adb, TvOptimize.current, pkgs);
+                cleanDone = r.done;
+                cleanRolled = r.rolledBack;
+            } catch (Exception e) {
+                android.util.Log.w("LumeOptimize", "clean failed", e);
+                cleanDone = 0;
+                cleanRolled = true;
+            }
+            runOnUiThread(() -> {
+                cleanBusy = false;
+                show(index + 1, 1);
+            });
+        }).start();
+    }
+
+    void cleanDone() {
+        title(cleanRolled ? "Stopped" : "All done");
+        subtitle(cleanRolled ? It.t("Stopped: the TV did not answer well, the last group was turned back on")
+                : It.f("%d apps switched off. Undo any time in Settings > Optimize this TV.", cleanDone));
+        buttons("Done", this::next);
     }
 
     void finish_() {
