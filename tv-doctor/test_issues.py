@@ -2,7 +2,7 @@
 import json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import tvdoctor as T
-data = json.load(open(T.KNOWN))["issues"]
+data = json.load(open(T.KNOWN, encoding="utf-8"))["issues"]
 ids = [i["id"] for i in data]
 assert len(ids) == len(set(ids)), "id duplicati"
 FAM = {"android-tv", "google-tv", "fireos", "tizen", "webos", "roku", "vidaa"}
