@@ -33,10 +33,21 @@ jobs:
         shell: bash
         run: for t in test_*.py; do python "$t" > /dev/null || exit 1; done
       - run: python tv-doctor/build_app.py ${{ matrix.name }}
+      - name: Package (keeps the permission to run: a browser download loses it)
+        shell: bash
+        run: |
+          cd tv-doctor/dist-app
+          case "${{ matrix.os }}" in
+            windows-latest) mv "${{ matrix.name }}.exe" "TV-Doctor-windows.exe"; out="TV-Doctor-windows.exe" ;;
+            ubuntu-latest) mkdir pkg && cp "${{ matrix.name }}" "pkg/TV Doctor" && chmod +x "pkg/TV Doctor" && tar -C pkg -czf "${{ matrix.name }}.tar.gz" "TV Doctor"; out="${{ matrix.name }}.tar.gz" ;;
+            *) mkdir pkg && cp "${{ matrix.name }}" "pkg/TV Doctor" && chmod +x "pkg/TV Doctor" && (cd pkg && zip -X -q "../${{ matrix.name }}.zip" "TV Doctor"); out="${{ matrix.name }}.zip" ;;
+          esac
+          if command -v shasum >/dev/null; then shasum -a 256 "$out" > "$out.sha256"; else sha256sum "$out" > "$out.sha256"; fi
+          echo "OUT=$out" >> "$GITHUB_ENV"
       - name: Attach to the release
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          f=$(ls tv-doctor/dist-app/${{ matrix.name }}*  | grep -v sha256)
-          gh release upload "${{ inputs.tag }}" "$f" "$f.sha256" --clobber --repo "${{ github.repository }}"
+          cd tv-doctor/dist-app
+          gh release upload "${{ inputs.tag }}" "$OUT" "$OUT.sha256" --clobber --repo "${{ github.repository }}"
