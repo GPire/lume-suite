@@ -349,7 +349,11 @@ def build_plan(serial, d, tier):
         if tier == "caution":
             for p, why in BRAND_CAUTION.get(key, {}).items():
                 if p in d["_pkgs"] and not is_never(p) and p != home_pkg: add(p, "caution", why, key.upper()); seen.add(p)
+    # What we deliberately file under "caution" (it takes a feature away) never slips into the safe tier through the generic list.
+    held_back = set(FIRE_CAUTION) | set(GOOGLE_TV_CAUTION) | {p for v in BRAND_CAUTION.values() for p in v}
     for p in sorted(system):
+        if p in held_back and tier == "safe":
+            continue
         if p in seen or is_never(p) or p == home_pkg or p not in uad or p.startswith(NO_BENEFIT_PREFIX):
             continue
         if ram.get(p, 0) < MIN_RAM_KB:

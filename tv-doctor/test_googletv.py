@@ -7,7 +7,8 @@ d = T.detect("fixture")
 safe = [x[0] for x in T.build_plan("fixture", d, "safe") if not x[4]]
 full = [x[0] for x in T.build_plan("fixture", d, "caution") if not x[4]]
 assert all(p in safe for p in T.GOOGLE_TV_SAFE), "safe set missing"
-assert not any(p in safe for p in T.GOOGLE_TV_CAUTION), "caution set in safe tier"
+leak = [p for p in T.GOOGLE_TV_CAUTION if p in safe]
+assert not leak, "caution set in safe tier: %s" % leak
 assert all(p in full for p in T.GOOGLE_TV_CAUTION), "caution set missing"
 for never in ("com.google.android.rkpdapp", "com.google.android.apps.mediashell", "com.google.android.apps.tv.launcherx",
               "com.google.android.tungsten.setupwraith", "com.google.android.gms"):
