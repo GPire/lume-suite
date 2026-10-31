@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Ambient Cast mark: a picture frame (the paintings on the wall) around a ripple spreading from a point (casting). -->
+<!-- Lume Cast mark: the Lume orb (warm light) with two waves above it (casting). -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="128dp" android:height="128dp" android:viewportWidth="128" android:viewportHeight="128">
-    <path android:pathData="M38,8 H90 A30,30 0 0 1 120,38 V90 A30,30 0 0 1 90,120 H38 A30,30 0 0 1 8,90 V38 A30,30 0 0 1 38,8 Z" android:strokeColor="#F2C14E" android:strokeWidth="9" android:fillColor="#00000000" />
-    <path android:pathData="M64,24 A40,40 0 1 1 64,104 A40,40 0 1 1 64,24" android:strokeColor="#E8734A" android:strokeWidth="9" android:fillColor="#00000000" />
-    <path android:pathData="M64,40 A24,24 0 1 1 64,88 A24,24 0 1 1 64,40" android:strokeColor="#F2C14E" android:strokeWidth="9" android:fillColor="#00000000" />
-    <path android:pathData="M64,64 m-10,0 a10,10 0 1 0 20,0 a10,10 0 1 0 -20,0" android:fillColor="#F2C14E" />
+    <path android:pathData="M64,80 m-34,0 a34,34 0 1 0 68,0 a34,34 0 1 0 -68,0" android:fillColor="#FF9F0A" />
+    <path android:pathData="M54,68 m-14,0 a14,14 0 1 0 28,0 a14,14 0 1 0 -28,0" android:fillColor="#FFD27A" android:fillAlpha="0.55" />
+    <path android:pathData="M22.4,56 A48,48 0 0 1 105.6,56" android:strokeColor="#FFFFFF" android:strokeAlpha="0.75" android:strokeWidth="6" android:strokeLineCap="round" android:fillColor="#00000000" />
+    <path android:pathData="M12,50 A60,60 0 0 1 116,50" android:strokeColor="#FFFFFF" android:strokeAlpha="0.45" android:strokeWidth="6" android:strokeLineCap="round" android:fillColor="#00000000" />
 </vector>

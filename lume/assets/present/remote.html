@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#0b0b10">
 <title>Lume</title>
-<style>
+<style>[hidden]{display:none!important}
 :root{--bg:#0b0b10;--card:#1c1c22;--card2:#26262e;--text:#f5f5f7;--dim:#9a9aa5;--accent:#0a84ff;--ok:#30d158;--bad:#ff453a;color-scheme:dark}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.35 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;overscroll-behavior:none}
@@ -66,6 +66,11 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim)
   <section id="t-look" class="hide"><h1 data-t="look">Aspetto</h1>
     <h2 data-t="bg">Sfondo</h2><div class="chips" id="walls"></div>
     <h2 data-t="homeLook">Home</h2><div class="chips" id="looks"></div></section>
+  <section id="t-clean" class="hide"><h1 data-t="cleanT">Pulisci la TV</h1><p class="sub" id="cleanSub"></p>
+    <div class="list" id="cleanSteps"></div>
+    <div id="keepBox" class="hide"><h2 data-t="keepH">Cosa vuoi tenere</h2><div class="chips" id="keeps"></div></div>
+    <div class="list" style="margin-top:12px"><button id="cleanBtn" style="background:var(--accent);font-weight:600"></button><button id="cleanUndo" data-t="cleanUndo">Annulla la pulizia</button></div>
+    <p class="sub" id="cleanLinked" style="margin-top:12px"></p></section>
   <section id="t-more" class="hide"><h1 data-t="more">Altro</h1><h2 data-t="open">Apri sulla TV</h2>
     <div class="list" id="shortcuts"></div>
     <h2 data-t="power">Alimentazione</h2><div class="list"><button id="sleepBtn" data-t="sleep">Spegni lo schermo</button></div>
@@ -77,14 +82,15 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim)
   <button data-tab="apps"><b>▦</b><span data-t="tApps">App</span></button>
   <button data-tab="search"><b>⌕</b><span data-t="tSearch">Cerca</span></button>
   <button data-tab="look"><b>◐</b><span data-t="tLook">Aspetto</span></button>
+  <button data-tab="clean"><b>✦</b><span data-t="tClean">Pulisci</span></button>
   <button data-tab="more"><b>⋯</b><span data-t="tMore">Altro</span></button>
 </nav>
 <div id="toast"></div>
 
 <script>
 "use strict";
-const IT={pairTitle:"Collega la TV",pairSub:"Scrivi il codice di 6 cifre che vedi sulla TV.",pairBtn:"Collega",back:"Indietro",home:"Home",menu:"Menu",apps:"App",appsSub:"Tocca per aprirla sulla TV.",findApp:"Cerca un'app",search:"Cerca",searchSub:"Scrivi qui e il testo arriva sulla TV: niente tastiera col telecomando.",searchPh:"App, film, serie…",searchBtn:"Cerca sulla TV",look:"Aspetto",bg:"Sfondo",homeLook:"Home",scene:"Scena",classic:"Classico",more:"Altro",open:"Apri sulla TV",power:"Alimentazione",sleep:"Spegni lo schermo",phone:"Questo telefono",forget:"Scollega questo telefono",tRemote:"Telecomando",tApps:"App",tSearch:"Cerca",tLook:"Aspetto",tMore:"Altro",sent:"Inviato",badPin:"Il codice non corrisponde a quello sulla TV",off:"Il controllo da telefono è spento sulla TV",lost:"La TV non risponde",notHome:"Lume non è in primo piano: Indietro funziona solo con l'interruttore del tasto Home",onHome:"Lume è in primo piano",elsewhere:"Un'altra app è aperta",cc:"Centro di controllo",recents:"App recenti",weather:"Previsioni meteo",markets:"Mercati",news:"Notizie",health:"Salute della TV",settings:"Impostazioni",airplay:"AirPlay: come collegarsi",ask:"Spegnere lo schermo della TV?"};
-const EN={pairTitle:"Pair with the TV",pairSub:"Type the 6-digit code shown on the TV.",pairBtn:"Pair",back:"Back",home:"Home",menu:"Menu",apps:"Apps",appsSub:"Tap to open it on the TV.",findApp:"Find an app",search:"Search",searchSub:"Type here and the text goes to the TV: no remote keyboard.",searchPh:"Apps, movies, shows…",searchBtn:"Search on the TV",look:"Look",bg:"Background",homeLook:"Home",scene:"Scene",classic:"Classic",more:"More",open:"Open on the TV",power:"Power",sleep:"Turn the screen off",phone:"This phone",forget:"Unpair this phone",tRemote:"Remote",tApps:"Apps",tSearch:"Search",tLook:"Look",tMore:"More",sent:"Sent",badPin:"The code does not match the one on the TV",off:"Phone control is off on the TV",lost:"The TV is not answering",notHome:"Lume is not in front: Back only works with the Home-key switch on",onHome:"Lume is in front",elsewhere:"Another app is open",cc:"Control Center",recents:"Recent Apps",weather:"Forecast",markets:"Markets",news:"News",health:"TV health",settings:"Settings",airplay:"AirPlay: how to connect",ask:"Turn the TV screen off?"};
+const IT={tClean:"Pulisci",cleanT:"Pulisci la TV",keepH:"Cosa vuoi tenere",cleanUndo:"Annulla la pulizia",cs_dev:"Opzioni sviluppatore",cs_adb:"Debug",cs_ok:"Consenso sulla TV",c_idle:"Due interruttori, una volta sola. Segui i passi: si aggiornano da soli.",c_dev:"Sulla TV: Impostazioni > Informazioni, premi 7 volte il nome (o Numero build).",c_adb:"Sulla TV: Opzioni sviluppatore > Debug ADB / USB: Sì.",c_check:"Controlla la TV",c_waiting:"Guarda la TV: scegli Consenti sempre, poi OK.",c_off:"Il debug è spento: accendilo sulla TV e riprova.",c_ready:"{n} app possono essere spente. Scegli cosa tenere.",c_tidy:"Niente da pulire: la TV è già in ordine.",c_clean:"Pulisci adesso",c_cleaning:"Sto pulendo...",c_done:"Fatto: {n} app spente. Annulli quando vuoi.",c_stopped:"Mi sono fermato: la TV non rispondeva bene, ho riacceso l'ultimo gruppo.",c_failed:"Non ci riesco: se la TV usa solo il Debug wireless, serve un computer una volta (gpire.github.io/lume-suite).",l_screensaver:"La Galleria è il salvaschermo",l_home:"Il tasto Home apre Lume",l_airplay:"AirPlay è pronto sull'iPhone",k_assistant:"Assistente vocale",k_cast:"Trasmissione dal telefono",k_games:"Giochi",k_music:"Musica",k_shopping:"Acquisti",k_video:"App video",k_screensaver:"Salvaschermo",k_kids:"Modalità bimbi",k_smarthome:"Casa smart",k_recommendations:"Consigli",k_privacy:"Telemetria",pairTitle:"Collega la TV",pairSub:"Scrivi il codice di 6 cifre che vedi sulla TV.",pairBtn:"Collega",back:"Indietro",home:"Home",menu:"Menu",apps:"App",appsSub:"Tocca per aprirla sulla TV.",findApp:"Cerca un'app",search:"Cerca",searchSub:"Scrivi qui e il testo arriva sulla TV: niente tastiera col telecomando.",searchPh:"App, film, serie…",searchBtn:"Cerca sulla TV",look:"Aspetto",bg:"Sfondo",homeLook:"Home",scene:"Scena",classic:"Classico",more:"Altro",open:"Apri sulla TV",power:"Alimentazione",sleep:"Spegni lo schermo",phone:"Questo telefono",forget:"Scollega questo telefono",tRemote:"Telecomando",tApps:"App",tSearch:"Cerca",tLook:"Aspetto",tMore:"Altro",sent:"Inviato",badPin:"Il codice non corrisponde a quello sulla TV",off:"Il controllo da telefono è spento sulla TV",lost:"La TV non risponde",notHome:"Lume non è in primo piano: Indietro funziona solo con l'interruttore del tasto Home",onHome:"Lume è in primo piano",elsewhere:"Un'altra app è aperta",cc:"Centro di controllo",recents:"App recenti",weather:"Previsioni meteo",markets:"Mercati",news:"Notizie",health:"Salute della TV",settings:"Impostazioni",airplay:"AirPlay: come collegarsi",ask:"Spegnere lo schermo della TV?"};
+const EN={tClean:"Clean",cleanT:"Clean the TV",keepH:"What to keep",cleanUndo:"Undo the cleaning",cs_dev:"Developer options",cs_adb:"Debugging",cs_ok:"Allowed on the TV",c_idle:"Two switches, once. Follow the steps: they update by themselves.",c_dev:"On the TV: Settings > About, press the name (or Build) 7 times.",c_adb:"On the TV: Developer options > ADB / USB debugging: On.",c_check:"Check the TV",c_waiting:"Look at the TV: choose Always allow, then OK.",c_off:"Debugging is off: turn it on at the TV and try again.",c_ready:"{n} apps can be switched off. Choose what to keep.",c_tidy:"Nothing to clean: the TV is already tidy.",c_clean:"Clean now",c_cleaning:"Cleaning...",c_done:"Done: {n} apps switched off. Undo any time.",c_stopped:"I stopped: the TV did not answer well, the last group was turned back on.",c_failed:"I cannot: if the TV only offers Wireless debugging you need a computer once (gpire.github.io/lume-suite).",l_screensaver:"The Gallery is the screensaver",l_home:"The Home button opens Lume",l_airplay:"AirPlay is ready on your iPhone",k_assistant:"Voice assistant",k_cast:"Casting from the phone",k_games:"Games",k_music:"Music",k_shopping:"Shopping",k_video:"Video apps",k_screensaver:"Screensaver",k_kids:"Kids mode",k_smarthome:"Smart home",k_recommendations:"Recommendations",k_privacy:"Telemetry",pairTitle:"Pair with the TV",pairSub:"Type the 6-digit code shown on the TV.",pairBtn:"Pair",back:"Back",home:"Home",menu:"Menu",apps:"Apps",appsSub:"Tap to open it on the TV.",findApp:"Find an app",search:"Search",searchSub:"Type here and the text goes to the TV: no remote keyboard.",searchPh:"Apps, movies, shows…",searchBtn:"Search on the TV",look:"Look",bg:"Background",homeLook:"Home",scene:"Scene",classic:"Classic",more:"More",open:"Open on the TV",power:"Power",sleep:"Turn the screen off",phone:"This phone",forget:"Unpair this phone",tRemote:"Remote",tApps:"Apps",tSearch:"Search",tLook:"Look",tMore:"More",sent:"Sent",badPin:"The code does not match the one on the TV",off:"Phone control is off on the TV",lost:"The TV is not answering",notHome:"Lume is not in front: Back only works with the Home-key switch on",onHome:"Lume is in front",elsewhere:"Another app is open",cc:"Control Center",recents:"Recent Apps",weather:"Forecast",markets:"Markets",news:"News",health:"TV health",settings:"Settings",airplay:"AirPlay: how to connect",ask:"Turn the TV screen off?"};
 const L=(navigator.language||"it").toLowerCase().startsWith("it")?IT:EN;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 $$("[data-t]").forEach(e=>e.textContent=L[e.dataset.t]||e.textContent);
@@ -126,6 +132,20 @@ function drawLook(){
   const w=$("#walls");w.textContent="";state.wallpapers.forEach(x=>chip(w,x.name,x.current,async()=>{if(await act({action:"wallpaper",key:x.key})){state.wallpapers.forEach(y=>y.current=y.key===x.key);drawLook()}}));
   const l=$("#looks");l.textContent="";[["scene",L.scene],["classic",L.classic]].forEach(([k,n])=>chip(l,n,state.look===k,async()=>{if(await act({action:"look",value:k})){state.look=k;drawLook()}}));
 }
+let keepSet=null,cleanTimer=null;
+async function cleanPoll(){
+  const r=await api("/api/remote/act",{method:"POST",body:JSON.stringify({action:"opt_state"})});if(!r)return;const j=(await r.json()).opt;if(!j)return;
+  const st=j.status,steps=$("#cleanSteps");steps.textContent="";
+  [[L.cs_dev,j.dev],[L.cs_adb,j.adb],[L.cs_ok,["ready","tidy","cleaning","done","stopped"].includes(st)]].forEach(([n,on])=>{const b=document.createElement("button");b.textContent=(on?"✓ ":"")+n;b.disabled=true;if(on)b.className="on";steps.append(b)});
+  const f=(k,n)=>(L[k]||k).replace("{n}",n);
+  $("#cleanSub").textContent=!j.dev?L.c_dev:!j.adb?L.c_adb:st==="waiting_ok"?L.c_waiting:st==="debug_off"?L.c_off:st==="ready"?f("c_ready",j.count):st==="tidy"?L.c_tidy:st==="cleaning"?L.c_cleaning:st==="done"?f("c_done",j.done):st==="stopped"?L.c_stopped:st==="failed"?L.c_failed:L.c_idle;
+  const box=$("#keepBox"),k=$("#keeps");box.classList.toggle("hide",st!=="ready"||!j.groups.length);
+  if(st==="ready"){if(!keepSet)keepSet=new Set(j.groups.filter(g=>g.keep).map(g=>g.id));k.textContent="";j.groups.forEach(g=>chip(k,(L["k_"+g.id]||g.id)+" ("+g.count+")",keepSet.has(g.id),()=>{keepSet.has(g.id)?keepSet.delete(g.id):keepSet.add(g.id);cleanPoll()}))}
+  const b=$("#cleanBtn");b.hidden=false;b.disabled=st==="cleaning"||st==="waiting_ok"||(!j.dev||!j.adb);
+  b.textContent=st==="ready"?L.c_clean:L.c_check;b.onclick=()=>act({action:st==="ready"?"opt_clean":"opt_check",keep:[...(keepSet||[])]});
+  $("#cleanUndo").hidden=!j.saved;$("#cleanUndo").onclick=()=>act({action:"opt_undo"});
+  $("#cleanLinked").textContent=st==="done"?(j.linked||[]).map(x=>"✓ "+({screensaver:L.l_screensaver,"home-button":L.l_home,airplay:L.l_airplay}[x]||x)).join("   "):"";
+}
 function drawMore(){
   const s=$("#shortcuts");s.textContent="";
   [["cc","cc"],["recents","recents"],["weather","weather"],["markets","markets"],["news","news"],["health","health"],["settings","settings"],["airplay","airplay"]].forEach(([k,t])=>{
@@ -144,7 +164,7 @@ const send=async()=>{const t=$("#q").value.trim();if(t&&await act({action:"searc
 $("#sendQ").onclick=send;$("#sf").onsubmit=e=>{e.preventDefault();send()};
 $("#sleepBtn").onclick=()=>{if(confirm(L.ask))act({action:"sleep"})};
 $("#forget").onclick=unpaired;
-$$("[data-tab]").forEach(b=>b.onclick=()=>{$$("[data-tab]").forEach(x=>x.classList.toggle("on",x===b));["remote","apps","search","look","more"].forEach(t=>$("#t-"+t).classList.toggle("hide",t!==b.dataset.tab));if(b.dataset.tab==="search")$("#q").focus()});
+$$("[data-tab]").forEach(b=>b.onclick=()=>{clearInterval(cleanTimer);if(b.dataset.tab==="clean"){cleanPoll();cleanTimer=setInterval(cleanPoll,2000)};$$("[data-tab]").forEach(x=>x.classList.toggle("on",x===b));["remote","apps","search","look","clean","more"].forEach(t=>$("#t-"+t).classList.toggle("hide",t!==b.dataset.tab));if(b.dataset.tab==="search")$("#q").focus()});
 if(token)start();else unpaired();
 </script>
 </body>

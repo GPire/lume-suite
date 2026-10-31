@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192"><defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b0b10"/><stop offset="1" stop-color="#241a3e"/></linearGradient>
+<radialGradient id="glow" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="#ff9f0a" stop-opacity="0.42"/><stop offset="1" stop-color="#ff9f0a" stop-opacity="0"/></radialGradient>
+<radialGradient id="orb" cx="0.38" cy="0.32" r="0.8"><stop offset="0" stop-color="#ffd27a"/><stop offset="0.45" stop-color="#ff9f0a"/><stop offset="1" stop-color="#c2500a"/></radialGradient>
+<linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3d58a"/><stop offset="0.5" stop-color="#c8963a"/><stop offset="1" stop-color="#8a5f1c"/></linearGradient>
+</defs><rect width="192" height="192" fill="url(#bg)"/><rect width="192" height="192" fill="url(#glow)"/><circle cx="96" cy="96" r="50" fill="url(#orb)"/><circle cx="96" cy="96" r="50" fill="none" stroke="#fff" stroke-opacity="0.35" stroke-width="2.0"/><path d="M39.7 63.5 A65.0 65.0 0 0 1 152.3 63.5" fill="none" stroke="#fff" stroke-opacity="0.75" stroke-width="3.0" stroke-linecap="round"/><path d="M25.9 55.5 A81.0 81.0 0 0 1 166.1 55.5" fill="none" stroke="#fff" stroke-opacity="0.45" stroke-width="3.0" stroke-linecap="round"/></svg>

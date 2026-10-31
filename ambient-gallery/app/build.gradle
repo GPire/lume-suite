@@ -2,7 +2,7 @@ plugins { id 'com.android.application' }
 android {
     namespace 'org.lumesuite.gallery'
     compileSdk 34
-    defaultConfig { applicationId 'org.lumesuite.gallery'; minSdk 22; targetSdk 34; versionCode 7; versionName '0.7' }
+    defaultConfig { applicationId 'org.lumesuite.gallery'; minSdk 22; targetSdk 34; versionCode 8; versionName '0.8' }
     buildTypes { release { minifyEnabled false } }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
 }

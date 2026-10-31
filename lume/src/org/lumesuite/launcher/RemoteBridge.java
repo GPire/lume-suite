@@ -169,6 +169,26 @@ public final class RemoteBridge {
                     }
                     break;
                 }
+                case "opt_state":
+                    res.put("opt", TvOptimize.snapshot(c));
+                    ok = true;
+                    break;
+                case "opt_check":
+                    TvOptimize.startCheck(c);
+                    ok = true;
+                    break;
+                case "opt_clean": {
+                    java.util.Set<String> keep = new java.util.HashSet<>();
+                    JSONArray k = req.optJSONArray("keep");
+                    if (k != null) for (int i = 0; i < k.length(); i++) keep.add(k.optString(i));
+                    TvOptimize.startClean(c, keep);
+                    ok = true;
+                    break;
+                }
+                case "opt_undo":
+                    TvOptimize.startUndo(c);
+                    ok = true;
+                    break;
                 case "sleep":
                     ok = SleepReceiver.sleepNow(c);
                     if (!ok) error = "Power Off needs its permission on the TV (Settings > Permissions)";

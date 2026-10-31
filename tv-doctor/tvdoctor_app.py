@@ -374,6 +374,41 @@ def install_suite(serial, d, files=None):
     return res
 
 
+SMARTTUBE_CERT = "109735aa24fe85e2e1623ebb3b1ecc4bf4263f4c6374e4411d646bfa2eda482a"   # the certificate of the clean 32.68 we checked
+SMARTTUBE_API = "https://api.github.com/repos/yuliskov/SmartTube/releases/latest"
+
+
+def install_smarttube(serial, fetch=None, api=None):
+    """SmartTube (YouTube without ads) from its own GitHub release, checked twice before it touches the TV: the file must match the
+    SHA-256 GitHub lists for it, and it must be signed with the certificate we pinned (the publisher's key). If either differs
+    it is not installed. Optional: only when the person ticks it."""
+    import urllib.request, apkcert
+    get = fetch or (lambda url: urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "tv-doctor"}), timeout=120).read())
+    try:
+        rel = json.loads((api or (lambda: get(SMARTTUBE_API)))())
+        abis = T.sh(serial, "getprop ro.product.cpu.abilist").lower()
+        want = [a for a in ("arm64-v8a", "armeabi-v7a", "x86_64", "x86") if a in abis] + ["universal"]
+        assets = {a["name"]: a for a in rel.get("assets", []) if a["name"].startswith("SmartTube_stable_") and a["name"].endswith(".apk")}
+        pick = next((a for w in want for n, a in assets.items() if n.endswith("_" + w + ".apk")), None)
+        if not pick:
+            return {"app": "SmartTube", "ok": False, "why": "nessun file adatto a questa TV nell'ultima versione"}
+        os.makedirs(DOWNLOADS, exist_ok=True)
+        dest = os.path.join(DOWNLOADS, pick["name"])
+        data = get(pick["browser_download_url"])
+        digest = (pick.get("digest") or "").replace("sha256:", "")
+        import hashlib
+        if digest and hashlib.sha256(data).hexdigest() != digest:
+            return {"app": "SmartTube", "ok": False, "why": "il file scaricato non corrisponde a quello pubblicato: non lo installo"}
+        with open(dest, "wb") as f: f.write(data)
+        if not apkcert.signed_by(dest, SMARTTUBE_CERT):
+            os.remove(dest)
+            return {"app": "SmartTube", "ok": False, "why": "la firma non è quella dell'autore che abbiamo verificato: non lo installo"}
+        out = T.install_apk_text(serial, dest)
+        return {"app": "SmartTube " + rel.get("tag_name", ""), "ok": "Success" in out} if "Success" in out else {"app": "SmartTube", "ok": False, "why": T.install_why(out)}
+    except Exception as e:
+        return {"app": "SmartTube", "ok": False, "why": str(e)[:120]}
+
+
 def mem_avail(serial):
     m = re.search(r"MemAvailable:\s+(\d+)", T.sh(serial, "grep MemAvailable /proc/meminfo"))
     return int(m.group(1)) // 1024 if m else 0
@@ -387,7 +422,7 @@ def healthy(serial, home_pkg):
     return bool(h.strip()) and (not home_pkg or home_pkg in h)
 
 
-def run_apply(serial, batch=4, install=False, replace_home=False, dns=False, keep=(), anim=True, selected=None, ultra=False):
+def run_apply(serial, batch=4, install=False, replace_home=False, dns=False, keep=(), anim=True, selected=None, ultra=False, smarttube=False):
     """Small batches, a health check after each; on the first doubt the batch is undone and we stop."""
     if DEMO and T.FIXTURE is None:
         T.FIXTURE = demo_fixture()
@@ -398,6 +433,8 @@ def run_apply(serial, batch=4, install=False, replace_home=False, dns=False, kee
             suite = install_suite(serial, d)
         except Exception as e:
             suite = [{"app": n, "ok": False, "why": str(e)[:160]} for _, n, _ in SUITE]
+    if smarttube:
+        suite = (suite or []) + [install_smarttube(serial)]
     plan = T.build_plan(serial, d, "caution" if (selected is not None or ultra) else "safe")
     chosen = set(selected) if selected is not None else None   # the owner's own ticks, app by app
     todo = [x[0] for x in plan if not x[4] and T.group_of(x[0]) not in set(keep) and (chosen is None or x[0] in chosen)]   # what the owner chose to keep stays on
@@ -487,7 +524,7 @@ class H(BaseHTTPRequestHandler):
             elif self.path == "/api/probe": r = {"state": T.probe(q["serial"])}
             elif self.path == "/api/inspect": r = inspect(q["serial"])
             elif self.path == "/api/report": r = {"url": report_url(q.get("serial", ""), str(q.get("outcome", ""))[:400])}
-            elif self.path == "/api/apply": r = run_apply(q["serial"], install=bool(q.get("install")), replace_home=bool(q.get("replaceHome")), dns=bool(q.get("dns")), keep=q.get("keep") or [], anim=q.get("anim", True), selected=q.get("selected"), ultra=bool(q.get("ultra")))
+            elif self.path == "/api/apply": r = run_apply(q["serial"], install=bool(q.get("install")), replace_home=bool(q.get("replaceHome")), dns=bool(q.get("dns")), keep=q.get("keep") or [], anim=q.get("anim", True), selected=q.get("selected"), ultra=bool(q.get("ultra")), smarttube=bool(q.get("smarttube")))
             elif self.path == "/api/undo": r = run_undo(q["serial"])
             elif self.path == "/api/enable": r = enable_guide(q["brand"], int(q.get("year", 2022)), q.get("lang", "en"))
             elif self.path == "/api/adbstatus": r = {"ready": DEMO or adb_ready()}

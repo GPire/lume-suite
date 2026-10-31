@@ -224,6 +224,96 @@ final class TvOptimize {
         sp.edit().remove("integration_old").apply();
     }
 
+    // ---------------------------------------------------------------- the same cleaning, driven from the phone
+
+    static final class Job {
+        volatile String status = "idle";   // idle, waiting_ok, debug_off, ready, tidy, cleaning, done, stopped, failed
+        volatile Plan plan;
+        volatile int done;
+        volatile List<String> linked = new ArrayList<>();
+    }
+
+    static final Job job = new Job();
+
+    static synchronized void startCheck(Context ctx) {
+        final Context c = ctx.getApplicationContext();
+        if (job.status.equals("waiting_ok") || job.status.equals("cleaning")) return;
+        job.status = "waiting_ok";
+        new Thread(() -> {
+            try (AdbClient a = AdbClient.connect(c, "127.0.0.1", 5555, 120000)) {
+                Plan p = plan(c, a);
+                job.plan = p;
+                job.status = p.safe.isEmpty() ? "tidy" : "ready";
+            } catch (AdbClient.NotReady e) {
+                job.status = e.waitingForOk ? "waiting_ok" : "debug_off";
+            } catch (Exception e) {
+                android.util.Log.w("LumeOptimize", "phone check failed", e);
+                job.status = "failed";
+            }
+        }).start();
+    }
+
+    static synchronized void startClean(Context ctx, Set<String> keep) {
+        final Context c = ctx.getApplicationContext();
+        final Plan p = job.plan;
+        if (p == null || job.status.equals("cleaning")) return;
+        job.status = "cleaning";
+        new Thread(() -> {
+            try (AdbClient a = AdbClient.connect(c, "127.0.0.1", 5555, 15000)) {
+                List<String> pick = new ArrayList<>();
+                for (String pkg : p.safe) {
+                    String g = group(c, pkg);
+                    if (g == null || !keep.contains(g)) pick.add(pkg);
+                }
+                Result r = apply(c, a, p, pick);
+                job.done = r.done;
+                job.linked = r.rolledBack ? new ArrayList<>() : integrate(c, a);
+                job.status = r.rolledBack ? "stopped" : "done";
+            } catch (Exception e) {
+                android.util.Log.w("LumeOptimize", "phone clean failed", e);
+                job.status = "failed";
+            }
+        }).start();
+    }
+
+    static synchronized void startUndo(Context ctx) {
+        final Context c = ctx.getApplicationContext();
+        new Thread(() -> {
+            try (AdbClient a = AdbClient.connect(c, "127.0.0.1", 5555, 15000)) {
+                job.done = undo(c, a);
+                job.plan = null;
+                job.status = "idle";
+            } catch (Exception e) {
+                job.status = "failed";
+            }
+        }).start();
+    }
+
+    /** What the phone page shows: the state, the groups to keep, and whether the two switches are on. */
+    static JSONObject snapshot(Context c) throws Exception {
+        JSONObject o = new JSONObject();
+        o.put("status", job.status).put("done", job.done).put("saved", saved(c).size());
+        o.put("dev", android.provider.Settings.Global.getInt(c.getContentResolver(), android.provider.Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0) == 1);
+        o.put("adb", android.provider.Settings.Global.getInt(c.getContentResolver(), android.provider.Settings.Global.ADB_ENABLED, 0) == 1);
+        JSONArray gs = new JSONArray();
+        Plan p = job.plan;
+        if (p != null) {
+            java.util.LinkedHashMap<String, Integer> n = new java.util.LinkedHashMap<>();
+            for (String pkg : p.safe) {
+                String g = group(c, pkg);
+                if (g != null) n.put(g, n.containsKey(g) ? n.get(g) + 1 : 1);
+            }
+            for (java.util.Map.Entry<String, Integer> e : n.entrySet())
+                gs.put(new JSONObject().put("id", e.getKey()).put("count", e.getValue()).put("keep", keepByDefault(c, e.getKey())));
+            o.put("count", p.safe.size());
+        }
+        o.put("groups", gs);
+        JSONArray lk = new JSONArray();
+        for (String x : job.linked) lk.put(x);
+        o.put("linked", lk);
+        return o;
+    }
+
     static Set<String> saved(Context c) {
         return c.getSharedPreferences("optimize", Context.MODE_PRIVATE).getStringSet("disabled", new HashSet<>());
     }

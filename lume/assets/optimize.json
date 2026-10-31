@@ -68,19 +68,6 @@
     "com.mitv.tvhome.atv": "Mi TV home (PatchWall)"
    }
   },
-  "sony": {
-   "safe": {
-    "com.sony.dtv.promos": "Sony promotions",
-    "com.sony.dtv.sonyselect": "Sony Select promo row",
-    "com.sony.dtv.multiscreendemo": "Demo screen",
-    "com.sony.dtv.ecodashboard": "Eco dashboard",
-    "com.sony.dtv.smarthelp": "Smart help pop-ups"
-   },
-   "caution": {
-    "com.sony.dtv.helpguidecontents": "Help guide contents",
-    "com.sony.dtv.sonytab": "Sony tab"
-   }
-  },
   "tcl": {
    "safe": {
     "com.tcl.bootadservice": "Ads at start-up",
@@ -109,6 +96,19 @@
     "com.nvidia.factorybundling": "Factory bundling"
    },
    "caution": {}
+  },
+  "sony": {
+   "safe": {
+    "com.sony.dtv.promos": "Sony promotions",
+    "com.sony.dtv.sonyselect": "Sony Select promo row",
+    "com.sony.dtv.multiscreendemo": "Demo screen",
+    "com.sony.dtv.ecodashboard": "Eco dashboard",
+    "com.sony.dtv.smarthelp": "Smart help pop-ups"
+   },
+   "caution": {
+    "com.sony.dtv.helpguidecontents": "Help guide contents",
+    "com.sony.dtv.sonytab": "Sony tab"
+   }
   }
  },
  "groups": [

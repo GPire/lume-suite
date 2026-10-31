@@ -34,7 +34,16 @@
 
 *Prefer one line?* Mac/Linux: `curl -fsSL https://gpire.github.io/lume-suite/install.sh | sh` · Windows PowerShell: `irm https://gpire.github.io/lume-suite/install.ps1 | iex`. Or open **https://gpire.github.io/lume-suite/**.
 
-**From the TV alone, no computer** (Fire TV, Android TV, Google TV): install the free **Downloader** app, enter `github.com/GPire/lume-suite/releases/latest/download/lume-launcher.apk`, open **Lume**, then *Settings > Optimize this TV*. Lume talks to the TV's own debugging service (switch it on first: Lume shows how), the TV asks you once to *Allow*, and it cleans in small safe groups with an Undo. It uses the same lists as TV Doctor. Tried on an Android TV 14 image; on a real Fire TV it reaches the *Allow* box. Android 11+ TVs that only offer Wireless debugging still need TV Doctor on a computer.
+**From the TV alone, no computer** (Fire TV, Android TV, Google TV, and the easy way if you are on your phone): on the TV install the free **Downloader** app and type `gpire.github.io/lume-suite/tv` (typing is easier with the free *Fire TV* or *Google TV* app on your phone: it has a keyboard). Pick **Lume**, then open it: a guide takes you through *Developer options*, the one *Allow* question and the cleaning, then connects the Gallery as screensaver, the Home button and AirPlay. Lume reads by itself whether each switch is on and moves on. You can also do the whole cleaning from your phone: *Lume > Settings > Phone control* shows a code and a QR; on the phone page the **Clean** tab shows the same steps, what to keep, *Clean now* and *Undo*. Same lists as TV Doctor, with an Undo. Tried on an Android 14 TV image; on a real Fire TV it reaches the *Allow* box.
+
+**What you do yourself, TV by TV**
+
+| TV | You do |
+|---|---|
+| Fire TV Stick / Fire TV | Press the Fire TV name 7 times (Settings > My Fire TV > About), turn on *ADB debugging*, answer *Always allow*. Lume opens the right page for you. |
+| Google TV / Android TV, Android 10 or older | Press *Build* 7 times, turn on *USB debugging*, answer *Always allow*. |
+| Google TV / Android TV, Android 11 or newer (Wireless debugging only) | A computer once, on the same Wi-Fi: TV Doctor finds the TV and asks for the 6-digit pairing code. |
+| Samsung, LG, Roku, Hisense | Apps cannot be removed from outside. TV Doctor shows what to switch off for your model and year, and checks whether your network blocks ads (router DNS to AdGuard). |
 
 **Samsung, LG, Roku, VIDAA** are closed systems: TV Doctor tells you what is and is not possible for your model and year ([details](docs/GOOGLE_TV_AND_TIZEN.md)). An HDMI stick gives these TVs the full experience.
 
