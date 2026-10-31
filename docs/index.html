@@ -21,8 +21,8 @@ p{margin:0 0 14px}.dim{color:var(--dim)}
 .btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#111;font-weight:650;font-size:19px;padding:16px 26px;border-radius:40px;text-decoration:none;border:0;cursor:pointer;transition:transform .15s}
 .btn:hover{transform:scale(1.03)}.btn.ghost{background:var(--card);color:var(--text);border:1px solid var(--line)}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.url{flex:1;min-width:260px;font:15px ui-monospace,Menlo,Consolas,monospace;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:14px;padding:14px 16px;overflow-wrap:anywhere}
-ol{padding-left:22px;margin:8px 0 0}li{margin:6px 0}
+.url{flex:1;min-width:260px;font:15px ui-monospace,Menlo,Consolas,monospace;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:14px;padding:14px 16px;overflow-wrap:break-word;word-break:normal}
+ol{padding-left:22px;margin:8px 0 0}li{margin:6px 0}ol.big li{margin:14px 0;line-height:1.45}.mobile .tvcard{display:none}.phone{border-color:rgba(255,159,10,.5)}.mobile .pccard{opacity:.92}
 .tag{display:inline-block;font-size:13px;color:var(--dim);border:1px solid var(--line);border-radius:20px;padding:3px 12px;margin:0 6px 6px 0}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
 a{color:#7ab8ff}small{color:var(--dim)}
@@ -34,11 +34,24 @@ a{color:#7ab8ff}small{color:var(--dim)}
   <h1 data-t="h1">Una TV più calma.</h1>
   <p class="dim" data-t="lead">TV Doctor trova la tua TV, installa Lume e Lume Cast e spegne, senza rischi e sempre annullabile, ciò che la rallenta. Niente comandi, niente programmi per sviluppatori.</p>
 
-  <div class="card">
+  <div class="card phone" id="phonecard" hidden>
+    <h2 data-t="phT">Sei sul telefono? Ecco la strada più breve</h2>
+    <p class="dim" data-t="phS">Si fa tutto dalla TV, senza computer. Ci vogliono pochi minuti.</p>
+    <ol class="big">
+      <li data-t="p1">Sulla TV installa <b>Downloader</b> (gratis): cercalo nello store della TV.</li>
+      <li><span data-t="p2">In Downloader scrivi questo indirizzo (copialo qui e rileggilo sul telefono mentre lo scrivi):</span>
+        <div class="row" style="margin-top:8px"><div class="url" id="u2">github.com/<wbr>GPire/<wbr>lume-suite/<wbr>releases/<wbr>latest/<wbr>download/<wbr>lume-launcher.apk</div><button class="btn ghost" data-copy="u2" data-t="copy">Copia</button></div></li>
+      <li data-t="p3">Installa e apri <b>Lume</b>. Una guida ti porta passo passo (Opzioni sviluppatore, consenso, pulizia).</li>
+    </ol>
+    <p class="dim" style="margin-top:14px" data-t="p4">Preferisci il computer? Mandati il link e aprilo da lì:</p>
+    <div class="row"><button class="btn" id="sharebtn" data-t="shareL">Mandami il link</button></div>
+  </div>
+
+  <div class="card pccard">
     <h2 data-t="pcT">Dal computer</h2>
     <p class="dim" data-t="pcS">Funziona con qualsiasi TV sulla tua rete Wi-Fi.</p>
     <div class="row" id="dlrow">
-      <a class="btn" id="dl" href="https://github.com/GPire/lume-suite/releases/latest/download/TV-Doctor-windows.exe"><span data-t="dl">Scarica l'app</span> <small id="osn" style="color:#555"></small></a>
+      <a class="btn" id="dl" href="https://github.com/GPire/lume-suite/releases/latest/download/TV-Doctor-windows.exe"><span id="dllabel">Scarica l'app</span></a>
       <a class="btn ghost" id="dl2" href="https://github.com/GPire/lume-suite/releases/latest/download/TV-Doctor-mac-intel.zip" hidden>Mac Intel</a>
       <a class="btn ghost" href="https://github.com/GPire/lume-suite/releases/latest" data-t="all">Tutti i file</a>
     </div>
@@ -49,10 +62,10 @@ a{color:#7ab8ff}small{color:var(--dim)}
     </ol>
   </div>
 
-  <div class="card">
+  <div class="card tvcard">
     <h2 data-t="tvT">Solo dalla TV (Fire TV, Android TV, Google TV)</h2>
     <p class="dim" data-t="tvS">Con l'app gratuita <b>Downloader</b> scrivi questo indirizzo:</p>
-    <div class="row"><div class="url" id="u">github.com/GPire/lume-suite/releases/latest/download/lume-launcher.apk</div><button class="btn ghost" id="copy" data-t="copy">Copia</button></div>
+    <div class="row"><div class="url" id="u">github.com/<wbr>GPire/<wbr>lume-suite/<wbr>releases/<wbr>latest/<wbr>download/<wbr>lume-launcher.apk</div><button class="btn ghost" id="copy" data-t="copy">Copia</button></div>
     <p class="dim" style="margin-top:12px"><small data-t="tvN">Poi apri Lume > Impostazioni > Ottimizza questa TV: pulisce da sola, senza computer (attiva prima il debug, Lume ti mostra come).</small></p>
   </div>
 
@@ -74,17 +87,20 @@ a{color:#7ab8ff}small{color:var(--dim)}
 </main>
 <script>
 "use strict";
-const IT={};
-const EN={cmdT:"Or one command",cmdS:"Paste it into Terminal (Mac, Linux) or PowerShell (Windows): it downloads TV Doctor, checks its signature and starts it by itself.",h1:"A calmer TV.",lead:"TV Doctor finds your TV, installs Lume and Lume Cast, and turns off, safely and always reversibly, what slows it down. No commands, no developer tools.",pcT:"From a computer",pcS:"Works with any TV on your Wi-Fi.",dl:"Download TV Doctor",all:"All files",s1:"Open it (Mac: right-click the program, then Open. Windows: if a warning appears, More info, then Run anyway).",s2:"It opens in your browser and looks for your TV by itself: if needed it shows you how to switch debugging on.",s3:"Press the big button: it cleans, installs Lume and waits for your OK on each thing. You choose what to keep.",dl:"Download the app",tvT:"From the TV alone (Fire TV, Android TV, Google TV)",tvS:"With the free <b>Downloader</b> app, type this address:",copy:"Copy",tvN:"Then open Lume > Settings > Optimize this TV: it cleans by itself, no computer (switch debugging on first, Lume shows how).",c1T:"What it does",c1:"Recognises brand, model, year and system. Installs the apps after checking their signature. Turns things off four at a time, checks the TV is fine and undoes it by itself if anything is wrong. Never uninstalls.",c2T:"What Lume is",c2:"A calm Home with a big glass clock, sharp cards, Control Center, phone control, three looks (glass, graphite, high contrast) and AirPlay with synced lyrics.",c3T:"Samsung, LG, Roku",c3:"Closed systems: TV Doctor says what is really possible for your model and year, and the cleanest answer is a small HDMI stick.",beta:"Beta: really tested on one Fire TV Stick 4K Max",support:"What works on which TV",copied:"Copied"};
+const IT={dlWin:"Scarica per Windows",dlMac:"Scarica per Mac (chip Apple)",dlLin:"Scarica per Linux"};
+const EN={phT:"On your phone? Here is the shortest way",phS:"Everything is done from the TV, no computer. It takes a few minutes.",p1:"On the TV install <b>Downloader</b> (free): look for it in the TV's store.",p2:"In Downloader type this address (copy it here and read it back on the phone while you type):",p3:"Install and open <b>Lume</b>. A guide takes you step by step (Developer options, consent, cleaning).",p4:"Prefer a computer? Send yourself the link and open it there:",shareL:"Send me the link",dlWin:"Download for Windows",dlMac:"Download for Mac (Apple chip)",dlLin:"Download for Linux",cmdT:"Or one command",cmdS:"Paste it into Terminal (Mac, Linux) or PowerShell (Windows): it downloads TV Doctor, checks its signature and starts it by itself.",h1:"A calmer TV.",lead:"TV Doctor finds your TV, installs Lume and Lume Cast, and turns off, safely and always reversibly, what slows it down. No commands, no developer tools.",pcT:"From a computer",pcS:"Works with any TV on your Wi-Fi.",dl:"Download TV Doctor",all:"All files",s1:"Open it (Mac: right-click the program, then Open. Windows: if a warning appears, More info, then Run anyway).",s2:"It opens in your browser and looks for your TV by itself: if needed it shows you how to switch debugging on.",s3:"Press the big button: it cleans, installs Lume and waits for your OK on each thing. You choose what to keep.",dl:"Download the app",tvT:"From the TV alone (Fire TV, Android TV, Google TV)",tvS:"With the free <b>Downloader</b> app, type this address:",copy:"Copy",tvN:"Then open Lume > Settings > Optimize this TV: it cleans by itself, no computer (switch debugging on first, Lume shows how).",c1T:"What it does",c1:"Recognises brand, model, year and system. Installs the apps after checking their signature. Turns things off four at a time, checks the TV is fine and undoes it by itself if anything is wrong. Never uninstalls.",c2T:"What Lume is",c2:"A calm Home with a big glass clock, sharp cards, Control Center, phone control, three looks (glass, graphite, high contrast) and AirPlay with synced lyrics.",c3T:"Samsung, LG, Roku",c3:"Closed systems: TV Doctor says what is really possible for your model and year, and the cleanest answer is a small HDMI stick.",beta:"Beta: really tested on one Fire TV Stick 4K Max",support:"What works on which TV",copied:"Copied"};
 const lang=(navigator.language||"it").toLowerCase().startsWith("it")?IT:EN;
 document.documentElement.lang=lang===IT?"it":"en";
 document.querySelectorAll("[data-t]").forEach(e=>{const v=lang[e.dataset.t];if(v)e.innerHTML=v});
 const ua=navigator.userAgent,os=/Windows/.test(ua)?"Windows":/Mac/.test(ua)&&!/iPhone|iPad/.test(ua)?"Mac":/Linux|X11/.test(ua)&&!/Android/.test(ua)?"Linux":"";
-if(os)document.getElementById("osn").textContent="· "+os;
-const R="https://github.com/GPire/lume-suite/releases/latest/download/",dl=document.getElementById("dl"),dl2=document.getElementById("dl2");
-if(os==="Mac"){dl.href=R+"TV-Doctor-mac-apple-chip.zip";dl.firstChild.nextSibling.textContent=" (Apple chip)";dl2.hidden=false}
-else if(os==="Linux"){dl.href=R+"TV-Doctor-linux.tar.gz"}
-if(/Android/.test(ua))document.getElementById("u").scrollIntoView();
+const R="https://github.com/GPire/lume-suite/releases/latest/download/",dl=document.getElementById("dl"),dl2=document.getElementById("dl2"),lbl=document.getElementById("dllabel");
+const mobile=location.search.includes("phone=1")||/Android|iPhone|iPad|iPod|Mobile/i.test(ua)||(matchMedia("(pointer:coarse)").matches&&innerWidth<800);
+if(os==="Mac"){dl.href=R+"TV-Doctor-mac-apple-chip.zip";lbl.textContent=lang.dlMac;dl2.hidden=false}
+else if(os==="Linux"){dl.href=R+"TV-Doctor-linux.tar.gz";lbl.textContent=lang.dlLin}
+else{lbl.textContent=lang.dlWin}
+if(mobile){document.body.classList.add("mobile");document.getElementById("phonecard").hidden=false;document.getElementById("dlrow").style.display="none";
+  const sb=document.getElementById("sharebtn"),data={title:document.title,text:"Lume per TV: TV Doctor",url:"https://gpire.github.io/lume-suite/"};
+  sb.onclick=async()=>{try{if(navigator.share){await navigator.share(data)}else{location.href="mailto:?subject="+encodeURIComponent(data.title)+"&body="+encodeURIComponent(data.url)}}catch(_){}}}
 document.querySelectorAll("[data-copy]").forEach(b=>b.onclick=async e=>{try{await navigator.clipboard.writeText(document.getElementById(b.dataset.copy).textContent.trim());b.textContent=lang.copied||"Copiato";setTimeout(()=>b.textContent=lang.copy||"Copia",1800)}catch(_){}});
 document.getElementById("copy").onclick=async e=>{try{await navigator.clipboard.writeText(document.getElementById("u").textContent.trim());e.target.textContent=lang.copied||"Copiato";setTimeout(()=>e.target.textContent=lang.copy||"Copia",1800)}catch(_){}};
 </script>
