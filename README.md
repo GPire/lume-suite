@@ -55,6 +55,10 @@
 - **Lume** is a home screen for Android TV, Google TV and Fire TV: a big glass clock, a dock of sharp cards, Control Center, Recent Apps, markets, news, weather in several cities, a health page, three looks (glass, graphite, high contrast), the TV's own voice assistant, and full control from a phone.
 - **Lume Cast** is an AirPlay receiver with Apple Music-style lyrics and screen mirroring, so an iPhone can show music and video on the TV.
 
+### The phone as a remote
+
+In Lume: Control Center, then the phone button. Scan the code, type the number: the page that opens is an Apple TV Remote-style surface (swipe to move, tap to choose, hold for Menu), with volume, play/pause, apps and favourites, search on the TV, YouTube or the web, profiles, and one-tap scenes (Cinema, Night, Music). To open apps and search while you watch something else, allow **Open apps from your phone** (TV Doctor and "Optimize this TV" do it for you). To type into other apps and use Back from them, switch Lume on in the TV's Accessibility settings once.
+
 <p align="center"><img src="docs/img/lume-control_center.jpg" alt="Lume Control Center" width="350"> <img src="docs/img/lume-markets.jpg" alt="Lume markets page" width="350"></p>
 
 Release files are signed with this project's key (certificate SHA-256 `09:9C:A1:B2:91:12:0A:BF:2C:B2:EB:79:9B:76:81:58:3D:3C:52:E4:00:91:1B:A0:83:3F:2A:CA:A1:92:A7:B6`) and listed with their checksums in `SHA256SUMS`.
@@ -68,6 +72,7 @@ Release files are signed with this project's key (certificate SHA-256 `09:9C:A1:
 | TV Doctor on Samsung, LG, Roku, VIDAA | Guides only | These systems are closed: it explains what is possible, per year |
 | Lume | Real Fire TV Stick 4K Max; Android TV 14 image | Setup, Home, Control Center, markets, news, weather verified |
 | Lume Cast | Real Fire TV Stick 4K Max | AirPlay music and mirroring need testing with more iPhones; synced lyrics and Sing mode not yet checked on a real song |
+| Phone remote | Real Fire TV Stick 4K Max, driven from a computer | Pairing, apps, search and volume verified. The voice assistant button cannot be verified: Alexa starts listening only from the remote's own button. Not yet tried on a Google TV |
 
 Details in [docs/DEVICE_SUPPORT.md](docs/DEVICE_SUPPORT.md) and how we compare with similar projects in [docs/COMPARISON.md](docs/COMPARISON.md).
 

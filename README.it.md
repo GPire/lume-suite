@@ -17,3 +17,7 @@
 Qualcosa non va? Nell'app c'è *Segnala la tua TV*: prepara la segnalazione, tu la leggi su GitHub e premi Invia. Nulla viene disinstallato dalla TV: le app vengono solo disattivate.
 
 [English: full details, status and licences](README.md)
+
+### Il telefono come telecomando
+
+In Lume: Centro di controllo, poi il pulsante del telefono. Inquadra il codice e scrivi il numero: si apre una superficie in stile Apple TV Remote (scorri per muoverti, tocca per scegliere, tieni premuto per il Menu), con volume, play/pausa, app e preferiti, ricerca sulla TV, su YouTube o sul web, profili e scene a un tocco (Cinema, Notte, Musica). Per aprire app e cercare mentre guardi altro, consenti **Apri app dal telefono** (lo fanno TV Doctor e "Ottimizza questa TV"). Per scrivere nelle altre app e usare Indietro da lì, accendi Lume nell'Accessibilità della TV, una volta sola.
