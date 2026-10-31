@@ -203,10 +203,10 @@ def show_detect(d):
 def load_uad():
     if not os.path.exists(CACHE):
         if os.path.exists(BUNDLED_UAD) and BUNDLED_UAD != CACHE:
-            return json.load(open(BUNDLED_UAD))
+            return json.load(open(BUNDLED_UAD, encoding="utf-8"))
         print("scarico la lista UAD-NG (una volta)...", file=sys.stderr)
         urllib.request.urlretrieve(UAD_URL, CACHE)
-    return json.load(open(CACHE))
+    return json.load(open(CACHE, encoding="utf-8"))
 
 
 NO_BENEFIT_PREFIX = ("com.android.theme.", "com.android.traceur", "com.android.protips", "com.android.carrierconfig",
@@ -391,7 +391,7 @@ def apply(serial, d, plan, tier, only):
         print("niente da fare"); return
     os.makedirs(BACKUPS, exist_ok=True)
     path = os.path.join(BACKUPS, f"{serial.replace(':','_')}-{time.strftime('%Y%m%d-%H%M%S')}.json")
-    json.dump({"serial": serial, "model": d["model"], "tier": tier, "disabled": [x[0] for x in todo]}, open(path, "w"), indent=1)
+    json.dump({"serial": serial, "model": d["model"], "tier": tier, "disabled": [x[0] for x in todo]}, open(path, "w", encoding="utf-8"), indent=1)
     print(f"backup scritto: {path}")
     done, failed = [], []
     for p, *_ in todo:
@@ -406,7 +406,7 @@ def undo(serial, path):
         files = sorted(f for f in os.listdir(BACKUPS) if f.startswith(serial.replace(":", "_"))) if os.path.isdir(BACKUPS) else []
         if not files: raise SystemExit("nessun backup trovato")
         path = os.path.join(BACKUPS, files[-1])
-    b = json.load(open(path))
+    b = json.load(open(path, encoding="utf-8"))
     for p in b["disabled"]:
         print(sh(serial, f"pm enable {p} 2>&1 | tail -1"))
     for k, v in b.get("settings", {}).items():
@@ -457,7 +457,7 @@ def check(serial):
     files = [f for f in files if f.startswith(serial.replace(":", "_"))]
     if not files: raise SystemExit("nessun backup: non c'è nulla da controllare")
     want = set()
-    for f in files: want |= set(json.load(open(os.path.join(BACKUPS, f)))["disabled"])
+    for f in files: want |= set(json.load(open(os.path.join(BACKUPS, f), encoding="utf-8"))["disabled"])
     off = set(l.replace("package:", "") for l in sh(serial, "pm list packages -d").splitlines())
     back = sorted(want - off)
     print(f"Controllati {len(want)} pacchetti. Tornati attivi dopo un aggiornamento: {len(back)}")
@@ -488,7 +488,7 @@ def tune(serial, tier="essenziale", dns=False):
         sh(serial, f"settings put {ns} {key} {val}")
     os.makedirs(BACKUPS, exist_ok=True)
     path = os.path.join(BACKUPS, f"{serial.replace(':','_')}-tuning-{time.strftime('%Y%m%d-%H%M%S')}.json")
-    json.dump({"serial": serial, "disabled": [], "settings": old}, open(path, "w"), indent=1)
+    json.dump({"serial": serial, "disabled": [], "settings": old}, open(path, "w", encoding="utf-8"), indent=1)
     print("animazioni ridotte (valori precedenti salvati in %s)" % path)
 
 
@@ -498,7 +498,7 @@ KNOWN = os.path.join(HERE, "known_issues.json")
 def match_issues(family=None, brand="", maker="", sdk=0, year=0):
     """Known community problems that apply to this device (read-only: nothing is run)."""
     out = []
-    for i in json.load(open(KNOWN))["issues"]:
+    for i in json.load(open(KNOWN, encoding="utf-8"))["issues"]:
         m = i["match"]
         if m.get("family") and family not in m["family"]: continue
         if m.get("brand") and not any(b in (brand + " " + maker).lower() for b in m["brand"]): continue
@@ -552,7 +552,7 @@ def launchers(serial, apply=False):
     sh(serial, "sync")
     os.makedirs(BACKUPS, exist_ok=True)
     path = os.path.join(BACKUPS, f"{serial.replace(':','_')}-launchers-{time.strftime('%Y%m%d-%H%M%S')}.json")
-    json.dump({"serial": serial, "disabled": extra, "settings": {}}, open(path, "w"), indent=1)
+    json.dump({"serial": serial, "disabled": extra, "settings": {}}, open(path, "w", encoding="utf-8"), indent=1)
     print("salvato in " + path)
     return extra
 
@@ -597,7 +597,7 @@ def replace_google_home(serial, apply=False, allow_google_tv=False):
         print("Con la Home di Google spenta, Home non apre Lume: ho rimesso tutto come prima."); return []
     os.makedirs(BACKUPS, exist_ok=True)
     path = os.path.join(BACKUPS, f"{serial.replace(':','_')}-launchers-{time.strftime('%Y%m%d-%H%M%S')}.json")
-    json.dump({"serial": serial, "disabled": targets, "settings": {}}, open(path, "w"), indent=1)
+    json.dump({"serial": serial, "disabled": targets, "settings": {}}, open(path, "w", encoding="utf-8"), indent=1)
     print("Fatto: Home apre Lume. Per tornare a Google: undo --file " + path)
     return targets
 
@@ -607,7 +607,7 @@ GUIDES = os.path.join(HERE, "closed_tvs.json")
 
 def guide(os_name, year):
     """Closed platforms (no ADB): honest, per-year checklist from guides.json."""
-    g = json.load(open(GUIDES))
+    g = json.load(open(GUIDES, encoding="utf-8"))
     p = g.get(os_name)
     if not p: raise SystemExit("piattaforme: " + ", ".join(g))
     yr = p.get("years", {}).get(str(year))

@@ -1787,7 +1787,8 @@ public class MainActivity extends Activity {
         heroTitle.setIncludeFontPadding(false);
         heroTitle.setMaxLines(2);
         heroTitle.setEllipsize(TextUtils.TruncateAt.END);
-        heroInfo.addView(heroTitle, new LinearLayout.LayoutParams(dp(420), ViewGroup.LayoutParams.WRAP_CONTENT));
+        // never wider than the space left of the big clock (a long painting title used to run into its first digit)
+        heroInfo.addView(heroTitle, new LinearLayout.LayoutParams(Math.min(dp(420), (int) (getResources().getDisplayMetrics().widthPixels * 0.29f)), ViewGroup.LayoutParams.WRAP_CONTENT));
         heroMeta = text(12.5f, Ui.font(this, "medium"), 0.8f);
         LinearLayout.LayoutParams mlp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mlp.topMargin = dp(10);

@@ -37,7 +37,7 @@ def _prime(bits):
 
 def load_key():
     if os.path.exists(KEYFILE):
-        k = json.load(open(KEYFILE)); return k["n"], k["d"]
+        k = json.load(open(KEYFILE, encoding="utf-8")); return k["n"], k["d"]
     e = 65537
     while True:
         p, q = _prime(1024), _prime(1024)
@@ -45,7 +45,7 @@ def load_key():
         if p != q and phi % e: break
     n, d = p * q, pow(e, -1, phi)
     os.makedirs(os.path.dirname(KEYFILE), exist_ok=True)
-    with open(KEYFILE, "w") as f: json.dump({"n": n, "d": d}, f)
+    with open(KEYFILE, "w", encoding="utf-8") as f: json.dump({"n": n, "d": d}, f)
     os.chmod(KEYFILE, 0o600)
     return n, d
 

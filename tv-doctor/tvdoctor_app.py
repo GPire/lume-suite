@@ -209,7 +209,7 @@ def inspect(serial):
     try:
         files = sorted(f for f in os.listdir(T.BACKUPS) if f.startswith(serial.replace(":", "_")) and "-tuning-" not in f and "-launchers-" not in f) if os.path.isdir(T.BACKUPS) else []
         before = set()
-        for f in files: before |= set(json.load(open(os.path.join(T.BACKUPS, f))).get("disabled", []))
+        for f in files: before |= set(json.load(open(os.path.join(T.BACKUPS, f), encoding="utf-8")).get("disabled", []))
         reactivated = len(before & {x[0] for x in todo})
     except Exception:
         pass
@@ -264,7 +264,7 @@ def suite_files(local_dir=None, api=None, fetch=None):
     names = [n for n, _, _ in SUITE]
     if all(os.path.exists(os.path.join(local, n)) for n in names):
         sums = os.path.join(local, "SHA256SUMS")
-        want = dict(l.split()[::-1] for l in open(sums).read().splitlines() if l.strip()) if os.path.exists(sums) else {}
+        want = dict(l.split()[::-1] for l in open(sums, encoding="utf-8").read().splitlines() if l.strip()) if os.path.exists(sums) else {}
         for n in names:
             if n in want and want[n].lstrip("*") != _sha256(os.path.join(local, n)):
                 raise RuntimeError(f"{n}: la firma SHA-256 non corrisponde, non lo installo")
