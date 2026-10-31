@@ -26,3 +26,11 @@ dist/
 *.p12
 tv-doctor/dist-app/
 tv-doctor/build-app/
+
+# video work: raw footage, device snapshots, node modules, renders
+video/raw/
+video/state/
+video/app/node_modules/
+video/app/out/
+video/app/public/*.mp4
+video/app/public/frames/

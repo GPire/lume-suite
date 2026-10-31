@@ -53,7 +53,7 @@ public class SettingsActivity extends Activity {
     // tvOS-style pages: the main list opens a page per section; Back returns to the main list.
     static final String ROOT = "root", PROFILES = "Profiles", SHELF = "Top Shelf", PRESENT = "Presentation",
             INPUTS = "Inputs", WEATHER = "Weather", WATCHING = "Continue Watching", HOME = "Home",
-            PERMS = "Permissions", ABOUT = "About", PHONE = "Phone control", OPTIMIZE = "Optimize this TV";
+            PERMS = "Permissions", ABOUT = "About", PHONE = "Phone control", OPTIMIZE = "Optimize this TV", MORE = "More";
 
     FrameLayout leftPane;
     ScrollView scroller;
@@ -107,6 +107,7 @@ public class SettingsActivity extends Activity {
             case PHONE: pagePhone(); break;
             case OPTIMIZE: pageOptimize(); break;
             case ABOUT: pageAbout(); break;
+            case MORE: pageMore(); break;
             default: pageRoot(); break;
         }
         scroller.scrollTo(0, 0);
@@ -220,6 +221,7 @@ public class SettingsActivity extends Activity {
             case PERMS: grad = new int[]{0xFF8E8E93, 0xFF48484A}; glyph = "shield"; break;
             case PHONE: grad = new int[]{0xFF5E5CE6, 0xFF3634A3}; glyph = "remote"; break;
             case OPTIMIZE: grad = new int[]{0xFFFF9F0A, 0xFFE0640A}; glyph = "bolt"; break;
+            case MORE: grad = new int[]{0xFF636366, 0xFF2C2C2E}; glyph = "more"; break;
             default: grad = new int[]{0xFF8E8E93, 0xFF3A3A3C}; glyph = "gear"; break;
         }
         android.graphics.Bitmap b = android.graphics.Bitmap.createBitmap(w, h, android.graphics.Bitmap.Config.ARGB_8888);
@@ -238,9 +240,30 @@ public class SettingsActivity extends Activity {
     // ---------------------------------------------------------------- pages
 
     void pageRoot() {
+        // The few things people actually change, in the order they matter. The rest is under "More": Lume already picks the news, weather
+        // and catalogues from the TV's language and country, so most of it never needs a visit.
         nav(PROFILES, () -> Profiles.current(this).name);
+        nav(HOME, () -> {
+            String k = Profiles.homePrefs(this).getString("wallpaper", "aurora");
+            int i = java.util.Arrays.asList(MainActivity.WALL_KEYS).indexOf(k);
+            return MainActivity.WALL_NAMES[Math.max(0, i)];
+        });
+        nav(PHONE, () -> org.lumesuite.launcher.present.Presenter.remoteEnabled(this) ? "On" : "Off");
+        nav(OPTIMIZE, () -> TvOptimize.saved(this).isEmpty() ? (AutoMemory.enabled(this) ? "Automatic" : "") : It.f("%d apps off", TvOptimize.saved(this).size()));
+        nav(PERMS, () -> {
+            int missing = (Perms.hasListener(this) || !Perms.listenerSupported(this) ? 0 : 1) + (Perms.hasLocation(this) ? 0 : 1)
+                    + (Perms.hasTvListings(this) || !WatchNext.supported() ? 0 : 1)
+                    + (Perms.hasAdmin(this) || !Perms.adminSupported(this) ? 0 : 1) + (Perms.isDefaultHome(this) ? 0 : 1) + (Perms.hasOverlay(this) ? 0 : 1);
+            return missing == 0 ? "All allowed" : missing + " to allow";
+        });
+        nav(MORE, () -> "");
+        nav(ABOUT, () -> "Version " + version());
+        row("TV Settings", () -> "", () -> Suggestions.start(this, new Intent(Settings.ACTION_SETTINGS)));
+    }
+
+    /** The settings most people never need: what the carousel shows, weather places, TV inputs, the signage mode. */
+    void pageMore() {
         nav(SHELF, () -> {
-            // What the carousel shows, in its order: Continue Watching, apps' rows, recommendations, news.
             List<String> on = new ArrayList<>();
             if (cwOn()) on.add("Continue Watching");
             if (appRowsOn()) on.add("Apps");
@@ -248,24 +271,9 @@ public class SettingsActivity extends Activity {
             if (Suggestions.showNews(this)) on.add("News");
             return on.isEmpty() ? "Off" : on.size() > 2 ? on.size() + " sources" : String.join(" & ", on);
         });
-        nav(PHONE, () -> org.lumesuite.launcher.present.Presenter.remoteEnabled(this) ? "On" : "Off");
-        nav(OPTIMIZE, () -> TvOptimize.saved(this).isEmpty() ? "" : It.f("%d apps off", TvOptimize.saved(this).size()));
-        nav(PRESENT, () -> org.lumesuite.launcher.present.Presenter.enabled(this) ? "On" : "Off");
+        nav(WEATHER, () -> !Weather.enabled(this) ? "Off" : Weather.place(this).isEmpty() ? "Automatic" : Weather.place(this));
         if (!Inputs.list(this).isEmpty()) nav(INPUTS, () -> Inputs.showCard(this) ? "On" : "Off");
-        nav(WEATHER, () -> !Weather.enabled(this) ? "Off" : Weather.place(this).isEmpty() ? "On" : Weather.place(this));
-        nav(HOME, () -> {
-            String k = Profiles.homePrefs(this).getString("wallpaper", "aurora");
-            int i = java.util.Arrays.asList(MainActivity.WALL_KEYS).indexOf(k);
-            return MainActivity.WALL_NAMES[Math.max(0, i)];
-        });
-        nav(PERMS, () -> {
-            int missing = (Perms.hasListener(this) || !Perms.listenerSupported(this) ? 0 : 1) + (Perms.hasLocation(this) ? 0 : 1)
-                    + (Perms.hasTvListings(this) || !WatchNext.supported() ? 0 : 1)
-                    + (Perms.hasAdmin(this) || !Perms.adminSupported(this) ? 0 : 1) + (Perms.isDefaultHome(this) ? 0 : 1) + (Perms.hasOverlay(this) ? 0 : 1);
-            return missing == 0 ? "All allowed" : missing + " to allow";
-        });
-        nav(ABOUT, () -> "Version " + version());
-        row("TV Settings", () -> "", () -> Suggestions.start(this, new Intent(Settings.ACTION_SETTINGS)));
+        nav(PRESENT, () -> org.lumesuite.launcher.present.Presenter.enabled(this) ? "On" : "Off");
     }
 
     void pageProfiles() {
@@ -537,6 +545,11 @@ public class SettingsActivity extends Activity {
     }
 
     void pageOptimize() {
+        row("Free memory automatically", () -> AutoMemory.enabled(this) ? "On" : "Off", () -> {
+            AutoMemory.set(this, !AutoMemory.enabled(this));
+            Toast.makeText(this, It.t(AutoMemory.enabled(this) ? "Lume will close unused apps by itself when memory runs low" : "Memory is only freed when you ask"), Toast.LENGTH_LONG).show();
+            refreshAll();
+        });
         row("Guided cleaning", () -> "", () -> startActivity(new Intent(this, SetupActivity.class).putExtra("only_clean", true)));
         row("Check this TV", () -> optStatus.isEmpty() ? "" : optStatus, () -> optCheck(null));
         row("Clean now", () -> optPlan != null ? It.f("%d apps", optPlan.safe.size()) : "", this::optClean);

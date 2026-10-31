@@ -473,7 +473,7 @@ BRAND_PITFALLS = {
     "vu": ["Con la Home di Google spenta il tasto YouTube del telecomando può non fare niente."],
     "oneplus": ["Con la Home spenta i tasti Guida e Tutte le app non rispondono."],
     "google": ["Google TV: la Home di Google si sostituisce solo con l'opzione dedicata (spegne anche l'app di configurazione, alcune pagine Impostazioni risultano non disponibili finché non annulli). Altrimenti resta sempre accesa."],
-    "amazon": ["Fire OS 8.1: dopo disattivazioni aggressive è segnalato qualche bootloop. Riavvio di controllo dopo ogni gruppo."],
+    "amazon": ["Fire OS 8.1: boot loops have been reported after very aggressive switching off. TV Doctor restarts to check after each group."],
 }
 GOOGLE_TV_KEEP = ["com.google.android.tvlauncher", "com.google.android.apps.tv.launcherx", "com.google.android.tungsten.setupwraith"]
 
@@ -496,7 +496,7 @@ def pitfalls(d):
 def wireless_note(d):
     """Android 11+ TVs and Chromecast with Google TV have no fixed port 5555: they need adb pair."""
     if int(d.get("sdk") or 0) >= 30:
-        return "Android 11+: se la porta 5555 non risponde usa Debug wireless: adb pair IP:porta, poi adb connect IP:porta."
+        return "Android 11 and newer: if port 5555 does not answer, use Wireless debugging (the app finds the TV and asks for the pairing code)."
     return ""
 
 
@@ -554,7 +554,7 @@ def integrate(serial):
     Lume Cast (an app that was never opened is "stopped": Android does not start it at boot, so AirPlay would not be there).
     The old values go in a backup so Undo puts them back. Returns what was done."""
     if FIXTURE is not None:
-        return ["screensaver", "home-button", "airplay", "cast-opens", "phone-opens"]
+        return ["screensaver", "home-button", "airplay", "cast-opens", "phone-opens", "ads-off"]
     have = set(l.replace("package:", "").strip() for l in sh(serial, "pm list packages").splitlines())
     old, did = {}, []
 
@@ -573,6 +573,12 @@ def integrate(serial):
             put("enabled_accessibility_services", cur + ":" + LUME_HOME_SERVICE if cur else LUME_HOME_SERVICE)
             put("accessibility_enabled", "1")
             did.append("home-button")
+    # Advertising off, on every Android TV: the system switch that apps read for "do not personalise ads" (confirmed on Fire OS, where it is
+    # the "Interest-based ads" switch; on Google TV and other Android TV it is the standard Android key, which apps are asked to respect).
+    if sh(serial, "settings get secure limit_ad_tracking").strip() != "1":
+        old["secure:limit_ad_tracking"] = sh(serial, "settings get secure limit_ad_tracking").strip()
+        sh(serial, "settings put secure limit_ad_tracking 1")
+        did.append("ads-off")
     if "org.lumesuite.launcher" in have:
         # "Display over other apps" for Lume: without it Android drops every app or search the phone remote opens while another app is on screen.
         sh(serial, "appops set org.lumesuite.launcher SYSTEM_ALERT_WINDOW allow")

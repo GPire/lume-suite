@@ -98,8 +98,9 @@ public class SetupActivity extends Activity {
         steps.add(this::look);
         steps.add(this::optimize);
         steps.add(this::cleanOffer);
-        // Home content, weather and presentation decide themselves (our gallery on the shelf, weather on, presentation off):
-        // a first run is five pages, and each of those stays one step away in Settings.
+        // One page where the person says what they want (news, weather, phone remote, automatic memory); the rest decides itself from
+        // the TV's language and country. Settings keeps only the everyday things, the rest is under More.
+        steps.add(this::homeContent);
         steps.add(this::homeAndPermissions);
         steps.add(this::finish_);
         if (getIntent().getBooleanExtra("skip", false)) {  // adb: --ez skip true marks setup as done
@@ -658,8 +659,8 @@ public class SetupActivity extends Activity {
     /** This profile's Home Screen: what the carousel shows, as switches. */
     void homeContent() {
         backdrop.animate().alpha(0.5f).setDuration(Motion.d(300)).start();
-        title("Your Home Screen");
-        subtitle("What plays in the carousel at the top of Home. Turn on any, all or none; you can change this in Settings.");
+        title("What do you want on your Home?");
+        subtitle("News, weather and catalogues already follow your language and country. Switch on what you want; you can change it later in Settings.");
         LinearLayout l = list();
         boolean[] recs = {Suggestions.showRecs(this)}, news = {Suggestions.showNews(this)};
         Row[] r = new Row[1];
@@ -683,6 +684,25 @@ public class SetupActivity extends Activity {
             cw.detail("Needs Android TV 8 or later");
             apps.detail("Needs Android TV 8 or later");
         }
+        boolean[] wx = {Weather.enabled(this)}, ph = {org.lumesuite.launcher.present.Presenter.remoteEnabled(this)}, mem = {AutoMemory.enabled(this)};
+        Row[] w = new Row[1];
+        w[0] = row(l, "Weather", "Where you are, found automatically", SWITCH, wx[0], () -> {
+            wx[0] = !wx[0];
+            Weather.prefs(this).edit().putBoolean("enabled", wx[0]).apply();
+            w[0].set(wx[0]);
+        });
+        Row[] p = new Row[1];
+        p[0] = row(l, "Phone remote", "Control the TV from your phone: scan a code once", SWITCH, ph[0], () -> {
+            ph[0] = !ph[0];
+            org.lumesuite.launcher.present.Presenter.setRemote(this, ph[0]);
+            p[0].set(ph[0]);
+        });
+        Row[] m = new Row[1];
+        m[0] = row(l, "Free memory automatically", "Closes apps you are not using when the TV runs low", SWITCH, mem[0], () -> {
+            mem[0] = !mem[0];
+            AutoMemory.set(this, mem[0]);
+            m[0].set(mem[0]);
+        });
         buttons("Continue", this::next);
         dots();
     }

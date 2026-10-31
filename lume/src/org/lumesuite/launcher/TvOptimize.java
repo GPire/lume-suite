@@ -196,6 +196,11 @@ final class TvOptimize {
                 did.add("home-button");
             }
         }
+        if (!"1".equals(a.shell("settings get secure limit_ad_tracking").trim())) {   // personalised ads off: Fire OS "Interest-based ads", and the standard Android key elsewhere
+            remember(a, old, "limit_ad_tracking");
+            a.shell("settings put secure limit_ad_tracking 1");
+            did.add("ads-off");
+        }
         a.shell("appops set " + c.getPackageName() + " SYSTEM_ALERT_WINDOW allow");   // the phone remote can open apps while another app is showing
         did.add("phone-opens");
         if (have.contains("org.lumesuite.cast")) {

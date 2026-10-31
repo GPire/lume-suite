@@ -1,6 +1,15 @@
 {
-  "lume": {"version": "0.5.3", "code": 117},
-  "cast": {"version": "0.1.4", "code": 8},
-  "gallery": {"version": "0.8", "code": 8},
+  "lume": {
+    "version": "0.6.1",
+    "code": 119
+  },
+  "cast": {
+    "version": "0.1.4",
+    "code": 8
+  },
+  "gallery": {
+    "version": "0.8",
+    "code": 8
+  },
   "page": "https://gpire.github.io/lume-suite/tv/"
 }

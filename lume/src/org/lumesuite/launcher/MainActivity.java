@@ -389,6 +389,8 @@ public class MainActivity extends Activity {
         super.onResume();
         resumed = true;
         activeInstance = this;
+        // Back on the Home: if memory is low and nothing is playing, close what is no longer in use (see AutoMemory).
+        handler.postDelayed(() -> { if (resumed) AutoMemory.maybeRun(this); }, 4000);
         String ws = Profiles.homePrefs(this).getString("wallpaper", "galleria");
         if (!ws.equals(wallStyle) || (Gallery.KEY.equals(ws) && gallerySlot != Gallery.slot())) {
             wallStyle = ws;

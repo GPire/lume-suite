@@ -37,3 +37,11 @@ Translations were written by the author with machine help and have not been revi
 | Phone remote: typing into other apps | Needs Lume's accessibility switch; the check that it refuses cleanly without it passed | Typing with the switch on, in a real search box |
 | Lume Cast: connected banner, options hint, redesigned Settings, Help, Health, About | Fire TV Stick 4K Max (pictures taken on the TV) | Mirroring and music with the new screens in use |
 
+## Advertising and memory, on every Android TV (2026-10-31)
+
+| What | Fire TV (Stick 4K Max) | Google TV / Android TV |
+|---|---|---|
+| Personalised ads off (`secure limit_ad_tracking = 1`), set by TV Doctor and by Lume's guided cleaning after the install | **Verified**: it is exactly what the *Interest-based ads* switch in Fire OS changes (found by comparing all system settings before and after pressing it) | The standard Android key that apps are asked to respect; **not verified on a real Google TV**; Google's own ad-ID switch lives in Google's apps |
+| Other privacy switches in Fire OS (usage data, app usage data, Amazon Photos) | Off here; they are stored by Amazon's apps, not in system settings, so no script can set them: TV Doctor switches off the apps behind them | Not applicable |
+| Memory freed automatically by Lume when it is low and nothing is playing (Settings > Optimize this TV, or the first-run page) | Runs; **no measurable gain seen** in a short test on a 1.7 GB stick (Android already manages cached apps) | Same code; not tested |
+
