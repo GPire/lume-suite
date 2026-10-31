@@ -113,12 +113,14 @@ def _builtin_adb(serial, args):
     return ""
 
 
-def probe(serial, wait=4):
+def probe(serial, wait=4, wireless=False):
     """Is this TV ready? 'ok', 'auth' (it shows the "Allow debugging?" box and waits for the person) or 'fail'.
     Never blocks for long: the box is shown to the person by the app, not hidden behind a 45 s wait."""
     import shutil
     host, _, port = serial.partition(":")
     port = int(port or 5555)
+    if wireless and not shutil.which("adb"):
+        return "tools"   # Android 11+ wireless debugging is encrypted: the built-in client cannot, Google's adb can
     if shutil.which("adb"):
         try:
             subprocess.run(["adb", "connect", serial], capture_output=True, text=True, timeout=15)
@@ -126,7 +128,7 @@ def probe(serial, wait=4):
             out = (st.stdout + st.stderr).lower()
         except Exception:
             return "fail"
-        return "ok" if out.strip().startswith("device") else "auth" if "unauthorized" in out else "fail"
+        return "ok" if out.strip().startswith("device") else "auth" if "unauthorized" in out else "pair" if wireless else "fail"
     import pyadb
     try:
         pyadb.connect(host, port, wait).close()

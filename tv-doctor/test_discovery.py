@@ -39,3 +39,12 @@ for words, fam in [(("Samsung Electronics", "UE55NU7400", ""), "tizen"), (("LG E
                    (("Hisense", "55A6", ""), "vidaa"), (("", "", "Sonos Beam"), None)]:
     assert D.family_of(*words) == fam, (words, D.family_of(*words), fam)
 print("discovery OK")
+
+# Android 11+ wireless debugging: connect and pairing ports are announced in SRV records
+srv = lambda port, target: struct.pack(">HHH", 0, 0, port) + name(target)
+pk = struct.pack(">HHHHHH", 0, 0x8400, 0, 2, 0, 0)
+pk += rr("adb-ABC._adb-tls-connect._tcp.local", 33, srv(37123, "tv.local"))
+pk += rr("adb-ABC._adb-tls-pairing._tcp.local", 33, srv(41555, "tv.local"))
+sw = D.summarize_mdns([("192.168.1.60", D.parse_response(pk))])["192.168.1.60"]
+assert sw["adb_connect_port"] == 37123 and sw["adb_pair_port"] == 41555, sw
+print("TUTTO OK discovery wireless")

@@ -182,13 +182,16 @@ def find_tvs():
         hint = hints.get(ip)
         if found and hint and found["kind"] == "adb":
             found["name"] = hint.get("name") or hint.get("model") or found["name"]
+        if not found and hint and hint.get("adb_connect_port"):   # Android 11+: no port 5555, the TV announces its own port
+            found = {"kind": "adb", "serial": f"{ip}:{hint['adb_connect_port']}", "name": hint.get("name") or hint.get("model") or ip,
+                     "wireless": True, "pairPort": hint.get("adb_pair_port")}
         return found or predict_off(ip, names, hint)
     addresses = sorted({f"{pre}.{i}" for i in range(1, 255)} | set(hints))
     with ThreadPoolExecutor(64) as ex:
         res = [r for r in ex.map(one, addresses) if r]
     adbs = [r for r in res if r["kind"] == "adb"]
     with ThreadPoolExecutor(8) as ex:
-        for r, state in zip(adbs, ex.map(lambda r: T.probe(r["serial"]), adbs)):
+        for r, state in zip(adbs, ex.map(lambda r: T.probe(r["serial"], wireless=r.get("wireless", False)), adbs)):
             r["state"] = state
             if state == "ok":   # a real name beats an address
                 try:
@@ -273,6 +276,19 @@ def default_gateway():
     except Exception:
         pass
     return local_prefix() + ".1"
+
+
+def pair_tv(ip, port, code):
+    """Android 11+ wireless debugging: the six-digit code on the TV pairs this computer once, with Google's own adb."""
+    import shutil
+    ip = re.sub(r"[^0-9.]", "", ip or "")
+    if not shutil.which("adb"):
+        return {"ok": False, "error": "tools"}
+    if not (re.fullmatch(r"\d{1,5}", str(port)) and re.fullmatch(r"\d{6}", str(code))):
+        return {"ok": False, "error": "code"}
+    r = subprocess.run(["adb", "pair", f"{ip}:{port}", str(code)], capture_output=True, text=True, timeout=40)
+    out = (r.stdout + r.stderr).strip()
+    return {"ok": "Successfully paired" in out, "error": "" if "Successfully paired" in out else out[:160]}
 
 
 def report_url(serial, outcome=""):
@@ -460,6 +476,7 @@ class H(BaseHTTPRequestHandler):
                 ip = re.sub(r"[^0-9.]", "", q.get("ip", ""))
                 r = classify(ip) or {"error": "nessuna TV riconosciuta a questo indirizzo"}
                 if r.get("kind") == "adb": r["state"] = T.probe(r["serial"])
+            elif self.path == "/api/pair": r = pair_tv(q.get("ip", ""), q.get("port", ""), q.get("code", ""))
             elif self.path == "/api/dnscheck": r = dns_check()
             elif self.path == "/api/probe": r = {"state": T.probe(q["serial"])}
             elif self.path == "/api/inspect": r = inspect(q["serial"])

@@ -18,7 +18,8 @@ SSDP_GROUP, SSDP_PORT = "239.255.255.250", 1900
 # Service types that TVs and streamers advertise, and what each one says about the device.
 SERVICES = ["_googlecast._tcp.local", "_airplay._tcp.local", "_raop._tcp.local", "_androidtvremote2._tcp.local",
             "_spotify-connect._tcp.local", "_amzn-wplay._tcp.local", "_samsungmsf._tcp.local", "_lg-smart-device._tcp.local",
-            "_sonos._tcp.local", "_roku-rcp._tcp.local", "_hap._tcp.local", "_homekit._tcp.local"]
+            "_sonos._tcp.local", "_roku-rcp._tcp.local", "_hap._tcp.local", "_homekit._tcp.local",
+            "_adb-tls-connect._tcp.local", "_adb-tls-pairing._tcp.local"]   # Android 11+ "Wireless debugging": the port changes, so it is announced
 
 # Maker words -> the family TV Doctor works with. Order matters: first match wins.
 FAMILY_BY_WORD = [("samsung", "tizen"), ("lg electronics", "webos"), ("lge", "webos"), ("webos", "webos"), ("roku", "roku"),
@@ -86,7 +87,7 @@ def parse_response(data):
             if rtype == 12:
                 out.append((name, "PTR", _read_name(data, pos)[0]))
             elif rtype == 33 and len(rd) >= 7:
-                out.append((name, "SRV", _read_name(data, pos + 6)[0]))
+                out.append((name, "SRV", {"port": struct.unpack(">H", rd[4:6])[0], "target": _read_name(data, pos + 6)[0]}))
             elif rtype == 16:
                 txt, i = {}, 0
                 while i < len(rd):
@@ -142,6 +143,9 @@ def summarize_mdns(records):
                 d["name"] = d["name"] or value.get("fn") or value.get("name") or ""
                 d["model"] = d["model"] or value.get("md") or value.get("model") or value.get("am") or ""
                 d["maker"] = d["maker"] or value.get("manufacturer") or ""
+            elif kind == "SRV" and isinstance(value, dict):
+                if name.endswith("_adb-tls-connect._tcp.local"): d["adb_connect_port"] = value["port"]
+                elif name.endswith("_adb-tls-pairing._tcp.local"): d["adb_pair_port"] = value["port"]
             elif kind == "PTR" and "._" in value:
                 d["_instance"] = d["_instance"] or value.split("._", 1)[0]
     for d in found.values():
@@ -211,6 +215,7 @@ def discover(seconds=3.0):
         family = family_of(maker, model, name) or ("fire" if "_amzn-wplay" in services else None) \
             or ("android" if "_androidtvremote2" in services or "_googlecast" in services and not maker else None)
         out[ip] = {"name": name, "maker": maker, "model": model, "family": family,
+                   "adb_connect_port": a.get("adb_connect_port"), "adb_pair_port": a.get("adb_pair_port"),
                    "how": "+".join(x for x, y in (("mDNS", a), ("SSDP", b)) if y), "services": services}
     return out
 
