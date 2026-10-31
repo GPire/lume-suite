@@ -1034,6 +1034,7 @@ public class SetupActivity extends Activity {
     }
 
     int cleanDone;
+    List<String> cleanLinked = new ArrayList<>();
     boolean cleanRolled;
 
     void cleanApply() {
@@ -1046,6 +1047,7 @@ public class SetupActivity extends Activity {
                 TvOptimize.Result r = TvOptimize.apply(this, adb, TvOptimize.current, pkgs);
                 cleanDone = r.done;
                 cleanRolled = r.rolledBack;
+                cleanLinked = r.rolledBack ? new ArrayList<>() : TvOptimize.integrate(this, adb);
             } catch (Exception e) {
                 android.util.Log.w("LumeOptimize", "clean failed", e);
                 cleanDone = 0;
@@ -1058,10 +1060,19 @@ public class SetupActivity extends Activity {
         }).start();
     }
 
+    String linkedText() {
+        StringBuilder b = new StringBuilder();
+        for (String x : cleanLinked) {
+            b.append("\n\u2713 ").append(It.t(x.equals("screensaver") ? "The Gallery is the screensaver"
+                    : x.equals("home-button") ? "The Home button opens Lume" : "AirPlay is ready on your iPhone"));
+        }
+        return b.toString();
+    }
+
     void cleanDone() {
         title(cleanRolled ? "Stopped" : "All done");
         subtitle(cleanRolled ? It.t("Stopped: the TV did not answer well, the last group was turned back on")
-                : It.f("%d apps switched off. Undo any time in Settings > Optimize this TV.", cleanDone));
+                : It.f("%d apps switched off. Undo any time in Settings > Optimize this TV.", cleanDone) + linkedText());
         buttons("Done", this::next);
     }
 

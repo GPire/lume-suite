@@ -421,11 +421,17 @@ def run_apply(serial, batch=4, install=False, replace_home=False, dns=False, kee
     with contextlib.redirect_stdout(io.StringIO()):
         T.tune(serial, d.get("tier", "essenziale") if anim else "pieno", dns, ultra)
     T.sh(serial, "sync")   # Android writes package states a little later: a reboot right now would lose them (seen on Fire OS 8.1)
+    linked = []
+    if install and not rolled:   # the three apps work as one: screensaver, Home button, AirPlay ready
+        try:
+            linked = T.integrate(serial)
+        except BaseException:
+            linked = []
     homed = None
     if replace_home and not rolled:   # Lume must be there; replace_google_home checks Home opens Lume and puts Google back if not
         with contextlib.redirect_stdout(io.StringIO()):
             homed = bool(T.replace_google_home(serial, True, True))
-    return {"ok": not rolled, "done": done, "rolledBack": rolled, "before": before, "after": mem_avail(serial), "suite": suite, "home": homed}
+    return {"ok": not rolled, "done": done, "rolledBack": rolled, "before": before, "after": mem_avail(serial), "suite": suite, "home": homed, "linked": linked}
 
 
 def run_undo(serial):

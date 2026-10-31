@@ -544,6 +544,47 @@ def tune(serial, tier="essenziale", dns=False, ultra=False):
     print("animazioni ridotte (valori precedenti salvati in %s)" % path)
 
 
+LUME_GALLERY_DREAM = "org.lumesuite.gallery/org.lumesuite.gallery.ArtDream"
+LUME_HOME_SERVICE = "org.lumesuite.launcher/org.lumesuite.launcher.PowerService"
+
+
+def integrate(serial):
+    """After the suite is installed, switch on what makes the three apps work as one: the Gallery as the screensaver, Lume's
+    accessibility service (so the Home button opens Lume on Fire TV and other TVs that keep their own Home), and one first launch of
+    Lume Cast (an app that was never opened is "stopped": Android does not start it at boot, so AirPlay would not be there).
+    The old values go in a backup so Undo puts them back. Returns what was done."""
+    if FIXTURE is not None:
+        return ["screensaver", "home-button", "airplay"]
+    have = set(l.replace("package:", "").strip() for l in sh(serial, "pm list packages").splitlines())
+    old, did = {}, []
+
+    def put(key, val):
+        old["secure:" + key] = sh(serial, f"settings get secure {key}").strip()
+        sh(serial, f"settings put secure {key} {val}")
+
+    if "org.lumesuite.gallery" in have:
+        put("screensaver_components", LUME_GALLERY_DREAM)
+        put("screensaver_enabled", "1")
+        did.append("screensaver")
+    if "org.lumesuite.launcher" in have and "org.lumesuite.launcher" not in sh(serial, "cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME | tail -1"):
+        cur = sh(serial, "settings get secure enabled_accessibility_services").strip()
+        cur = "" if cur in ("null", "") else cur
+        if LUME_HOME_SERVICE not in cur:
+            put("enabled_accessibility_services", cur + ":" + LUME_HOME_SERVICE if cur else LUME_HOME_SERVICE)
+            put("accessibility_enabled", "1")
+            did.append("home-button")
+    if "org.lumesuite.cast" in have:
+        sh(serial, "monkey -p org.lumesuite.cast -c android.intent.category.LEANBACK_LAUNCHER 1")
+        time.sleep(3)
+        sh(serial, "input keyevent KEYCODE_HOME")
+        did.append("airplay")
+    if old:
+        os.makedirs(BACKUPS, exist_ok=True)
+        path = os.path.join(BACKUPS, f"{serial.replace(':','_')}-tuning-integration-{time.strftime('%Y%m%d-%H%M%S')}.json")
+        json.dump({"serial": serial, "disabled": [], "settings": old}, open(path, "w", encoding="utf-8"), indent=1)
+    return did
+
+
 KNOWN = os.path.join(HERE, "known_issues.json")
 
 
@@ -682,7 +723,7 @@ def guide(os_name, year):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["detect", "plan", "apply", "undo", "check", "tune", "guide", "issues", "launchers", "replace-home", "install"])
+    ap.add_argument("cmd", choices=["detect", "plan", "apply", "undo", "check", "tune", "guide", "issues", "launchers", "replace-home", "install", "integrate"])
     ap.add_argument("-s", "--serial"); ap.add_argument("--tier", choices=["safe", "caution"], default="safe")
     ap.add_argument("--yes", action="store_true"); ap.add_argument("--os"); ap.add_argument("--year", type=int, default=2022); ap.add_argument("--only"); ap.add_argument("--file"); ap.add_argument("--apk"); ap.add_argument("--google-tv", action="store_true"); ap.add_argument("--dns", action="store_true")
     a = ap.parse_args()
@@ -697,6 +738,8 @@ def main():
         tune(serial, dns=a.dns); return
     if a.cmd == "launchers":
         launchers(serial, a.yes); return
+    if a.cmd == "integrate":
+        print("fatto: " + ", ".join(integrate(serial) or ["niente da collegare"])); return
     if a.cmd == "replace-home":
         replace_google_home(serial, a.yes, a.google_tv); return
     if a.cmd == "install":

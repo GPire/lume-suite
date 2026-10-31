@@ -167,6 +167,63 @@ final class TvOptimize {
         return r;
     }
 
+    /**
+     * The three apps working as one (the same steps as TV Doctor's `integrate`): the Gallery as the screensaver, Lume's
+     * accessibility service so the Home button opens Lume where the TV keeps its own Home, and a first launch of Lume Cast
+     * (an app that was never opened is "stopped" and is not started at boot). The old values are kept for Undo.
+     */
+    static List<String> integrate(Context c, AdbClient a) throws Exception {
+        List<String> did = new ArrayList<>();
+        Set<String> have = packages(a.shell("pm list packages"));
+        SharedPreferences sp = c.getSharedPreferences("optimize", Context.MODE_PRIVATE);
+        JSONObject old = new JSONObject(sp.getString("integration_old", "{}"));
+        if (have.contains("org.lumesuite.gallery")) {
+            remember(a, old, "screensaver_components");
+            remember(a, old, "screensaver_enabled");
+            a.shell("settings put secure screensaver_components org.lumesuite.gallery/org.lumesuite.gallery.ArtDream");
+            a.shell("settings put secure screensaver_enabled 1");
+            did.add("screensaver");
+        }
+        if (!c.getPackageName().equals(homePackage(a))) {
+            String ours = c.getPackageName() + "/org.lumesuite.launcher.PowerService";
+            String cur = a.shell("settings get secure enabled_accessibility_services");
+            if ("null".equals(cur)) cur = "";
+            if (!cur.contains(ours)) {
+                remember(a, old, "enabled_accessibility_services");
+                remember(a, old, "accessibility_enabled");
+                a.shell("settings put secure enabled_accessibility_services " + (cur.isEmpty() ? ours : cur + ":" + ours));
+                a.shell("settings put secure accessibility_enabled 1");
+                did.add("home-button");
+            }
+        }
+        if (have.contains("org.lumesuite.cast")) {
+            a.shell("monkey -p org.lumesuite.cast -c android.intent.category.LEANBACK_LAUNCHER 1");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {
+            }
+            a.shell("am start -n " + c.getPackageName() + "/org.lumesuite.launcher.SetupActivity --activity-reorder-to-front");   // back to where we were
+            did.add("airplay");
+        }
+        sp.edit().putString("integration_old", old.toString()).apply();
+        return did;
+    }
+
+    private static void remember(AdbClient a, JSONObject old, String key) throws Exception {
+        if (!old.has(key)) old.put(key, a.shell("settings get secure " + key));
+    }
+
+    static void undoIntegration(Context c, AdbClient a) throws Exception {
+        SharedPreferences sp = c.getSharedPreferences("optimize", Context.MODE_PRIVATE);
+        JSONObject old = new JSONObject(sp.getString("integration_old", "{}"));
+        for (java.util.Iterator<String> it = old.keys(); it.hasNext(); ) {
+            String k = it.next(), v = old.getString(k);
+            if (!k.matches("[a-z_]{1,60}")) continue;
+            a.shell(v.isEmpty() || "null".equals(v) ? "settings delete secure " + k : "settings put secure " + k + " " + v);
+        }
+        sp.edit().remove("integration_old").apply();
+    }
+
     static Set<String> saved(Context c) {
         return c.getSharedPreferences("optimize", Context.MODE_PRIVATE).getStringSet("disabled", new HashSet<>());
     }
@@ -180,6 +237,7 @@ final class TvOptimize {
             left.remove(p);
             n++;
         }
+        undoIntegration(c, a);
         c.getSharedPreferences("optimize", Context.MODE_PRIVATE).edit().putStringSet("disabled", left).apply();
         return n;
     }
