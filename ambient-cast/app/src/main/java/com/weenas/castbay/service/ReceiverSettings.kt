@@ -42,7 +42,7 @@ data class ReceiverSettings(
     /** "Sing" for karaoke: 0 the song as it is, 1 the singer turned down, 2 the singer almost gone (see VocalReducer). */
     val singLevel: Int = 0,
     /** Open the app's screen when a picture starts while it is not on screen (needs "Display over other apps"). */
-    val openOnCast: Boolean = false,
+    val openOnCast: Boolean = true,
     /** The app's language: [LANGUAGE_SYSTEM] (the TV's), [LANGUAGE_ZH] or [LANGUAGE_EN]. */
     val language: String = LANGUAGE_SYSTEM,
     /** Look for a newer CastBay on GitHub once a day (UpdateChecker). */
@@ -177,7 +177,7 @@ class ReceiverSettingsStore(context: Context) {
         showLyrics = preferences.getBoolean("show_lyrics_v2", true),  // on by default: a song with its words is the point; Settings and the quick menu switch it off
         lyricsDelayTenths = preferences.getInt("lyrics_delay_tenths", 0).coerceIn(-30, 30),
         singLevel = preferences.getInt("sing_level", 0).coerceIn(0, 2),
-        openOnCast = preferences.getBoolean("open_on_cast", false),
+        openOnCast = preferences.getBoolean("open_on_cast", true),  // on by default: casting from the phone should show up on the TV without hunting for the app
         language = preferences.getString("language", null)
             ?.takeIf { it in ReceiverSettings.LANGUAGES } ?: ReceiverSettings.LANGUAGE_SYSTEM,
         checkUpdates = preferences.getBoolean("check_updates", true),

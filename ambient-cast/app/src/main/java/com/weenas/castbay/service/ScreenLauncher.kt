@@ -21,6 +21,8 @@ object ScreenLauncher {
     /** MainActivity is on screen (between onStart and onStop). */
     @Volatile var visible = false
 
+    private var lastToastAt = 0L
+
     /** Whether Android lets this app start its screen from the background. */
     fun allowed(context: Context): Boolean =
         Build.VERSION.SDK_INT < Build.VERSION_CODES.Q || Settings.canDrawOverlays(context)
@@ -30,7 +32,12 @@ object ScreenLauncher {
         if (visible) return
         if (!allowed(context)) {
             Log.i(TAG, "Not on screen and not allowed to open it (Display over other apps)")
-            Toast.makeText(context, R.string.open_on_cast_toast, Toast.LENGTH_LONG).show()
+            // On by default, so without the permission this would nag at every cast: once in ten minutes is enough.
+            val now = android.os.SystemClock.elapsedRealtime()
+            if (lastToastAt == 0L || now - lastToastAt > 10 * 60_000L) {
+                lastToastAt = now
+                Toast.makeText(context, R.string.open_on_cast_toast, Toast.LENGTH_LONG).show()
+            }
             return
         }
         try {

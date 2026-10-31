@@ -554,7 +554,7 @@ def integrate(serial):
     Lume Cast (an app that was never opened is "stopped": Android does not start it at boot, so AirPlay would not be there).
     The old values go in a backup so Undo puts them back. Returns what was done."""
     if FIXTURE is not None:
-        return ["screensaver", "home-button", "airplay"]
+        return ["screensaver", "home-button", "airplay", "cast-opens", "phone-opens"]
     have = set(l.replace("package:", "").strip() for l in sh(serial, "pm list packages").splitlines())
     old, did = {}, []
 
@@ -573,11 +573,19 @@ def integrate(serial):
             put("enabled_accessibility_services", cur + ":" + LUME_HOME_SERVICE if cur else LUME_HOME_SERVICE)
             put("accessibility_enabled", "1")
             did.append("home-button")
+    if "org.lumesuite.launcher" in have:
+        # "Display over other apps" for Lume: without it Android drops every app or search the phone remote opens while another app is on screen.
+        sh(serial, "appops set org.lumesuite.launcher SYSTEM_ALERT_WINDOW allow")
+        did.append("phone-opens")
     if "org.lumesuite.cast" in have:
+        # "Display over other apps": lets Lume Cast come to the front when a phone starts casting, so the cast shows up
+        # on the TV instead of staying behind the Home screen. Harmless if the TV has no such switch.
+        sh(serial, "appops set org.lumesuite.cast SYSTEM_ALERT_WINDOW allow")
         sh(serial, "monkey -p org.lumesuite.cast -c android.intent.category.LEANBACK_LAUNCHER 1")
         time.sleep(3)
         sh(serial, "input keyevent KEYCODE_HOME")
         did.append("airplay")
+        did.append("cast-opens")
     if old:
         os.makedirs(BACKUPS, exist_ok=True)
         path = os.path.join(BACKUPS, f"{serial.replace(':','_')}-tuning-integration-{time.strftime('%Y%m%d-%H%M%S')}.json")

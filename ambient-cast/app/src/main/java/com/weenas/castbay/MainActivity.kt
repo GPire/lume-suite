@@ -2,6 +2,8 @@ package com.weenas.castbay
 
 import android.content.Context
 import android.os.Bundle
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
 import android.view.KeyEvent
 import android.view.MotionEvent
 import com.weenas.castbay.util.Diagnostics
@@ -96,6 +98,18 @@ class MainActivity : ComponentActivity() {
         Diagnostics.record("app", "Opened")
         if (intent?.getStringExtra("demo") == "lyrics") {   // developer demo of the lyrics screen, see DemoLyrics
             setContent { CastBayTheme { com.weenas.castbay.ui.screen.DemoLyrics() } }
+            DevShot.maybe(this)
+            return
+        }
+        val demo = intent?.getStringExtra("demo")
+        if (demo == "hints" || demo == "hints_music") {   // developer demo of the connected banner and the options hint
+            setContent {
+                CastBayTheme {
+                    androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier.fillMaxSize().background(androidx.compose.ui.graphics.Color(0xFF1A1230))) {
+                        com.weenas.castbay.ui.PlaybackHints(Unit, "iPhone di Giulia", demo == "hints_music", false, 0, androidx.compose.ui.Modifier.fillMaxSize())
+                    }
+                }
+            }
             DevShot.maybe(this)
             return
         }

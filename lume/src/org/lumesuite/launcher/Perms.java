@@ -36,6 +36,19 @@ final class Perms {
         return new ComponentName(a, MediaWatchService.class);
     }
 
+    /** "Display over other apps": what lets Lume open an app or a search when it is not the app on screen (the phone remote needs it). */
+    static boolean hasOverlay(android.content.Context c) {
+        return Build.VERSION.SDK_INT < 23 || android.provider.Settings.canDrawOverlays(c);
+    }
+
+    static void requestOverlay(Activity a) {
+        try {
+            a.startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION, android.net.Uri.parse("package:" + a.getPackageName())));
+        } catch (Exception e) {   // some TVs have no such page: TV Doctor (or Lume’s own guided cleaning) grants it from outside
+            android.widget.Toast.makeText(a, It.t("This TV has no page for it. TV Doctor or Lume’s Optimize this TV can allow it."), android.widget.Toast.LENGTH_LONG).show();
+        }
+    }
+
     static boolean hasLocation(Activity a) {
         return a.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }

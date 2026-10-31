@@ -382,4 +382,7 @@
     <string name="wifi_tip_weak">Weak Wi-Fi: move the TV closer to the router, or use a cable. Video may stutter.</string>
     <string name="wifi_tip_24">You are on 2.4 GHz: the 5 GHz network is faster and steadier for AirPlay.</string>
     <string name="wifi_tip_guest">This looks like a guest network: routers keep guests apart, so your iPhone may not see this TV. Use the main Wi-Fi.</string>
+    <string name="connected_to">Connected: %1$s</string>
+    <string name="hint_options_music">Press Down for lyrics, voice and timing</string>
+    <string name="hint_options_picture">Press Down or Menu for picture and sound</string>
 </resources>

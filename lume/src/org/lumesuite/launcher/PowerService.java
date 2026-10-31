@@ -55,6 +55,20 @@ public class PowerService extends AccessibilityService {
         handler.postDelayed(this::homeIfStockShowing, 800);
     }
 
+    /**
+     * Types into the text box that has the cursor in whatever app is on screen (the phone's keyboard for any search field).
+     * Replaces the box's text with [text], so the phone can send what it has as the person types. False when nothing there takes text.
+     */
+    boolean typeText(String text) {
+        AccessibilityNodeInfo root = getRootInActiveWindow();
+        if (root == null) return false;
+        AccessibilityNodeInfo f = root.findFocus(AccessibilityNodeInfo.FOCUS_INPUT);
+        if (f == null || !f.isEditable()) return false;
+        android.os.Bundle b = new android.os.Bundle();
+        b.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, text);
+        return f.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, b);
+    }
+
     private void homeIfStockShowing() {
         if (!HomeButton.wanted(this)) return;
         AccessibilityNodeInfo root = getRootInActiveWindow();

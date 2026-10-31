@@ -37,7 +37,10 @@ public final class RemoteBridge {
         MainActivity a = MainActivity.activeInstance;
         j.put("name", android.os.Build.MODEL);
         j.put("onHome", a != null && a.resumed);
-        j.put("keysEverywhere", PowerService.instance != null);   // Home and Back reach other apps only with the Home-key switch on
+        j.put("keysEverywhere", PowerService.instance != null);
+        j.put("assistant", Assistant.name(c) == null ? JSONObject.NULL : Assistant.name(c));   // Alexa, Google's, or none
+        j.put("canType", PowerService.instance != null);
+        j.put("overlay", Perms.hasOverlay(c) || (a != null && a.resumed));   // can it open apps when something else is on screen   // typing into other apps rides on the same accessibility switch   // Home and Back reach other apps only with the Home-key switch on
         j.put("look", "classic".equals(Profiles.homePrefs(c).getString("home_look", "scene")) ? "classic" : "scene");
         String wall = Profiles.homePrefs(c).getString("wallpaper", "galleria");
         JSONArray walls = new JSONArray();
@@ -46,6 +49,10 @@ public final class RemoteBridge {
                     .put("current", MainActivity.WALL_KEYS[i].equals(wall)));
         }
         j.put("wallpapers", walls);
+        JSONArray profs = new JSONArray();
+        String cur = Profiles.current(c).id;
+        for (Profiles.Profile pr : Profiles.list(c)) profs.put(new JSONObject().put("id", pr.id).put("name", pr.name).put("current", pr.id.equals(cur)));
+        j.put("profiles", profs);
         j.put("apps", apps(c));
         return j.toString();
     }
@@ -95,6 +102,12 @@ public final class RemoteBridge {
             String error = null;
             MainActivity a = MainActivity.activeInstance;
             boolean onHome = a != null && a.resumed;
+            boolean mayStart = onHome || Perms.hasOverlay(c);   // Android aborts starts from a background app without "Display over other apps"
+            if (!mayStart && (action.equals("launch") || action.equals("search") || action.equals("web") || action.equals("open")
+                    || action.equals("home") || action.equals("assistant") || action.equals("a11y"))) {
+                res.put("ok", false).put("error", "overlay");
+                return res;
+            }
             switch (action) {
                 case "key": {
                     String k = req.optString("key");
@@ -189,6 +202,85 @@ public final class RemoteBridge {
                     TvOptimize.startUndo(c);
                     ok = true;
                     break;
+                case "profile": {
+                    String id = req.optString("id");
+                    boolean found = false;
+                    for (Profiles.Profile pr : Profiles.list(c)) found |= pr.id.equals(id);
+                    if (!found) { error = "unknown profile"; break; }
+                    Profiles.setCurrent(c, id);
+                    if (a != null) MAIN.post(a::recreate);
+                    ok = true;
+                    break;
+                }
+                case "a11y": {   // the TV's Accessibility page, where Lume's switch lives (typing, Back from other apps, the Home button)
+                    c.startActivity(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    ok = true;
+                    break;
+                }
+                case "volume": {   // an exact level, 0-100, for the one-tap scenes
+                    int pct = Math.max(0, Math.min(100, req.optInt("pct", -1)));
+                    if (req.optInt("pct", -1) < 0) { error = "no level"; break; }
+                    android.media.AudioManager am = (android.media.AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
+                    int max = am.getStreamMaxVolume(android.media.AudioManager.STREAM_MUSIC);
+                    am.setStreamVolume(android.media.AudioManager.STREAM_MUSIC, Math.round(max * pct / 100f), android.media.AudioManager.FLAG_SHOW_UI);
+                    ok = true;
+                    break;
+                }
+                case "media": {
+                    String m = req.optString("key");
+                    android.media.AudioManager am = (android.media.AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
+                    int mk = m.equals("play") ? KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE : m.equals("next") ? KeyEvent.KEYCODE_MEDIA_NEXT
+                            : m.equals("prev") ? KeyEvent.KEYCODE_MEDIA_PREVIOUS : m.equals("rew") ? KeyEvent.KEYCODE_MEDIA_REWIND
+                            : m.equals("ff") ? KeyEvent.KEYCODE_MEDIA_FAST_FORWARD : 0;
+                    if (mk != 0) {
+                        am.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, mk));
+                        am.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, mk));
+                        ok = true;
+                    } else if (m.equals("vol_up") || m.equals("vol_down") || m.equals("mute")) {
+                        am.adjustStreamVolume(android.media.AudioManager.STREAM_MUSIC,
+                                m.equals("vol_up") ? android.media.AudioManager.ADJUST_RAISE
+                                : m.equals("vol_down") ? android.media.AudioManager.ADJUST_LOWER : android.media.AudioManager.ADJUST_TOGGLE_MUTE,
+                                android.media.AudioManager.FLAG_SHOW_UI);
+                        ok = true;
+                    } else {
+                        error = "unknown media key";
+                    }
+                    break;
+                }
+                case "assistant":
+                    ok = Assistant.open(c);
+                    if (!ok) error = "This TV has no voice assistant";
+                    break;
+                case "type": {
+                    String t = req.optString("text");
+                    if (t.length() > 500) { error = "too long"; break; }
+                    if (PowerService.instance == null) { error = "Typing needs Lume's switch: TV Settings > Accessibility > Lume"; break; }
+                    final boolean[] r = {false};
+                    final java.util.concurrent.CountDownLatch done = new java.util.concurrent.CountDownLatch(1);
+                    MAIN.post(() -> {
+                        r[0] = PowerService.instance != null && PowerService.instance.typeText(t);
+                        done.countDown();
+                    });
+                    done.await(2, java.util.concurrent.TimeUnit.SECONDS);
+                    ok = r[0];
+                    if (!ok) error = "Open a search box on the TV first";
+                    break;
+                }
+                case "web": {
+                    String q = req.optString("text").trim();
+                    String engine = req.optString("engine");
+                    if (q.isEmpty() || q.length() > 200) { error = "empty text"; break; }
+                    String url = (engine.equals("youtube") ? "https://www.youtube.com/results?search_query=" : "https://duckduckgo.com/?q=")
+                            + java.net.URLEncoder.encode(q, "UTF-8");
+                    Intent v = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    try {
+                        c.startActivity(v);
+                        ok = true;
+                    } catch (Exception e) {
+                        error = engine.equals("youtube") ? "No YouTube app on this TV" : "No browser on this TV";
+                    }
+                    break;
+                }
                 case "sleep":
                     ok = SleepReceiver.sleepNow(c);
                     if (!ok) error = "Power Off needs its permission on the TV (Settings > Permissions)";

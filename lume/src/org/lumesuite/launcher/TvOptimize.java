@@ -196,7 +196,10 @@ final class TvOptimize {
                 did.add("home-button");
             }
         }
+        a.shell("appops set " + c.getPackageName() + " SYSTEM_ALERT_WINDOW allow");   // the phone remote can open apps while another app is showing
+        did.add("phone-opens");
         if (have.contains("org.lumesuite.cast")) {
+            a.shell("appops set org.lumesuite.cast SYSTEM_ALERT_WINDOW allow");   // lets Lume Cast come to the front when a phone starts casting
             a.shell("monkey -p org.lumesuite.cast -c android.intent.category.LEANBACK_LAUNCHER 1");
             try {
                 Thread.sleep(3000);

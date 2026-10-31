@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Lume per TV</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3CradialGradient id=%27o%27 cx=%27.38%27 cy=%27.32%27 r=%27.8%27%3E%3Cstop offset=%270%27 stop-color=%27%23ffd27a%27/%3E%3Cstop offset=%27.45%27 stop-color=%27%23ff9f0a%27/%3E%3Cstop offset=%271%27 stop-color=%27%23c2500a%27/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2728%27 fill=%27url(%23o)%27/%3E%3C/svg%3E">
 <style>
 :root{color-scheme:dark}
 body{margin:0;background:radial-gradient(900px 500px at 15% -10%,#3a2410,transparent 60%),#0b0b10;color:#f5f5f7;font:26px/1.4 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;padding:48px 6vw}
@@ -11,12 +12,23 @@ a.b small{display:block;font-weight:400;font-size:21px;color:#555;margin-top:4px
 a.b.g{background:#ffffff1c;color:#f5f5f7}a.b.g small{color:#b4b4bd}
 a.b:focus{outline:6px solid #ff9f0a;outline-offset:3px;transform:scale(1.02)}
 .n{font-size:21px;color:#9a9aa5;max-width:900px;margin-top:28px}
+.card{background:#ffffff14;border-radius:22px;padding:20px 28px;margin:0 0 22px;max-width:900px;font-size:23px;display:none}
+.card b{color:#ffd27a}.card.on{display:block}
 </style></head><body>
 <h1>Lume per TV</h1>
 <p>Scegli con il telecomando e premi OK. Dopo l'installazione apri <b>Lume</b>: una guida fa il resto, passo per passo.<br><span style="font-size:21px">Pick with the remote and press OK. After installing, open <b>Lume</b>: a guide does the rest.</span></p>
+<div class="card" id="fire"><b>Prima volta su Fire TV</b> (serve una sola volta): Impostazioni, La mia Fire TV, Opzioni sviluppatore, <b>Installa app sconosciute</b>, scegli <b>Silk Browser</b> e metti Consenti. Se non vedi Opzioni sviluppatore: Informazioni, premi OK sul nome del dispositivo 7 volte. Poi premi OK su un pulsante qui sotto: a fine download scegli <b>Installa</b>.<br><span style="font-size:19px;color:#9a9aa5">First time on Fire TV: Settings, My Fire TV, Developer options, Install unknown apps, allow Silk Browser. Then press OK on a button below and choose Install when the download ends.</span></div>
+<div class="card" id="android"><b>Android TV / Google TV</b>: se compare "Per sicurezza la TV non consente l'installazione", premi Impostazioni e consenti le app sconosciute a questo browser, poi riprova. A fine download scegli <b>Installa</b>.<br><span style="font-size:19px;color:#9a9aa5">If the TV blocks the install, allow unknown apps for this browser, then try again.</span></div>
+<div class="card" id="closed"><b>Questa TV non installa app Android</b> (Samsung, LG, Roku, VIDAA). Lume non serve a lei: apri il link principale dal computer e usa TV Doctor, che ti guida passo per passo.<br><a href="../" style="color:#ffd27a">gpire.github.io/lume-suite</a><br><span style="font-size:19px;color:#9a9aa5">This TV cannot install Android apps: open the main link on a computer and use TV Doctor.</span></div>
 <a class="b" href="https://github.com/GPire/lume-suite/releases/latest/download/lume-launcher.apk" autofocus>1. Scarica Lume <small>La schermata Home, la pulizia guidata, il controllo dal telefono · Download Lume</small></a>
 <a class="b g" href="https://github.com/GPire/lume-suite/releases/latest/download/ambient-cast.apk">2. Lume Cast <small>AirPlay con testi: musica e video dall'iPhone · AirPlay with lyrics</small></a>
 <a class="b g" href="https://github.com/GPire/lume-suite/releases/latest/download/ambient-gallery.apk">3. Lume Gallery <small>Il salvaschermo con quadri famosi · The art screensaver</small></a>
 <a class="b g" href="https://github.com/yuliskov/SmartTube/releases/latest">4. SmartTube (facoltativa) <small>YouTube senza pubblicità. Nella pagina scegli il file che finisce per armeabi-v7a (Fire TV Stick) o arm64-v8a (Google TV) · YouTube without ads: pick armeabi-v7a (Fire TV Stick) or arm64-v8a (Google TV)</small></a>
 <p class="n">Se la TV chiede di "consentire l'installazione da fonti sconosciute" per Downloader, accetta: è normale per le app fuori dallo store. · If the TV asks to allow installs from unknown sources for Downloader, accept: it is normal for apps outside the store.</p>
+<script>
+(function(){var u=navigator.userAgent||"",q=function(i){var e=document.getElementById(i);if(e)e.className+=" on"};
+if(/Tizen|Web0S|webOS|NetCast|Roku|VIDAA|SMART-TV|HbbTV/i.test(u)&&!/Android/i.test(u))q("closed");
+else if(/AFT|Silk/i.test(u))q("fire");
+else if(/Android/i.test(u))q("android");})();
+</script>
 </body></html>

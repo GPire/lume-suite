@@ -142,7 +142,23 @@ final class SearchPanel {
         queryView = a.text(26, Ui.font(a, "display"), 1f);
         queryView.setSingleLine(true);
         queryView.setEllipsize(TextUtils.TruncateAt.START);
+        // A field you can tell is a field: a soft glass capsule with a magnifier, like tvOS's search box.
+        GradientDrawable field = new GradientDrawable();
+        field.setCornerRadius(a.dp(22));
+        field.setColor(0x1FFFFFFF);
+        field.setStroke(Math.max(1, a.dp(1) / 2), 0x26FFFFFF);
+        queryView.setBackground(field);
+        queryView.setPadding(a.dp(18), a.dp(8), a.dp(18), a.dp(8));
+        queryView.setCompoundDrawablesWithIntrinsicBounds(
+                new android.graphics.drawable.BitmapDrawable(a.getResources(), Glyphs.get("search", a.dp(22), 0xB3FFFFFF)), null, null, null);
+        queryView.setCompoundDrawablePadding(a.dp(14));
         head.addView(queryView, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        // The phone is a keyboard too: one chip leads to the code and QR.
+        View phoneChip = chip(It.t("Type from your phone"), () -> a.startActivity(new Intent(a, PhoneActivity.class)));
+        LinearLayout.LayoutParams pcl = (LinearLayout.LayoutParams) phoneChip.getLayoutParams();
+        pcl.leftMargin = a.dp(16);
+        pcl.rightMargin = a.dp(4);
+        head.addView(phoneChip, pcl);
         col.addView(head, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         keyScroll = new HorizontalScrollView(a);
@@ -570,7 +586,7 @@ final class SearchPanel {
         row.setOrientation(LinearLayout.HORIZONTAL);
         row.setClipChildren(false);
         hs.addView(row);
-        list.addView(hs, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height + a.dp(20)));
+        list.addView(hs, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height + a.dp(height > a.dp(130) ? 34 : 20)));   // posters: room for a two-line caption
         setItems(row, items);
         return row;
     }
@@ -755,8 +771,8 @@ final class SearchPanel {
         round(art, radius);
         cell.addView(art, new LinearLayout.LayoutParams(w, h));
         TextView l = a.text(11.5f, Ui.font(a, "medium"), 0.6f);
-        l.setText(label);
-        l.setSingleLine(true);
+        l.setText(label.replaceAll("\\s*\u00b7\\s*", "\n"));   // the year under the title
+        l.setMaxLines(2);   // a title and its year, not "Mare Fuori \u00b7 2\u2026"
         l.setEllipsize(TextUtils.TruncateAt.END);
         l.setShadowLayer(0, 0, 0, 0);
         LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(w, ViewGroup.LayoutParams.WRAP_CONTENT);

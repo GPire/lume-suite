@@ -25,6 +25,8 @@ public class PhoneActivity extends Activity {
         Shot.maybe(this, getIntent());
         Clicks.init(this);
         Motion.init(this);
+        // Opening this page means "I want to pair a phone": switch phone control on, or the code below would lead nowhere.
+        if (!Presenter.remoteEnabled(this)) Presenter.setRemote(this, true);
         Presenter.ensureRunning(this);
         FrameLayout root = UiKit.screen(this);
         LinearLayout panel = UiKit.glass(this, 820);

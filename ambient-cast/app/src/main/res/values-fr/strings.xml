@@ -67,4 +67,7 @@
     <string name="wifi_tip_weak">Wi-Fi faible : rapprochez la TV du routeur ou utilisez un câble. La vidéo peut saccader.</string>
     <string name="wifi_tip_24">Vous êtes en 2,4 GHz : le réseau 5 GHz est plus rapide et stable pour AirPlay.</string>
     <string name="wifi_tip_guest">Cela ressemble à un réseau invité : les routeurs isolent les invités et l\'iPhone peut ne pas voir cette TV. Utilisez le Wi-Fi principal.</string>
+    <string name="connected_to">Connecté : %1$s</string>
+    <string name="hint_options_music">Appuyez sur Bas pour paroles, voix et synchro</string>
+    <string name="hint_options_picture">Appuyez sur Bas ou Menu pour image et son</string>
 </resources>

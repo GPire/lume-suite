@@ -40,6 +40,7 @@ import com.weenas.castbay.ui.AppBackground
 import com.weenas.castbay.ui.BrandSlogan
 import com.weenas.castbay.ui.BrandTitle
 import com.weenas.castbay.ui.CastingBadge
+import com.weenas.castbay.ui.PlaybackHints
 import com.weenas.castbay.ui.VolumeIndicator
 import com.weenas.castbay.ui.Backdrop
 import androidx.compose.ui.draw.shadow
@@ -179,12 +180,15 @@ fun MirrorScreen(viewModel: AirPlayViewModel) {
             rememberMusicScreenSaver(kind == StreamKind.AUDIO && !menuOpen && !showingLyrics, settings.screenSaver, viewModel)
         }
         val saverShift = animatedSaverShift(saver)
+        // Goes up with each key press while no menu is open: brings the "Down for options" hint back for a moment.
+        var keyPulse by remember { mutableStateOf(0) }
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .onPreviewKeyEvent { event ->
                     // Down and Menu are free during playback (left/right/OK control it).
                     if (menuOpen || event.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+                    keyPulse++
                     if (event.key != Key.DirectionDown && event.key != Key.Menu) return@onPreviewKeyEvent false
                     menuOpen = true
                     true
@@ -246,6 +250,15 @@ fun MirrorScreen(viewModel: AirPlayViewModel) {
                 CastingBadge(stream, musicCoverSize(), Modifier.align(Alignment.TopStart).offset { saverShift }.padding(start = 56.dp, top = 20.dp))
                 ScreenSaverOverlay(saver)
             }
+            PlaybackHints(
+                streamKey = Triple(kind, stream.sender, stream.isDlna),
+                senderLabel = if (stream.isDlna) (com.weenas.castbay.dlna.DlnaSender.nameRes(stream.sender)?.let { stringResource(it) }.orEmpty())
+                    else stream.sender,
+                isAudio = kind == StreamKind.AUDIO,
+                menuOpen = menuOpen,
+                keyPulse = keyPulse,
+                modifier = Modifier.fillMaxSize()
+            )
             val senderVolume by viewModel.senderVolume.collectAsState()
             VolumeIndicator(senderVolume, Modifier.align(Alignment.BottomEnd).padding(end = 48.dp, bottom = 40.dp))
             if (settings.showStats) {

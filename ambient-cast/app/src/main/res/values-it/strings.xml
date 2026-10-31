@@ -348,4 +348,7 @@
     <string name="wifi_tip_weak">Wi-Fi debole: avvicina la TV al router o usa un cavo. Il video può scattare.</string>
     <string name="wifi_tip_24">Sei sulla rete a 2,4 GHz: la 5 GHz è più veloce e stabile per AirPlay.</string>
     <string name="wifi_tip_guest">Sembra una rete ospiti: i router tengono separati gli ospiti e l\'iPhone potrebbe non vedere questa TV. Usa la Wi-Fi principale.</string>
+    <string name="connected_to">Connesso: %1$s</string>
+    <string name="hint_options_music">Premi Giù per testi, voce e sincronia</string>
+    <string name="hint_options_picture">Premi Giù o Menu per immagine e audio</string>
 </resources>

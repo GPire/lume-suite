@@ -188,7 +188,10 @@ final class AdminServer {
         if (p.equals("/api/pair") && "POST".equals(r.method)) {
             String token = pairing.pair(body(r).optString("pin"));
             if (token == null) json(out, 403, new JSONObject().put("error", "That PIN doesn\u2019t match the one on the TV."));
-            else json(out, 200, new JSONObject().put("token", token));
+            else {
+                json(out, 200, new JSONObject().put("token", token));
+                org.lumesuite.launcher.PhoneLinked.show(context);
+            }
             return;
         }
         if (!p.startsWith("/api/")) { asset(out, "index.html", "text/html; charset=utf-8"); return; }

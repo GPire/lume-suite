@@ -67,4 +67,7 @@
     <string name="wifi_tip_weak">Schwaches WLAN: Fernseher näher an den Router oder per Kabel verbinden. Das Bild kann ruckeln.</string>
     <string name="wifi_tip_24">Du bist im 2,4-GHz-Netz: das 5-GHz-Netz ist für AirPlay schneller und stabiler.</string>
     <string name="wifi_tip_guest">Das sieht nach einem Gastnetz aus: Router trennen Gäste, das iPhone sieht diesen Fernseher vielleicht nicht. Nutze das Haupt-WLAN.</string>
+    <string name="connected_to">Verbunden: %1$s</string>
+    <string name="hint_options_music">Unten drücken für Songtexte, Stimme und Timing</string>
+    <string name="hint_options_picture">Unten oder Menü drücken für Bild und Ton</string>
 </resources>

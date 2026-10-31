@@ -261,7 +261,7 @@ public class SettingsActivity extends Activity {
         nav(PERMS, () -> {
             int missing = (Perms.hasListener(this) || !Perms.listenerSupported(this) ? 0 : 1) + (Perms.hasLocation(this) ? 0 : 1)
                     + (Perms.hasTvListings(this) || !WatchNext.supported() ? 0 : 1)
-                    + (Perms.hasAdmin(this) || !Perms.adminSupported(this) ? 0 : 1) + (Perms.isDefaultHome(this) ? 0 : 1);
+                    + (Perms.hasAdmin(this) || !Perms.adminSupported(this) ? 0 : 1) + (Perms.isDefaultHome(this) ? 0 : 1) + (Perms.hasOverlay(this) ? 0 : 1);
             return missing == 0 ? "All allowed" : missing + " to allow";
         });
         nav(ABOUT, () -> "Version " + version());
@@ -809,6 +809,7 @@ public class SettingsActivity extends Activity {
                 () -> Perms.requestDefaultHome(this));
         row("Wi-Fi name in Control Center", () -> Perms.hasLocation(this) ? "Allowed" : "Allow\u2026",
                 () -> Perms.requestLocation(this));
+        row("Open apps from your phone", () -> Perms.hasOverlay(this) ? "Allowed" : "Allow\u2026", () -> Perms.requestOverlay(this));
     }
 
     void pageAbout() {

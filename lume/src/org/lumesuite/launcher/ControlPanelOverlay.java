@@ -340,37 +340,33 @@ public final class ControlPanelOverlay {
                     }
                 }));
 
-        // Row 4: four square shortcuts \u2014 Inputs, Recent Apps, Settings, Search.
+        // Rows 4-6: square shortcuts, five to a row (Inputs, Recent Apps, Settings, Search; News, Markets, Weather,
+        // Accessibility; the phone as a remote, the voice assistant). Smaller than a wide tile so all of them fit the screen.
         int y4 = y3 + cap + gap;
-        String[] icons = {"input", "recents", "gear", "search"};
-        Runnable[] actions = {onInputs, () -> {
-            dismissAll(c);
-            RecentAppsOverlay.show(c);
-        }, onSettings, onSearch};
-        for (int i = 0; i < icons.length; i++) {
-            final Runnable act = actions[i];
-            outCells.add(makeTile(c, panel, i * (small + gap), y4, small, small, unit, screenW, screenH, glassSource,
-                    icons[i], null, null, v -> {
+        int tiny = (w - 4 * gap) / 5;
+        final String[] glyphs = {"input", "recents", "gear", "search", "news", "chart", "weather", "accessibility", "remote", "mic"};
+        final Runnable[] acts = {
+                onInputs,
+                () -> { dismissAll(c); RecentAppsOverlay.show(c); },
+                onSettings,
+                onSearch,
+                () -> { dismissAll(c); startExternal(c, new Intent(c, NewsActivity.class)); },
+                () -> { dismissAll(c); startExternal(c, new Intent(c, MarketsActivity.class)); },
+                () -> { dismissAll(c); startExternal(c, new Intent(c, WeatherCitiesActivity.class)); },
+                () -> { dismissAll(c); startExternal(c, new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)); },
+                () -> { dismissAll(c); startExternal(c, new Intent(c, PhoneActivity.class)); },
+                () -> {
+                    dismissAll(c);
+                    if (!Assistant.open(c)) android.widget.Toast.makeText(c, It.t("This TV has no voice assistant"), android.widget.Toast.LENGTH_SHORT).show();
+                }};
+        for (int i = 0; i < glyphs.length; i++) {
+            final Runnable act = acts[i];
+            outCells.add(makeTile(c, panel, (i % 5) * (tiny + gap), y4 + (i / 5) * (tiny + gap), tiny, tiny, unit, screenW, screenH, glassSource,
+                    glyphs[i], null, null, v -> {
                         if (act != null) act.run();
                     }));
         }
-
-        // Row 5 (Lume): News, Markets, Weather, and the system Accessibility page (where the Home key is switched on).
-        int y5 = y4 + small + gap;
-        String[] more = {"news", "chart", "weather", "accessibility"};
-        for (int i = 0; i < more.length; i++) {
-            final int k = i;
-            outCells.add(makeTile(c, panel, i * (small + gap), y5, small, small, unit, screenW, screenH, glassSource,
-                    more[i], null, null, v -> {
-                        dismissAll(c);
-                        startExternal(c, k == 0 ? new Intent(c, NewsActivity.class)
-                                : k == 1 ? new Intent(c, MarketsActivity.class)
-                                : k == 2 ? new Intent(c, WeatherCitiesActivity.class)
-                                : new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-                    }));
-        }
-
-        int totalH = y5 + small;
+        int totalH = y4 + 2 * (tiny + gap) - gap;
         FrameLayout.LayoutParams plp = new FrameLayout.LayoutParams(w, totalH, Gravity.TOP | Gravity.END);
         plp.topMargin = dp(unit, 36);
         plp.rightMargin = dp(unit, 28);

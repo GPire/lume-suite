@@ -836,6 +836,9 @@ public class SetupActivity extends Activity {
         Row w = row(l, "Wi-Fi Name in Control Center", "Android counts this as location access", ACTION, false,
                 () -> Perms.requestLocation(this));
         w.status(wifi ? "✓ Allowed" : "Allow  ›", wifi);
+        boolean over = Perms.hasOverlay(this);
+        Row o = row(l, "Open apps from your phone", "So the phone remote can open apps and search while you watch", ACTION, false, () -> Perms.requestOverlay(this));
+        o.status(over ? "✓ Allowed" : "Allow  ›", over);
         buttons("Continue", this::next);
         dots();
     }
@@ -1102,7 +1105,7 @@ public class SetupActivity extends Activity {
         clp.bottomMargin = u(18);
         page.addView(check, clp);
         title("You\u2019re All Set");
-        subtitle("Change any of this later in Settings, from the gear in Control Center.");
+        subtitle("Your phone works as a remote too: Control Center, then the phone button. Change any of this later in Settings, from the gear in Control Center.");
         buttons("Go to Home Screen", () -> {
             getSharedPreferences("setup", MODE_PRIVATE).edit().putBoolean(K_DONE, true).apply();
             startActivity(new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
