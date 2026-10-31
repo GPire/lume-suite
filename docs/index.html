@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta property="og:title" content="Lume: a calmer TV"><meta property="og:description" content="Open one app: it finds your TV, cleans it and installs a calm home screen. Fire TV, Google TV, Android TV."><meta property="og:image" content="https://gpire.github.io/lume-suite/img/banner.png"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://gpire.github.io/lume-suite/img/banner.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://gpire.github.io/lume-suite/img/banner.png">
 <meta name="theme-color" content="#0b0b10">
-<title>Lume per TV: una TV più calma</title>
+<meta name="description" content="TV Doctor finds your TV, installs Lume and Lume Cast, and switches off, safely and always reversibly, what slows it down. Free and open source."><link rel="canonical" href="https://gpire.github.io/lume-suite/"><link rel="alternate" hreflang="en" href="https://gpire.github.io/lume-suite/"><link rel="alternate" hreflang="it" href="https://gpire.github.io/lume-suite/it/"><link rel="alternate" hreflang="es" href="https://gpire.github.io/lume-suite/es/"><link rel="alternate" hreflang="de" href="https://gpire.github.io/lume-suite/de/"><link rel="alternate" hreflang="fr" href="https://gpire.github.io/lume-suite/fr/"><link rel="alternate" hreflang="pt" href="https://gpire.github.io/lume-suite/pt/"><link rel="alternate" hreflang="x-default" href="https://gpire.github.io/lume-suite/"><meta property="og:type" content="website"><meta property="og:site_name" content="Lume Suite"><meta property="og:title" content="Lume for TV: a calmer TV (Fire TV, Google TV, Android TV)"><meta property="og:description" content="TV Doctor finds your TV, installs Lume and Lume Cast, and switches off, safely and always reversibly, what slows it down. Free and open source."><meta property="og:url" content="https://gpire.github.io/lume-suite/"><meta property="og:image" content="https://gpire.github.io/lume-suite/img/banner.png"><meta property="og:locale" content="en_US"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Lume for TV: a calmer TV (Fire TV, Google TV, Android TV)"><meta name="twitter:description" content="TV Doctor finds your TV, installs Lume and Lume Cast, and switches off, safely and always reversibly, what slows it down. Free and open source."><meta name="twitter:image" content="https://gpire.github.io/lume-suite/img/banner.png"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Lume Suite (TV Doctor, Lume, Lume Cast)", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Android TV, Google TV, Fire OS", "description": "TV Doctor finds your TV, installs Lume and Lume Cast, and switches off, safely and always reversibly, what slows it down. Free and open source.", "inLanguage": "en", "url": "https://gpire.github.io/lume-suite/", "image": "https://gpire.github.io/lume-suite/img/banner.png", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "license": "https://github.com/GPire/lume-suite/blob/main/LICENSE.md", "codeRepository": "https://github.com/GPire/lume-suite"}</script><title>Lume for TV: a calmer TV (Fire TV, Google TV, Android TV)</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3CradialGradient id=%27o%27 cx=%27.38%27 cy=%27.32%27 r=%27.8%27%3E%3Cstop offset=%270%27 stop-color=%27%23ffd27a%27/%3E%3Cstop offset=%27.45%27 stop-color=%27%23ff9f0a%27/%3E%3Cstop offset=%271%27 stop-color=%27%23c2500a%27/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2728%27 fill=%27url(%23o)%27/%3E%3C/svg%3E">
-<meta name="description" content="TV Doctor trova la tua TV, installa Lume e Lume Cast e spegne, senza rischi, ciò che la rallenta. Fire TV, Google TV, Android TV.">
+
 <style>
 :root{--bg:#0b0b10;--card:rgba(255,255,255,.07);--line:rgba(255,255,255,.12);--text:#f5f5f7;--dim:#a1a1ab;--accent:#0a84ff;color-scheme:dark}
 *{box-sizing:border-box}
@@ -33,89 +33,85 @@ a{color:#7ab8ff}small{color:var(--dim)}
 <body>
 <main>
   <div class="clock" aria-hidden="true">18:30</div>
-  <h1 data-t="h1">Una TV più calma.</h1>
-  <p class="dim" data-t="lead">TV Doctor trova la tua TV, installa Lume e Lume Cast e spegne, senza rischi e sempre annullabile, ciò che la rallenta. Niente comandi, niente programmi per sviluppatori.</p>
+  <h1 data-t="h1">A calmer TV.</h1>
+  <p class="dim" data-t="lead">TV Doctor finds your TV, installs Lume and Lume Cast, and turns off, safely and always reversibly, what slows it down. No commands, no developer tools.</p>
 
   <div class="card phone" id="phonecard" hidden>
-    <h2 data-t="phT">Sei sul telefono? Ecco la strada più breve</h2>
-    <p class="dim" data-t="phS">Si fa tutto dalla TV, senza computer. Ci vogliono pochi minuti.</p>
+    <h2 data-t="phT">On your phone? Here is the shortest way</h2>
+    <p class="dim" data-t="phS">Everything is done from the TV, no computer. It takes a few minutes.</p>
     <ol class="big">
-      <li data-t="p1">Sulla TV installa <b>Downloader</b> (gratis): cercalo nello store della TV.</li>
-      <li><span data-t="p2">In Downloader scrivi questo indirizzo (copialo qui e rileggilo mentre lo scrivi):</span>
-        <div class="row" style="margin-top:8px"><div class="url" id="u2">gpire.github.io/<wbr>lume-suite/<wbr>tv</div><button class="btn ghost" data-copy="u2" data-t="copy">Copia</button></div>
-        <p class="dim" style="margin:8px 0 0;font-size:15px" data-t="p2b">Scrivere sulla TV è più facile con l'app gratuita <b>Fire TV</b> (Amazon) o <b>Google TV</b> sul telefono: ha una tastiera.</p></li>
-      <li data-t="p3">Installa e apri <b>Lume</b>. Una guida ti porta passo passo (Opzioni sviluppatore, consenso, pulizia). Puoi seguirla anche dal telefono: Lume > Impostazioni > Controllo dal telefono > scheda Pulisci.</li>
+      <li data-t="p1">On the TV install <b>Downloader</b> (free): look for it in the TV's store.</li>
+      <li><span data-t="p2">In Downloader type this address (copy it here and read it back on the phone while you type):</span>
+        <div class="row" style="margin-top:8px"><div class="url" id="u2">gpire.github.io/<wbr>lume-suite/<wbr>tv</div><button class="btn ghost" data-copy="u2" data-t="copy">Copy</button></div>
+        <p class="dim" style="margin:8px 0 0;font-size:15px" data-t="p2b">Typing is easier with the free <b>Fire TV</b> (Amazon) or <b>Google TV</b> app on your phone: it has a keyboard.</p></li>
+      <li data-t="p3">Install and open <b>Lume</b>. A guide takes you step by step (Developer options, consent, cleaning). You can follow it from your phone too: Lume > Settings > Phone control > Clean tab.</li>
     </ol>
-    <p class="dim" style="margin-top:14px" data-t="p4">Preferisci il computer? Mandati il link e aprilo da lì:</p>
-    <div class="row"><button class="btn" id="sharebtn" data-t="shareL">Mandami il link</button></div>
+    <p class="dim" style="margin-top:14px" data-t="p4">Prefer a computer? Send yourself the link and open it there:</p>
+    <div class="row"><button class="btn" id="sharebtn" data-t="shareL">Send me the link</button></div>
   </div>
 
   <div class="card pccard">
-    <h2 data-t="pcT">Dal computer</h2>
-    <p class="dim" data-t="pcS">Funziona con qualsiasi TV sulla tua rete Wi-Fi.</p>
+    <h2 data-t="pcT">From a computer</h2>
+    <p class="dim" data-t="pcS">Works with any TV on your Wi-Fi.</p>
     <div class="row" id="dlrow">
       <a class="btn" id="dl" href="https://github.com/GPire/lume-suite/releases/latest/download/TV-Doctor-windows.exe"><span id="dllabel">Scarica l'app</span></a>
       <a class="btn ghost" id="dl2" href="https://github.com/GPire/lume-suite/releases/latest/download/TV-Doctor-mac-intel.zip" hidden>Mac Intel</a>
-      <a class="btn ghost" href="https://github.com/GPire/lume-suite/releases/latest" data-t="all">Tutti i file</a>
+      <a class="btn ghost" href="https://github.com/GPire/lume-suite/releases/latest" data-t="all">All files</a>
     </div>
     <ol>
-      <li data-t="s1">Aprila (Mac: clic destro sul programma, poi Apri. Windows: se compare un avviso, Ulteriori informazioni, poi Esegui comunque).</li>
-      <li id="open" data-t="s2">Si apre nel browser e cerca la TV da sola: se serve, ti mostra come attivare il debug.</li>
-      <li data-t="s3">Premi il pulsante grande: pulisce, installa Lume e aspetta il tuo OK per ogni cosa. Scegli tu cosa tenere.</li>
+      <li data-t="s1">Open it (Mac: right-click the program, then Open. Windows: if a warning appears, More info, then Run anyway).</li>
+      <li id="open" data-t="s2">It opens in your browser and looks for your TV by itself: if needed it shows you how to switch debugging on.</li>
+      <li data-t="s3">Press the big button: it cleans, installs Lume and waits for your OK on each thing. You choose what to keep.</li>
     </ol>
   </div>
 
   <div class="card tvcard">
-    <h2 data-t="tvT">Solo dalla TV (Fire TV, Android TV, Google TV)</h2>
-    <p class="dim" data-t="tvS">Con l'app gratuita <b>Downloader</b> scrivi questo indirizzo:</p>
-    <div class="row"><div class="url" id="u">github.com/<wbr>GPire/<wbr>lume-suite/<wbr>releases/<wbr>latest/<wbr>download/<wbr>lume-launcher.apk</div><button class="btn ghost" id="copy" data-t="copy">Copia</button></div>
-    <p class="dim" style="margin-top:12px"><small data-t="tvN">Poi apri Lume > Impostazioni > Ottimizza questa TV: pulisce da sola, senza computer (attiva prima il debug, Lume ti mostra come).</small></p>
+    <h2 data-t="tvT">From the TV alone (Fire TV, Android TV, Google TV)</h2>
+    <p class="dim" data-t="tvS">With the free <b>Downloader</b> app, type this address:</p>
+    <div class="row"><div class="url" id="u">github.com/<wbr>GPire/<wbr>lume-suite/<wbr>releases/<wbr>latest/<wbr>download/<wbr>lume-launcher.apk</div><button class="btn ghost" id="copy" data-t="copy">Copy</button></div>
+    <p class="dim" style="margin-top:12px"><small data-t="tvN">Then open Lume > Settings > Optimize this TV: it cleans by itself, no computer (switch debugging on first, Lume shows how).</small></p>
   </div>
 
   <div class="card">
-    <h2 data-t="cmdT">Oppure un solo comando</h2>
-    <p class="dim" data-t="cmdS">Incollalo nel Terminale (Mac, Linux) o in PowerShell (Windows): scarica TV Doctor, controlla la sua firma e lo avvia da solo.</p>
-    <div class="row"><div class="url" id="c1">curl -fsSL https://gpire.github.io/lume-suite/install.sh | sh</div><button class="btn ghost" data-copy="c1" data-t="copy">Copia</button></div>
-    <div class="row" style="margin-top:10px"><div class="url" id="c2">irm https://gpire.github.io/lume-suite/install.ps1 | iex</div><button class="btn ghost" data-copy="c2" data-t="copy">Copia</button></div>
+    <h2 data-t="cmdT">Or one command</h2>
+    <p class="dim" data-t="cmdS">Paste it into Terminal (Mac, Linux) or PowerShell (Windows): it downloads TV Doctor, checks its signature and starts it by itself.</p>
+    <div class="row"><div class="url" id="c1">curl -fsSL https://gpire.github.io/lume-suite/install.sh | sh</div><button class="btn ghost" data-copy="c1" data-t="copy">Copy</button></div>
+    <div class="row" style="margin-top:10px"><div class="url" id="c2">irm https://gpire.github.io/lume-suite/install.ps1 | iex</div><button class="btn ghost" data-copy="c2" data-t="copy">Copy</button></div>
   </div>
 
   <div class="card" id="whatyoudo">
-    <h2 data-t="wT">Cosa devi fare tu, TV per TV</h2>
-    <p class="dim" data-t="wS">Tutto il resto lo fa Lume o TV Doctor. Ecco le poche cose che toccano a te.</p>
+    <h2 data-t="wT">What you do, TV by TV</h2>
+    <p class="dim" data-t="wS">Lume or TV Doctor does everything else. These are the few things left to you.</p>
     <details><summary><b>Fire TV Stick / Fire TV</b></summary><ol>
-      <li data-t="wf1">Premi 7 volte il nome della Fire TV in Impostazioni &gt; My Fire TV &gt; Informazioni (Lume ti porta lì).</li>
-      <li data-t="wf2">Opzioni sviluppatore &gt; Debug ADB: Sì.</li>
-      <li data-t="wf3">Quando la TV chiede "Consentire il debug?", scegli Consenti sempre, poi OK.</li></ol></details>
+      <li data-t="wf1">Press the Fire TV name 7 times in Settings > My Fire TV > About (Lume takes you there).</li>
+      <li data-t="wf2">Developer options > ADB debugging: On.</li>
+      <li data-t="wf3">When the TV asks "Allow debugging?", choose Always allow, then OK.</li></ol></details>
     <details><summary><b>Google TV / Android TV (Android 10 o precedente)</b></summary><ol>
-      <li data-t="wg1">Impostazioni &gt; Sistema &gt; Informazioni: premi 7 volte Numero build.</li>
-      <li data-t="wg2">Opzioni sviluppatore &gt; Debug USB: Sì.</li>
-      <li data-t="wg3">Consenti sempre, poi OK, quando la TV lo chiede.</li></ol></details>
+      <li data-t="wg1">Settings > System > About: press Build 7 times.</li>
+      <li data-t="wg2">Developer options > USB debugging: On.</li>
+      <li data-t="wg3">Always allow, then OK, when the TV asks.</li></ol></details>
     <details><summary><b>Google TV / Android TV (Android 11 o successivo, solo Debug wireless)</b></summary><ol>
-      <li data-t="wh1">Serve un computer, una volta sola, sulla stessa Wi-Fi: scarica TV Doctor qui sopra.</li>
-      <li data-t="wh2">Sulla TV: Opzioni sviluppatore &gt; Debug wireless: Sì &gt; Accoppia con codice. Scrivi il codice di 6 cifre nell'app.</li></ol></details>
+      <li data-t="wh1">You need a computer once, on the same Wi-Fi: download TV Doctor above.</li>
+      <li data-t="wh2">On the TV: Developer options > Wireless debugging: On > Pair with code. Type the 6-digit code in the app.</li></ol></details>
     <details><summary><b>Samsung, LG, Roku, Hisense</b></summary><ol>
-      <li data-t="ws1">Non si possono togliere app da fuori: TV Doctor mostra le impostazioni da spegnere per il tuo modello e anno.</li>
-      <li data-t="ws2">Per bloccare pubblicità e tracciamento sulla rete: imposta il DNS del router su 94.140.14.14 e 94.140.15.15 (TV Doctor ti dice dove).</li></ol></details>
+      <li data-t="ws1">Apps cannot be removed from outside: TV Doctor shows the settings to switch off for your model and year.</li>
+      <li data-t="ws2">To block ads and tracking on the whole network: set the router DNS to 94.140.14.14 and 94.140.15.15 (TV Doctor tells you where).</li></ol></details>
   </div>
 
   <div class="grid">
-    <div class="card"><h2 data-t="c1T">Cosa fa</h2><p class="dim" data-t="c1">Riconosce marca, modello, anno e sistema. Installa le app dopo aver controllato la loro firma. Spegne a gruppi di quattro, controlla che la TV stia bene e annulla da sola se qualcosa non va. Mai disinstalla.</p></div>
-    <div class="card"><h2 data-t="c2T">Cosa è Lume</h2><p class="dim" data-t="c2">Una Home calma con un grande orologio di vetro, schede nitide, Centro di controllo, controllo da telefono, tre aspetti (vetro, grafite, alto contrasto) e testi sincronizzati con AirPlay.</p></div>
-    <div class="card"><h2 data-t="c3T">Samsung, LG, Roku</h2><p class="dim" data-t="c3">Sono sistemi chiusi: TV Doctor dice cosa si può davvero fare per il tuo modello e anno, e la strada più pulita è una chiavetta da pochi euro sull'HDMI.</p></div>
+    <div class="card"><h2 data-t="c1T">What it does</h2><p class="dim" data-t="c1">Recognises brand, model, year and system. Installs the apps after checking their signature. Turns things off four at a time, checks the TV is fine and undoes it by itself if anything is wrong. Never uninstalls.</p></div>
+    <div class="card"><h2 data-t="c2T">What Lume is</h2><p class="dim" data-t="c2">A calm Home with a big glass clock, sharp cards, Control Center, phone control, three looks (glass, graphite, high contrast) and AirPlay with synced lyrics.</p></div>
+    <div class="card"><h2 data-t="c3T">Samsung, LG, Roku</h2><p class="dim" data-t="c3">Closed systems: TV Doctor says what is really possible for your model and year, and the cleanest answer is a small HDMI stick.</p></div>
   </div>
 
-  <p style="margin-top:28px"><span class="tag" data-t="beta">Beta: provata davvero su una Fire TV Stick 4K Max</span><span class="tag">Apache-2.0 · GPL-3.0</span></p>
-  <p><a href="https://github.com/GPire/lume-suite">GitHub</a> · <a href="https://github.com/GPire/lume-suite/blob/main/docs/DEVICE_SUPPORT.md" data-t="support">Cosa funziona su quale TV</a> · <a href="https://github.com/GPire/lume-suite/blob/main/docs/PRIVACY.md">Privacy</a></p>
+  <p style="margin-top:28px"><span class="tag" data-t="beta">Beta: really tested on one Fire TV Stick 4K Max</span><span class="tag">Apache-2.0 · GPL-3.0</span></p>
+  <p><a href="https://github.com/GPire/lume-suite">GitHub</a> · <a href="https://github.com/GPire/lume-suite/blob/main/docs/DEVICE_SUPPORT.md" data-t="support">What works on which TV</a> · <a href="https://github.com/GPire/lume-suite/blob/main/docs/PRIVACY.md">Privacy</a></p>
+<p class="dim" style="margin-top:22px;font-size:15px" lang="en"><b>English</b> · <a href="it/">Italiano</a> · <a href="es/">Español</a> · <a href="de/">Deutsch</a> · <a href="fr/">Français</a> · <a href="pt/">Português</a></p>
 </main>
 <script>
 "use strict";
-const IT={dlWin:"Scarica per Windows",dlMac:"Scarica per Mac (chip Apple)",dlLin:"Scarica per Linux"};
-const EN={wT:"What you do, TV by TV",wS:"Lume or TV Doctor does everything else. These are the few things left to you.",wf1:"Press the Fire TV name 7 times in Settings > My Fire TV > About (Lume takes you there).",wf2:"Developer options > ADB debugging: On.",wf3:"When the TV asks \"Allow debugging?\", choose Always allow, then OK.",wg1:"Settings > System > About: press Build 7 times.",wg2:"Developer options > USB debugging: On.",wg3:"Always allow, then OK, when the TV asks.",wh1:"You need a computer once, on the same Wi-Fi: download TV Doctor above.",wh2:"On the TV: Developer options > Wireless debugging: On > Pair with code. Type the 6-digit code in the app.",ws1:"Apps cannot be removed from outside: TV Doctor shows the settings to switch off for your model and year.",ws2:"To block ads and tracking on the whole network: set the router DNS to 94.140.14.14 and 94.140.15.15 (TV Doctor tells you where).",phT:"On your phone? Here is the shortest way",phS:"Everything is done from the TV, no computer. It takes a few minutes.",p1:"On the TV install <b>Downloader</b> (free): look for it in the TV's store.",p2:"In Downloader type this address (copy it here and read it back on the phone while you type):",p2b:"Typing is easier with the free <b>Fire TV</b> (Amazon) or <b>Google TV</b> app on your phone: it has a keyboard.",p3:"Install and open <b>Lume</b>. A guide takes you step by step (Developer options, consent, cleaning). You can follow it from your phone too: Lume > Settings > Phone control > Clean tab.",p4:"Prefer a computer? Send yourself the link and open it there:",shareL:"Send me the link",dlWin:"Download for Windows",dlMac:"Download for Mac (Apple chip)",dlLin:"Download for Linux",cmdT:"Or one command",cmdS:"Paste it into Terminal (Mac, Linux) or PowerShell (Windows): it downloads TV Doctor, checks its signature and starts it by itself.",h1:"A calmer TV.",lead:"TV Doctor finds your TV, installs Lume and Lume Cast, and turns off, safely and always reversibly, what slows it down. No commands, no developer tools.",pcT:"From a computer",pcS:"Works with any TV on your Wi-Fi.",dl:"Download TV Doctor",all:"All files",s1:"Open it (Mac: right-click the program, then Open. Windows: if a warning appears, More info, then Run anyway).",s2:"It opens in your browser and looks for your TV by itself: if needed it shows you how to switch debugging on.",s3:"Press the big button: it cleans, installs Lume and waits for your OK on each thing. You choose what to keep.",dl:"Download the app",tvT:"From the TV alone (Fire TV, Android TV, Google TV)",tvS:"With the free <b>Downloader</b> app, type this address:",copy:"Copy",tvN:"Then open Lume > Settings > Optimize this TV: it cleans by itself, no computer (switch debugging on first, Lume shows how).",c1T:"What it does",c1:"Recognises brand, model, year and system. Installs the apps after checking their signature. Turns things off four at a time, checks the TV is fine and undoes it by itself if anything is wrong. Never uninstalls.",c2T:"What Lume is",c2:"A calm Home with a big glass clock, sharp cards, Control Center, phone control, three looks (glass, graphite, high contrast) and AirPlay with synced lyrics.",c3T:"Samsung, LG, Roku",c3:"Closed systems: TV Doctor says what is really possible for your model and year, and the cleanest answer is a small HDMI stick.",beta:"Beta: really tested on one Fire TV Stick 4K Max",support:"What works on which TV",copied:"Copied"};
-const LANGS={"es": {"h1": "Una TV más tranquila.", "lead": "TV Doctor encuentra tu TV, instala Lume y Lume Cast y apaga, con seguridad y siempre de forma reversible, lo que la ralentiza. Sin comandos ni herramientas de desarrollo.", "pcT": "Desde un ordenador", "pcS": "Funciona con cualquier TV de tu Wi-Fi.", "dl": "Descargar la app", "all": "Todos los archivos", "phT": "¿Estás en el móvil? Este es el camino más corto", "phS": "Todo se hace desde la TV, sin ordenador. Lleva unos minutos.", "p1": "En la TV instala <b>Downloader</b> (gratis): búscalo en la tienda de la TV.", "p3": "Instala y abre <b>Lume</b>. Una guía te lleva paso a paso (Opciones de desarrollador, consentimiento, limpieza). También puedes seguirla desde el móvil: Lume > Ajustes > Control desde el teléfono > pestaña Limpiar.", "tvT": "Solo desde la TV (Fire TV, Android TV, Google TV)", "tvS": "Con la app gratuita <b>Downloader</b>, escribe esta dirección:", "copy": "Copiar", "copied": "Copiado", "cmdT": "O un solo comando", "c1T": "Qué hace", "c1": "Reconoce marca, modelo, año y sistema. Instala las apps tras comprobar su firma. Apaga cosas de cuatro en cuatro, comprueba que la TV va bien y lo deshace solo si algo falla. Nunca desinstala.", "c2T": "Qué es Lume", "c2": "Un inicio tranquilo con un gran reloj de cristal, tarjetas nítidas, Centro de control, el teléfono como mando, tres aspectos (cristal, grafito, alto contraste) y AirPlay con letras sincronizadas.", "c3T": "Samsung, LG, Roku", "c3": "Sistemas cerrados: TV Doctor dice qué es realmente posible para tu modelo y año; la respuesta más limpia es un pequeño stick HDMI.", "beta": "Beta: probada de verdad en una Fire TV Stick 4K Max", "dlWin": "Descargar para Windows", "dlMac": "Descargar para Mac (chip Apple)", "dlLin": "Descargar para Linux", "shareL": "Enviarme el enlace", "support": "Qué funciona en qué TV"}, "de": {"h1": "Ein ruhigerer Fernseher.", "lead": "TV Doctor findet deinen Fernseher, installiert Lume und Lume Cast und schaltet sicher und immer umkehrbar ab, was ihn bremst. Keine Befehle, keine Entwicklerwerkzeuge.", "pcT": "Vom Computer", "pcS": "Funktioniert mit jedem Fernseher in deinem WLAN.", "dl": "App herunterladen", "all": "Alle Dateien", "phT": "Am Telefon? Hier der kürzeste Weg", "phS": "Alles geschieht am Fernseher, ohne Computer. Es dauert ein paar Minuten.", "p1": "Installiere am Fernseher <b>Downloader</b> (kostenlos): such ihn im Store des Fernsehers.", "p3": "Installiere und öffne <b>Lume</b>. Eine Anleitung führt dich Schritt für Schritt (Entwickleroptionen, Zustimmung, Bereinigung). Du kannst ihr auch vom Telefon aus folgen: Lume > Einstellungen > Steuerung per Telefon > Reiter Bereinigen.", "tvT": "Nur vom Fernseher (Fire TV, Android TV, Google TV)", "tvS": "Gib mit der kostenlosen App <b>Downloader</b> diese Adresse ein:", "copy": "Kopieren", "copied": "Kopiert", "cmdT": "Oder ein einziger Befehl", "c1T": "Was es tut", "c1": "Erkennt Marke, Modell, Jahr und System. Installiert die Apps nach Prüfung der Signatur. Schaltet vier Dinge auf einmal ab, prüft, ob der Fernseher in Ordnung ist, und macht es von selbst rückgängig, wenn etwas nicht stimmt. Deinstalliert nie.", "c2T": "Was Lume ist", "c2": "Ein ruhiger Startbildschirm mit großer Glasuhr, scharfen Karten, Kontrollzentrum, dem Telefon als Fernbedienung, drei Looks (Glas, Graphit, hoher Kontrast) und AirPlay mit synchronen Songtexten.", "c3T": "Samsung, LG, Roku", "c3": "Geschlossene Systeme: TV Doctor sagt, was für dein Modell und Jahr wirklich möglich ist; die sauberste Lösung ist ein kleiner HDMI-Stick.", "beta": "Beta: wirklich getestet auf einem Fire TV Stick 4K Max", "dlWin": "Für Windows herunterladen", "dlMac": "Für Mac herunterladen (Apple-Chip)", "dlLin": "Für Linux herunterladen", "shareL": "Link an mich senden", "support": "Was auf welchem Fernseher funktioniert"}, "fr": {"h1": "Une TV plus calme.", "lead": "TV Doctor trouve votre TV, installe Lume et Lume Cast, et désactive, sans risque et toujours de façon réversible, ce qui la ralentit. Aucune commande, aucun outil de développeur.", "pcT": "Depuis un ordinateur", "pcS": "Fonctionne avec toute TV de votre Wi-Fi.", "dl": "Télécharger l’app", "all": "Tous les fichiers", "phT": "Sur votre téléphone ? Voici le chemin le plus court", "phS": "Tout se fait depuis la TV, sans ordinateur. Quelques minutes suffisent.", "p1": "Sur la TV, installez <b>Downloader</b> (gratuit) : cherchez-le dans la boutique de la TV.", "p3": "Installez et ouvrez <b>Lume</b>. Un guide vous mène pas à pas (Options pour les développeurs, consentement, nettoyage). Vous pouvez aussi le suivre depuis le téléphone : Lume > Réglages > Contrôle par téléphone > onglet Nettoyer.", "tvT": "Depuis la TV seule (Fire TV, Android TV, Google TV)", "tvS": "Avec l’app gratuite <b>Downloader</b>, tapez cette adresse :", "copy": "Copier", "copied": "Copié", "cmdT": "Ou une seule commande", "c1T": "Ce qu’il fait", "c1": "Reconnaît la marque, le modèle, l’année et le système. Installe les apps après avoir vérifié leur signature. Désactive quatre éléments à la fois, vérifie que la TV va bien et annule tout seul en cas de problème. Ne désinstalle jamais.", "c2T": "Ce qu’est Lume", "c2": "Un accueil calme avec une grande horloge de verre, des cartes nettes, un Centre de contrôle, le téléphone comme télécommande, trois styles (verre, graphite, contraste élevé) et AirPlay avec paroles synchronisées.", "c3T": "Samsung, LG, Roku", "c3": "Systèmes fermés : TV Doctor dit ce qui est réellement possible pour votre modèle et votre année ; la réponse la plus propre est une petite clé HDMI.", "beta": "Bêta : vraiment testée sur une Fire TV Stick 4K Max", "dlWin": "Télécharger pour Windows", "dlMac": "Télécharger pour Mac (puce Apple)", "dlLin": "Télécharger pour Linux", "shareL": "M’envoyer le lien", "support": "Ce qui marche sur quelle TV"}, "pt": {"h1": "Uma TV mais calma.", "lead": "O TV Doctor encontra a sua TV, instala o Lume e o Lume Cast e desliga, com segurança e sempre de forma reversível, o que a abranda. Sem comandos nem ferramentas de programador.", "pcT": "A partir de um computador", "pcS": "Funciona com qualquer TV na sua Wi-Fi.", "dl": "Descarregar a app", "all": "Todos os ficheiros", "phT": "Está no telemóvel? Este é o caminho mais curto", "phS": "Tudo se faz na TV, sem computador. Demora alguns minutos.", "p1": "Na TV instale o <b>Downloader</b> (grátis): procure-o na loja da TV.", "p3": "Instale e abra o <b>Lume</b>. Um guia leva-o passo a passo (Opções de programador, consentimento, limpeza). Também pode segui-lo no telemóvel: Lume > Definições > Controlo pelo telemóvel > separador Limpar.", "tvT": "Só a partir da TV (Fire TV, Android TV, Google TV)", "tvS": "Com a app gratuita <b>Downloader</b>, escreva este endereço:", "copy": "Copiar", "copied": "Copiado", "cmdT": "Ou um só comando", "c1T": "O que faz", "c1": "Reconhece marca, modelo, ano e sistema. Instala as apps depois de verificar a assinatura. Desliga quatro coisas de cada vez, confirma que a TV está bem e desfaz sozinho se algo correr mal. Nunca desinstala.", "c2T": "O que é o Lume", "c2": "Um ecrã inicial calmo com um grande relógio de vidro, cartões nítidos, Centro de controlo, o telemóvel como comando, três aspetos (vidro, grafite, alto contraste) e AirPlay com letras sincronizadas.", "c3T": "Samsung, LG, Roku", "c3": "Sistemas fechados: o TV Doctor diz o que é realmente possível para o seu modelo e ano; a resposta mais limpa é um pequeno stick HDMI.", "beta": "Beta: testada a sério numa Fire TV Stick 4K Max", "dlWin": "Descarregar para Windows", "dlMac": "Descarregar para Mac (chip Apple)", "dlLin": "Descarregar para Linux", "shareL": "Enviar-me a ligação", "support": "O que funciona em que TV"}};
-const code=(navigator.language||"en").toLowerCase().slice(0,2);
-const lang=code==="it"?IT:Object.assign({},EN,LANGS[code]||{});
-document.documentElement.lang=LANGS[code]||code==="it"?code:"en";
-document.querySelectorAll("[data-t]").forEach(e=>{const v=lang[e.dataset.t];if(v)e.innerHTML=v});
+const lang={"dlWin": "Download for Windows", "dlMac": "Download for Mac (Apple chip)", "dlLin": "Download for Linux", "copy": "Copy", "copied": "Copied", "shareL": "Send me the link"};
+const _c=(navigator.language||"en").toLowerCase().slice(0,2);if(["it", "es", "de", "fr", "pt"].indexOf(_c)>=0&&!/[?&]l=/.test(location.search))location.replace(_c+"/"+location.search);
 const ua=navigator.userAgent,os=/Windows/.test(ua)?"Windows":/Mac/.test(ua)&&!/iPhone|iPad/.test(ua)?"Mac":/Linux|X11/.test(ua)&&!/Android/.test(ua)?"Linux":"";
 const R="https://github.com/GPire/lume-suite/releases/latest/download/",dl=document.getElementById("dl"),dl2=document.getElementById("dl2"),lbl=document.getElementById("dllabel");
 const mobile=location.search.includes("phone=1")||/Android|iPhone|iPad|iPod|Mobile/i.test(ua)||(matchMedia("(pointer:coarse)").matches&&innerWidth<800);

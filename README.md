@@ -1,6 +1,6 @@
 <p align="center"><img src="docs/img/banner.svg" alt="Lume: a calmer TV" width="100%"></p>
 
-<h3 align="center">TV Doctor · Lume · Lume Cast: one calmer TV, for Fire TV, Google TV and Android TV</h3>
+<h3 align="center">The one-button TV cleaner for people without a coding assistant. TV Doctor · Lume · Lume Cast: one calmer TV, for Fire TV, Google TV and Android TV</h3>
 
 <p align="center">
   <a href="https://gpire.github.io/lume-suite/"><img alt="Get started" src="https://img.shields.io/badge/GET%20STARTED-open%20the%20page-ff9f0a?style=for-the-badge&labelColor=0b0b10"></a>
@@ -18,6 +18,19 @@
 **Your TV got slower, louder and nosier. This puts it right in two minutes.** In our test on a Fire TV Stick 4K Max the stock home screen dropped frames 69 to 81 percent of the time; Lume dropped 28 percent, and about 25 MB more memory came free after the cleaning (one TV, one test; yours will differ, and the numbers are in [docs/DEVICE_SUPPORT.md](docs/DEVICE_SUPPORT.md)). No coding agent, no command line, no account.
 
 **A calmer TV.** Open one app on your computer: it finds your TV by itself, installs a clean home screen, and switches off what slows it down or watches you. Nothing is deleted and everything can be undone. No coding agent, no command line, no account.
+
+## Start here
+
+| You have | Go to |
+|---|---|
+| **A Fire TV, Google TV or Android TV** (any computer, no coding assistant) | [The 3 steps below](#start-here-3-steps) |
+| **Only the TV in your hand** | Install **Downloader** on the TV and type `gpire.github.io/lume-suite/tv` |
+| **Only a phone** | [The phone page](https://gpire.github.io/lume-suite/) and the *Clean* tab of Lume's phone remote |
+| **A Samsung, LG, Roku or Hisense VIDAA TV** | [What you can switch off on your model](docs/GOOGLE_TV_AND_TIZEN.md) |
+| **Want to see it first** | [Screens](#what-is-inside) and the [supported TVs](docs/SUPPORTED_TVS.md) |
+| **A journalist or video maker** | [Press kit](docs/PRESS.md) |
+
+**Official links:** this repository and [gpire.github.io/lume-suite](https://gpire.github.io/lume-suite/). Other sites using the name are not run by this project.
 
 ## Start here (3 steps)
 
