@@ -38,7 +38,7 @@ jobs:
         run: |
           cd tv-doctor/dist-app
           case "${{ matrix.os }}" in
-            windows-latest) mv "${{ matrix.name }}.exe" "TV-Doctor-windows.exe"; out="TV-Doctor-windows.exe" ;;
+            windows-latest) out="${{ matrix.name }}.exe" ;;
             ubuntu-latest) mkdir pkg && cp "${{ matrix.name }}" "pkg/TV Doctor" && chmod +x "pkg/TV Doctor" && tar -C pkg -czf "${{ matrix.name }}.tar.gz" "TV Doctor"; out="${{ matrix.name }}.tar.gz" ;;
             *) mkdir pkg && cp "${{ matrix.name }}" "pkg/TV Doctor" && chmod +x "pkg/TV Doctor" && (cd pkg && zip -X -q "../${{ matrix.name }}.zip" "TV Doctor"); out="${{ matrix.name }}.zip" ;;
           esac
